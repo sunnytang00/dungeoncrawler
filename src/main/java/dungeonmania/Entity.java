@@ -1,5 +1,7 @@
 package dungeonmania;
 
+import java.util.UUID;
+
 import dungeonmania.util.Position;
 
 public abstract class Entity {
@@ -9,7 +11,7 @@ public abstract class Entity {
     private boolean isInteractable;
 
     public Entity(String id, String type, Position position, boolean isInteractable) {
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
         this.type = type;
         this.position = position;
         this.isInteractable = isInteractable;
@@ -35,6 +37,14 @@ public abstract class Entity {
         return position;
     }
 
+    public int getXCoordinate() {
+        return position.getX();
+    }
+
+    public int getYCoordinate() {
+        return position.getY();
+    }
+
     public void setPosition(Position position) {
         this.position = position;
     }
@@ -43,6 +53,5 @@ public abstract class Entity {
         return isInteractable;
     }
 
-    
 
 }
