@@ -21,7 +21,7 @@ public class WallTest {
 
         List<Entity> entities = new ArrayList<Entity>();
         entities.add(new Wall("wall", new Position(0, 1)));
-        //Convert list to a list of entity responses
+        //Convert list to a list of entity responses and pass into dungeonresponse
         List<EntityResponse> actual = entities.stream().map(Entity::getEntityResponse).collect(Collectors.toList());
         DungeonResponse dunres = new DungeonResponse("dungeonTestId", "d_testOneWall", actual, null, null, null,null);
         //Create a dungeon response and check getentities returns the wall
