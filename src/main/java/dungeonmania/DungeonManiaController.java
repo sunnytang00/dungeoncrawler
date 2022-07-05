@@ -1,5 +1,6 @@
 package dungeonmania;
 
+import dungeonmania.StaticEntities.Wall;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
@@ -45,10 +46,11 @@ public class DungeonManiaController {
      * /game/new
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
-        List<Entity> entities = new ArrayList<Entity>();
-        entities.add(new Entity("player", new Position(1, 1) , true));
-        List<EntityResponse> entityResponses = entities.stream().map(Entity::getEntityResponse).collect(Collectors.toList());
-        return new DungeonResponse("dungeonTestId", dungeonName, entityResponses, null, null, null,null);
+        // List<Entity> entities = new ArrayList<Entity>();
+        // entities.add(new Wall("wall", new Position(0, 1)));
+        // List<EntityResponse> entityResponses = entities.stream().map(Entity::getEntityResponse).collect(Collectors.toList());
+        // return new DungeonResponse("dungeonTestId", dungeonName, entityResponses, null, null, null,null);
+        return null;
     }
 
     /**

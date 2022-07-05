@@ -5,17 +5,17 @@ import java.util.UUID;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Position;
 
-public class Entity {
+public abstract class Entity {
     private String id;
     private String type;
     private Position position;
-    private boolean isInteractable;
+    protected boolean isInteractable;
 
-    public Entity(String type, Position position, boolean isInteractable) {
+    public Entity(String type, Position position) {
         this.id = UUID.randomUUID().toString();
         this.type = type;
         this.position = position;
-        this.isInteractable = isInteractable;
+        this.isInteractable = false;
     }
 
     public String getId() {
