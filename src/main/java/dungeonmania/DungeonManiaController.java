@@ -2,8 +2,10 @@ package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
+import dungeonmania.util.Position;
 import dungeonmania.util.JSONConfig;
 
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import com.google.gson.*;
 
 public class DungeonManiaController {
@@ -42,7 +45,10 @@ public class DungeonManiaController {
      * /game/new
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
-        return null;
+        List<Entity> entities = new ArrayList<Entity>();
+        entities.add(new Entity("player", new Position(1, 1) , true));
+        List<EntityResponse> entityResponses = entities.stream().map(Entity::getEntityResponse).collect(Collectors.toList());
+        return new DungeonResponse("dungeonTestId", dungeonName, entityResponses, null, null, null,null);
     }
 
     /**
