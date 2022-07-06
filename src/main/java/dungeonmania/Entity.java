@@ -5,7 +5,7 @@ import java.util.UUID;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Position;
 
-public class Entity {
+public abstract class Entity {
     private String id;
     private String type;
     private Position position;
@@ -57,5 +57,7 @@ public class Entity {
     public EntityResponse getEntityResponse() {
         return new EntityResponse(id, type, position, isInteractable);
     }
+
+    // toJSON method
 
 }
