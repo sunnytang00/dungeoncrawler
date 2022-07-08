@@ -24,4 +24,12 @@ public class DungeonMap {
         return currEntity;    
     }
 
+    public Position getPlayerPosition() {
+        Player player = mapEntities.stream()
+                                    .filter(entity -> entity.getType().equals("player"))
+                                    .findAny()
+                                    .orElse(null);
+        return player.getPosition();
+    }
+
 }
