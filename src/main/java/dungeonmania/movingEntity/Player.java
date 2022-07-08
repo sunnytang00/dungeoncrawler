@@ -18,11 +18,6 @@ public class Player extends MovingEntity {
         this.prevPosition = null;
     }
 
-    @Override
-    public void move(MovingEntity movingEntity, DungeonMap map) {
-        // TODO Auto-generated method stub
-        
-    }
 
     public boolean isInvisible() {
         return isInvisible;
