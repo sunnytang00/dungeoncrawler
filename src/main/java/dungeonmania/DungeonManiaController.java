@@ -6,9 +6,13 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 import dungeonmania.util.Position;
+import netscape.javascript.JSObject;
 import dungeonmania.util.JSONConfig;
+import dungeonmania.util.JSONMap;
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,7 +20,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 
 public class DungeonManiaController {
     public String getSkin() {
@@ -93,9 +103,29 @@ public class DungeonManiaController {
 
         Gson gson = new Gson();
         String content = FileLoader.loadResourceFile("/configs/" + filename + ".json");
-
+        
         JSONConfig config = gson.fromJson(content, JSONConfig.class);
 
         return config;
+    }
+
+    public JSONMap getMap(String fileName) throws IOException {
+
+        InputStream is = FileLoader.class.getResourceAsStream("/dungeons/" + fileName + ".json");
+        if (is == null) { throw new IOException(); }
+
+        JSONTokener tokener = new JSONTokener(is);
+        JSONObject object = new JSONObject(tokener);
+
+        String goals = object.getJSONObject("goal-condition").toString();
+
+        JSONArray entitiesJSON = object.getJSONArray("entities");
+        ArrayList<String> entityList = new ArrayList<String>();
+        for (int i = 0; i < entitiesJSON.length(); i++) {
+            entityList.add(entitiesJSON.get(i).toString());
+        }
+        
+        JSONMap map = new JSONMap(entityList, goals);
+        return map;
     }
 }
