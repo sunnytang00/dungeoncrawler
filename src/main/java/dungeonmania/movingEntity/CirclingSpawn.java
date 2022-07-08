@@ -42,8 +42,9 @@ public class CirclingSpawn implements MovingStrategy {
 
     @Override
     public void move(MovingEntity movingEntity, DungeonMap map) {
-        Position iniPos = movingEntity.getInitialPosition();
-        Position currPos = movingEntity.getPosition();
+        Spider spider = (Spider) movingEntity;
+        Position iniPos = spider.getInitialPosition();
+        Position currPos = spider.getPosition();
         List<Position> adjPos = iniPos.getAdjacentPositions();
         List<Entity> adjEntities = new ArrayList<Entity>();
         // first move
@@ -54,7 +55,7 @@ public class CirclingSpawn implements MovingStrategy {
                 // if boulder at first move position, spider stay idle until boulder is removed
                 return;
             }
-            movingEntity.setPosition(firstMovePos);
+            spider.setPosition(firstMovePos);
         // follow circular path
         } else {
             for (Position pos : adjPos) {
@@ -71,18 +72,18 @@ public class CirclingSpawn implements MovingStrategy {
             Position newAntiCircPos = adjPos.get(newAntiIndex);
             // if no boulder, follow simple clockwise circular path
             if (!containsBoulder(adjEntities)) {
-                movingEntity.setPosition(newCircPos);
+                spider.setPosition(newCircPos);
             }
             // if encounters boulder, reverse direction
             else {
                 List<Position> bouldersPos = getAdjacentBoulderPositions(adjEntities);
-                if (movingEntity.isClockwiseMove() && bouldersPos.contains(newCircPos)) {
-                    movingEntity.setClockwiseMove(false);
-                    movingEntity.setPosition(newAntiCircPos);
+                if (spider.isClockwiseMove() && bouldersPos.contains(newCircPos)) {
+                    spider.setClockwiseMove(false);
+                    spider.setPosition(newAntiCircPos);
                     
-                } else if (!movingEntity.isClockwiseMove() && bouldersPos.contains(newAntiCircPos)) {
-                    movingEntity.setClockwiseMove(true);
-                    movingEntity.setPosition(newCircPos);
+                } else if (!spider.isClockwiseMove() && bouldersPos.contains(newAntiCircPos)) {
+                    spider.setClockwiseMove(true);
+                    spider.setPosition(newCircPos);
 
                 }
             }

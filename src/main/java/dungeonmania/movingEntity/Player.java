@@ -1,14 +1,20 @@
 package dungeonmania.movingEntity;
 
+import java.util.Arrays;
+
 import dungeonmania.DungeonMap;
 import dungeonmania.util.Direction;
+import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
 public class Player extends MovingEntity {
 
+    private static final int DEFAULT_BRIBE_AMOUNT = JSONConfig.bribe_amount;
+
     private boolean isInvisible;
     private boolean isInvincible;
     private Position prevPosition;
+    private int wealth;
 
     public Player(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
@@ -16,6 +22,8 @@ public class Player extends MovingEntity {
         this.isInvisible = false;
         this.isInvincible = false;
         this.prevPosition = null;
+        this.wealth = 0; // imitially has not collected any treasure
+        setNonTraversibles(Arrays.asList("wall", "door"));
     }
 
 
@@ -55,4 +63,22 @@ public class Player extends MovingEntity {
 
     }
 
+    
+    public int getWealth() {
+        return wealth;
+    }
+
+
+    public void setWealth(int wealth) {
+        this.wealth = wealth;
+    }
+
+
+    public boolean hasEnoughToBribe() {
+        boolean enoughWealth = false;
+        if (this.wealth >= DEFAULT_BRIBE_AMOUNT) {
+            enoughWealth = true;
+        }
+        return enoughWealth;
+    }
 }
