@@ -6,12 +6,17 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 import dungeonmania.util.Position;
+import dungeonmania.util.JSONConfig;
 
 import java.io.IOException;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.google.gson.*;
 
 public class DungeonManiaController {
     public String getSkin() {
@@ -40,9 +45,11 @@ public class DungeonManiaController {
      * /game/new
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
-        List<Entity> entities = new ArrayList<Entity>();
-        List<EntityResponse> entityResponses = entities.stream().map(Entity::getEntityResponse).collect(Collectors.toList());
-        return new DungeonResponse("dungeonTestId", dungeonName, entityResponses, null, null, null,null);
+        // List<Entity> entities = new ArrayList<Entity>();
+        // entities.add(new Entity("player", new Position(1, 1) , true));
+        // List<EntityResponse> entityResponses = entities.stream().map(Entity::getEntityResponse).collect(Collectors.toList());
+        // return new DungeonResponse("dungeonTestId", dungeonName, entityResponses, null, null, null,null);
+        return null;
     }
 
     /**
@@ -78,5 +85,17 @@ public class DungeonManiaController {
      */
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
         return null;
+    }
+
+    //HELPERS DOWN HERE
+
+    public JSONConfig getConfig(String filename) throws IOException {
+
+        Gson gson = new Gson();
+        String content = FileLoader.loadResourceFile("/configs/" + filename + ".json");
+
+        JSONConfig config = gson.fromJson(content, JSONConfig.class);
+
+        return config;
     }
 }
