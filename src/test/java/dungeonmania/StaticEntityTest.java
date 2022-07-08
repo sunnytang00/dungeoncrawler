@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import dungeonmania.StaticEntities.*;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
+import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 import static dungeonmania.TestUtils.getEntities;
 
@@ -50,5 +51,29 @@ public class StaticEntityTest {
         assertEquals(expected, actual);
 
     }
+
+    @Test
+    public void BoulderTest() {
+
+        Boulder boulder = new Boulder("boulder", new Position(0, 0));
+
+        boulder.move(Direction.UP);
+        assertEquals(boulder.getPosition(), new Position(0, -1));
+        boulder.move(Direction.LEFT);
+        assertEquals(boulder.getPosition(), new Position(-1, -1));
+
+    }
        
+    @Test 
+    public void FloorSwitchTest() {
+
+        FloorSwitch floorswitch = new FloorSwitch("floorswitch", new Position(0, 0));
+
+        assertEquals(floorswitch.isTriggered(), false);
+        floorswitch.switchState();
+        assertEquals(floorswitch.isTriggered(), true);
+        floorswitch.switchState();
+        assertEquals(floorswitch.isTriggered(), false);
+
+    }
 }
