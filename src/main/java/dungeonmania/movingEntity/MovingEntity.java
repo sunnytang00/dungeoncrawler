@@ -16,7 +16,7 @@ public abstract class MovingEntity extends Entity implements MovingStrategy {
         super(type, position, isInteractable);
         this.initialPosition = position;
         this.isClockwiseMove = true; // initially true for spider
-        this.movingStrategy = new RandomSpawn();
+        this.movingStrategy = null;
     }
     
     public MovingStrategy getMovingStrategy() {

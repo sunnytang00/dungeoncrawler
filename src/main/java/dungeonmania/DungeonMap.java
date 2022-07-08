@@ -2,6 +2,7 @@ package dungeonmania;
 
 import java.util.List;
 
+import dungeonmania.movingEntity.Player;
 import dungeonmania.util.Position;
 
 public class DungeonMap {
@@ -24,12 +25,12 @@ public class DungeonMap {
         return currEntity;    
     }
 
-    public Position getPlayerPosition() {
-        Player player = mapEntities.stream()
+    public Player getPlayer() {
+        Player player = (Player) mapEntities.stream()
                                     .filter(entity -> entity.getType().equals("player"))
                                     .findAny()
                                     .orElse(null);
-        return player.getPosition();
+        return player;
     }
 
 }

@@ -133,4 +133,9 @@ public final class Position {
         adjacentPositions.add(new Position(x  , y-1));
         return adjacentPositions;
     }
+
+    public double getDistanceBetween(Position pos) {
+        double d = Math.sqrt(Math.pow((this.getX() - pos.getX()), 2) + Math.pow((this.getY() - pos.getY()), 2));
+        return d;
+    }
 }
