@@ -9,7 +9,7 @@
     
 //     private int keyID;
 
-//     public Door(String type, Position position, Key key) {
+//     public Door(String type, Position position) {
 //         super(type, position);
 //         this.keyID = keyID;
 //         setType("door_close");
