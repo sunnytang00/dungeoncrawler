@@ -2,25 +2,25 @@ package dungeonmania.util;
 
 public class JSONConfig {
     
-    public static int bomb_radius;
-    public static int bow_durability;
-    public static int bribe_amount;
-    public static int bribe_radius;
-    public static int mercenary_attack;
-    public static int mercenary_health;
-    public static int player_attack;
-    public static int player_health;
-    public static int shield_defence;
-    public static int shield_durability;
-    public static int spider_attack;
-    public static int spider_health;
-    public static int spider_spawn_rate;
-    public static int sword_attack;
-    public static int sword_durability;
-    public static int treasure_goal;
-    public static int zombie_attack;
-    public static int zombie_health;
-    public static int zombie_spawn_rate;
+    public int bomb_radius;
+    public int bow_durability;
+    public int bribe_amount;
+    public int bribe_radius;
+    public int mercenary_attack;
+    public int mercenary_health;
+    public int player_attack;
+    public int player_health;
+    public int shield_defence;
+    public int shield_durability;
+    public int spider_attack;
+    public int spider_health;
+    public int spider_spawn_rate;
+    public int sword_attack;
+    public int sword_durability;
+    public int treasure_goal;
+    public int zombie_attack;
+    public int zombie_health;
+    public int zombie_spawn_rate;
 
     /**
      * Constructor for a class which has fields consistent with the json config
@@ -49,25 +49,25 @@ public class JSONConfig {
             int spider_attack, int spider_health, int spider_spawn_rate, int sword_attack, int sword_durability,
             int treasure_goal, int zombie_attack, int zombie_health, int zombie_spawn_rate) {
 
-        JSONConfig.bomb_radius = bomb_radius;
-        JSONConfig.bow_durability = bow_durability;
-        JSONConfig.bribe_amount = bribe_amount;
-        JSONConfig.bribe_radius = bribe_radius;
-        JSONConfig.mercenary_attack = mercenary_attack;
-        JSONConfig.mercenary_health = mercenary_health;
-        JSONConfig.player_attack = player_attack;
-        JSONConfig.player_health = player_health;
-        JSONConfig.shield_defence = shield_defence;
-        JSONConfig.shield_durability = shield_durability;
-        JSONConfig.spider_attack = spider_attack;
-        JSONConfig.spider_health = spider_health;
-        JSONConfig.spider_spawn_rate = spider_spawn_rate;
-        JSONConfig.sword_attack = sword_attack;
-        JSONConfig.sword_durability = sword_durability;
-        JSONConfig.treasure_goal = treasure_goal;
-        JSONConfig.zombie_attack = zombie_attack;
-        JSONConfig.zombie_health = zombie_health;
-        JSONConfig.zombie_spawn_rate = zombie_spawn_rate;
+        this.bomb_radius = bomb_radius;
+        this.bow_durability = bow_durability;
+        this.bribe_amount = bribe_amount;
+        this.bribe_radius = bribe_radius;
+        this.mercenary_attack = mercenary_attack;
+        this.mercenary_health = mercenary_health;
+        this.player_attack = player_attack;
+        this.player_health = player_health;
+        this.shield_defence = shield_defence;
+        this.shield_durability = shield_durability;
+        this.spider_attack = spider_attack;
+        this.spider_health = spider_health;
+        this.spider_spawn_rate = spider_spawn_rate;
+        this.sword_attack = sword_attack;
+        this.sword_durability = sword_durability;
+        this.treasure_goal = treasure_goal;
+        this.zombie_attack = zombie_attack;
+        this.zombie_health = zombie_health;
+        this.zombie_spawn_rate = zombie_spawn_rate;
     }
 
     public int getBomb_radius() {

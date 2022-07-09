@@ -22,10 +22,10 @@ public class RandomSpawn implements MovingStrategy {
         List<Position> adjPos = currPos.getCardinallyAdjacentPositions();
         List<Position> moveablePos = new ArrayList<Position>();
         for (Position pos : adjPos) {
-            Entity atAdj = map.getEntityFromPos(pos);
-            if (atAdj == null || !movingEntity.blockedBy(atAdj)) {
+            List<Entity> atAdj = map.getEntityFromPos(pos);
+            if (atAdj.size() == 0 || !movingEntity.blockedBy(atAdj)) {
                 moveablePos.add(pos);
-            }    
+            }      
         }
 
         movingEntity.setPosition(getRandomPosition(moveablePos));

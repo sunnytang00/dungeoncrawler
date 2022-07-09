@@ -7,19 +7,19 @@ import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
 public class Mercenary extends Enemy {
-    private static final int DEFAULT_MERC_HEALTH = JSONConfig.mercenary_health;
-    private static final int DEFAULT_MERC_ATTACK = JSONConfig.mercenary_attack;
-    private static final int DEFAULT_BRIBE_RADIUS = JSONConfig.bribe_radius;
+    private static final int DEFAULT_MERC_HEALTH = 0;//JSONConfig.mercenary_health
+    private static final int DEFAULT_MERC_ATTACK = 0;//JSONConfig.mercenary_attack
+    private static final int DEFAULT_BRIBE_RADIUS = 0;//JSONConfig.bribe_radius
 
     private boolean isInRadius;
 
 
     public Mercenary(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
-        setMovingStrategy(new CirclingSpawn());
-        setHealth(DEFAULT_MERC_HEALTH);
-        setAttack(DEFAULT_MERC_ATTACK);
-        setNonTraversibles(Arrays.asList("boulder", "wall", "door"));
+        this.setMovingStrategy(new CirclingSpawn());
+        this.setHealth(DEFAULT_MERC_HEALTH);
+        this.setAttack(DEFAULT_MERC_ATTACK);
+        this.setNonTraversibles(Arrays.asList("boulder", "wall", "door"));
     }
 
     @Override

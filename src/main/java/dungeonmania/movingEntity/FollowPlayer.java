@@ -40,8 +40,8 @@ public class FollowPlayer implements MovingStrategy {
         for (Position pos : adjPos) {
             // always follow player but do not go into player position
             if (pos.getDistanceBetween(playerPrevPos) < currPos.getDistanceBetween(playerPrevPos)) {
-                Entity atAdj = map.getEntityFromPos(pos);
-                if (atAdj == null || !movingEntity.blockedBy(atAdj)) {
+                List<Entity> atAdj = map.getEntityFromPos(pos);
+                if (atAdj.size() == 0 || !movingEntity.blockedBy(atAdj)) {
                     moveablePos.add(pos);
                 }    
             }

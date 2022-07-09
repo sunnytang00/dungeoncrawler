@@ -50,8 +50,7 @@ public class CirclingSpawn implements MovingStrategy {
         // first move
         if (iniPos.equals(currPos)) {
             Position firstMovePos = iniPos.translateBy(Direction.UP);
-            Entity firstMoveEntity = map.getEntityFromPos(firstMovePos);
-            if (firstMoveEntity != null && firstMoveEntity.getType().equals("boulder")) {
+            if (map.checkTypeEntityAtPos("boulder", firstMovePos)) {
                 // if boulder at first move position, spider stay idle until boulder is removed
                 return;
             }
@@ -59,9 +58,9 @@ public class CirclingSpawn implements MovingStrategy {
         // follow circular path
         } else {
             for (Position pos : adjPos) {
-                Entity atAdj = map.getEntityFromPos(pos);
-                if (atAdj != null) {
-                    adjEntities.add(atAdj);
+                List<Entity> atAdj = map.getEntityFromPos(pos);
+                if (atAdj.size() != 0) {
+                    adjEntities.addAll(atAdj);
                 }
             }
             // index of circular path position, from 0 to 7

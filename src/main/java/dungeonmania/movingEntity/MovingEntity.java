@@ -33,16 +33,18 @@ public abstract class MovingEntity extends Entity  {
         return initialPosition;
     }
     
-    public boolean blockedBy(Entity atAdj) {
-        String type = atAdj.getType();
-        if (nontraversibles.contains(type)) {
-            // if (type.equals("door")) {
-            //     Door door = (Door) atAdj;
-            //     if (door.isOpen()) {
-            //         return true;
-            //     }
-            // }
-            return false;
+    public boolean blockedBy(List<Entity> atAdj) {
+        for (Entity entity : atAdj) {
+            String type = entity.getType();
+            if (nontraversibles.contains(type)) {
+                // if (type.equals("door")) {
+                //     Door door = (Door) atAdj;
+                //     if (door.isOpen()) {
+                //         return true;
+                //     }
+                // }
+                return false;
+            }
         }
         return true;
     }

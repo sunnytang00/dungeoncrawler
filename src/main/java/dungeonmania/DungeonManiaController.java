@@ -98,4 +98,5 @@ public class DungeonManiaController {
 
         return config;
     }
+
 }

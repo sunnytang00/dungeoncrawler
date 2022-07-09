@@ -8,9 +8,9 @@ import dungeonmania.util.Position;
 
 public class Spider extends Enemy {
 
-    private static final int DEFAULT_SPIDER_HEALTH = JSONConfig.spider_health;
-    private static final int DEFAULT_SPIDER_ATTACK = JSONConfig.spider_attack;
-    private static final int DEFAULT_SPIDER_SPAWN_RATE = JSONConfig.spider_spawn_rate;
+    private static final int DEFAULT_SPIDER_HEALTH = 0; //JSONConfig.spider_health
+    private static final int DEFAULT_SPIDER_ATTACK = 0; //JSONConfig.spider_attack
+    private static final int DEFAULT_SPIDER_SPAWN_RATE = 0; //JSONConfig.spider_spawn_rate
 
 
     private boolean isClockwiseMove;
@@ -18,10 +18,10 @@ public class Spider extends Enemy {
     
     public Spider(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
-        setMovingStrategy(new CirclingSpawn());
-        setHealth(DEFAULT_SPIDER_HEALTH);
-        setAttack(DEFAULT_SPIDER_ATTACK);
-        setNonTraversibles(Arrays.asList("boulder"));
+        this.setMovingStrategy(new CirclingSpawn());
+        this.setHealth(DEFAULT_SPIDER_HEALTH);
+        this.setAttack(DEFAULT_SPIDER_ATTACK);
+        this.setNonTraversibles(Arrays.asList("boulder"));
         this.spawnRate = DEFAULT_SPIDER_SPAWN_RATE;
         this.isClockwiseMove = true; // initially true for spider
     }

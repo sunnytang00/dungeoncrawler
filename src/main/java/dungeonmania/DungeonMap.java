@@ -17,14 +17,18 @@ public class DungeonMap {
         return mapEntities;
     }
 
-    public Entity getEntityFromPos(Position position) {
-        Entity currEntity = mapEntities.stream()
-                            .filter(entity -> position.equals(entity.getPosition()))
-                            .findAny()
-                            .orElse(null);
+    public List<Entity> getEntityFromPos(Position position) {
+        List<Entity> currEntity = mapEntities.stream()
+                            .filter(entity -> position.equals(entity.getPosition())).toList();
         return currEntity;    
     }
 
+    public boolean checkTypeEntityAtPos(String type, Position position) {
+        List<Entity> entitiesAtPos = this.getEntityFromPos(position);
+        boolean anyMatch = entitiesAtPos.stream().anyMatch(entity -> entity.getType().equals(type));
+        return anyMatch;
+    }
+    
     public Player getPlayer() {
         Player player = (Player) mapEntities.stream()
                                     .filter(entity -> entity.getType().equals("player"))
