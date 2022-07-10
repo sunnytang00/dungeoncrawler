@@ -13,6 +13,7 @@ public class TestJSONConfig {
 
         DungeonManiaController dmc = new DungeonManiaController();
         JSONConfig config = dmc.getConfig("c_battleTests_basicMercenaryMercenaryDies");
+
   
         assertEquals(config.getBomb_radius(), Integer.valueOf(getValueFromConfigFile("bomb_radius", "c_battleTests_basicMercenaryMercenaryDies")));
         assertEquals(config.getMercenary_attack(), Integer.valueOf(getValueFromConfigFile("mercenary_attack", "c_battleTests_basicMercenaryMercenaryDies")));

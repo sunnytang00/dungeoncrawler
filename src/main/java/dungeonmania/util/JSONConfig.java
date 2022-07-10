@@ -2,25 +2,25 @@ package dungeonmania.util;
 
 public class JSONConfig {
     
-    private int bomb_radius;
-    private int bow_durability;
-    private int bribe_amount;
-    private int bribe_radius;
-    private int mercenary_attack;
-    private int mercenary_health;
-    private int player_attack;
-    private int player_health;
-    private int shield_defence;
-    private int shield_durability;
-    private int spider_attack;
-    private int spider_health;
-    private int spider_spawn_rate;
-    private int sword_attack;
-    private int sword_durability;
-    private int treasure_goal;
-    private int zombie_attack;
-    private int zombie_health;
-    private int zombie_spawn_rate;
+    public int bomb_radius;
+    public int bow_durability;
+    public int bribe_amount;
+    public int bribe_radius;
+    public int mercenary_attack;
+    public int mercenary_health;
+    public int player_attack;
+    public int player_health;
+    public int shield_defence;
+    public int shield_durability;
+    public int spider_attack;
+    public int spider_health;
+    public int spider_spawn_rate;
+    public int sword_attack;
+    public int sword_durability;
+    public int treasure_goal;
+    public int zombie_attack;
+    public int zombie_health;
+    public int zombie_spawn_rate;
 
     /**
      * Constructor for a class which has fields consistent with the json config
