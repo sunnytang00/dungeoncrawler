@@ -6,7 +6,7 @@ import dungeonmania.DungeonMap;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
-public class Mercenary extends BribableEnemy implements MercenaryState {
+public class Mercenary extends BribableEnemy {
 
     private static final int DEFAULT_BRIBE_RADIUS = 0;//JSONConfig.bribe_radius
 
@@ -46,7 +46,6 @@ public class Mercenary extends BribableEnemy implements MercenaryState {
     }
 
 
-    @Override
     public void move(MovingEntity movingEntity, DungeonMap map) {
         if (!isBribed()) {
             if (map.getPlayer().isInvincible()) {
@@ -87,15 +86,20 @@ public class Mercenary extends BribableEnemy implements MercenaryState {
     }
     
 
-
-    @Override
-    public void currentState(Mercenary merc) {
-        if (this.isInRad()) {
+    public void changeState() {
+        if (inRad) { // && playerBribedMerc()
             setState(new MercBribedState());
         } else {
             setState(new MercViciousState());
         }
     }
 
+    @Override
+    public boolean becomeAlly() {
+        if (isBribed) {
+            return true;
+        }
+        return false;
+    }
 
 }

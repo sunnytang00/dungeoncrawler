@@ -2,7 +2,7 @@ package dungeonmania.movingEntity;
 
 import dungeonmania.util.Position;
 
-public abstract class Enemy extends MovingEntity implements MovingStrategy {
+public abstract class Enemy extends MovingEntity {
 
     private MovingStrategy movingStrategy;
 
@@ -15,6 +15,10 @@ public abstract class Enemy extends MovingEntity implements MovingStrategy {
     }
     public void setMovingStrategy(MovingStrategy movingStrategy) {
         this.movingStrategy = movingStrategy;
+    }
+
+    public boolean becomeAlly() {
+        return false;
     }
     
 }

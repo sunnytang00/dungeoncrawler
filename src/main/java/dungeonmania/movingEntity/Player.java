@@ -5,6 +5,9 @@ import java.util.List;
 
 import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
+import dungeonmania.StaticEntities.*;
+import dungeonmania.entities.Item;
+import dungeonmania.entities.collectableEntities.*;
 import dungeonmania.util.Direction;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
@@ -17,7 +20,8 @@ public class Player extends MovingEntity {
     private boolean isInvincible;
     private Position prevPosition;
     private int wealth;
-    // private List<Item> inventory;
+    private PlayerState state;
+    private List<Item> inventory;
 
     public Player(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
@@ -26,7 +30,6 @@ public class Player extends MovingEntity {
         this.isInvincible = false;
         this.prevPosition = null;
         this.wealth = 0; // imitially has not collected any treasure
-        this.setPrevPosition();
         this.setNonTraversibles(Arrays.asList("wall", "door"));
     }
 
@@ -85,24 +88,74 @@ public class Player extends MovingEntity {
         return enoughWealth;
     }
 
+    
+
+    public PlayerState getState() {
+        return state;
+    }
+
+
+    public void setState(PlayerState state) {
+        this.state = state;
+    }
+
+
+    public List<Item> getInventory() {
+        return inventory;
+    }
+
+
+    public void setInventory(List<Item> inventory) {
+        this.inventory = inventory;
+    }
+
+
     public void move(DungeonMap map, Direction direction) {
         this.setDirection(direction);
         Position newPos = getPosition().translateBy(direction);
         List<Entity> encounters = map.getEntityFromPos(newPos);
         // interact
+        for (Entity encounter : encounters) {
+            interact(encounter);
+        }
 
         this.setPosition(newPos);
+    }
+
+    public void interact(Entity entity) {
+
+        // create interact method in each entity
+        // if (entity instanceof Boulder) {
+        //     pushBoulder();
+        // } else if (entity instanceof Exit) {
+            
+        // } else if (entity instanceof Item) {
+        //     collectToInventory();
+        // } else if (entity instanceof Enemy) {
+        //     Enemy enemy = (Enemy) entity;
+        //     if (!enemy.becomeAlly()) {
+        //         // could not only bribe when encounter, could also bribe within certain radius
+        //         if (entity instanceof Mercenary && hasEnoughToBribe()) {
+        //             bribeMerc();
+        //         } else {
+        //             battleWithEnemy();
+        //         }
+        //     }
+        // }
+
     }
 
     public void pushBoulder(){
 
     }
 
-    public void collectToInventory() {
-        
+    public void collectToInventory(Item item) {
+        inventory.add(item);
     }
 
     public void consumePotion() {
+
+        // setState()
 
     }
 
@@ -110,7 +163,7 @@ public class Player extends MovingEntity {
 
     }
 
-    public void birbeEnemy() {
+    public void bribeMerc() {
 
     }
 
