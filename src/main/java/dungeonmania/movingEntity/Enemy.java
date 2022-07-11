@@ -8,7 +8,6 @@ public abstract class Enemy extends MovingEntity implements MovingStrategy {
 
     public Enemy(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
-        //TODO Auto-generated constructor stub
     }
 
     public MovingStrategy getMovingStrategy() {
