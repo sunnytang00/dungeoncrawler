@@ -71,12 +71,9 @@ public class Player extends MovingEntity {
     }
     
     public int getWealth() {
-        return wealth;
-    }
-
-
-    public void setWealth(int wealth) {
-        this.wealth = wealth;
+        int totalTreasure = (int) inventory.stream().filter(i -> i instanceof Treasure).count();
+        
+        return totalTreasure;
     }
 
 
@@ -111,15 +108,22 @@ public class Player extends MovingEntity {
 
 
     public void move(DungeonMap map, Direction direction) {
+
+        boolean blocked = false;
+
         this.setDirection(direction);
         Position newPos = getPosition().translateBy(direction);
         List<Entity> encounters = map.getEntityFromPos(newPos);
         // interact
         for (Entity encounter : encounters) {
             interact(encounter);
+            if (getNonTraversibles().contains(encounter.getType())) {
+                blocked = true;
+            }
         }
-
-        this.setPosition(newPos);
+        if (!blocked) {
+            this.setPosition(newPos);
+        }
     }
 
     public void interact(Entity entity) {
@@ -163,8 +167,26 @@ public class Player extends MovingEntity {
 
     }
 
-    public void bribeMerc() {
-
+    public void bribeMerc(Mercenary merc) {
+        if (!merc.isBribed() && merc.isInRad() && this.hasEnoughToBribe()) {
+            merc.setState(new MercBribedState());
+        }
+        
+        consumeInventory("treasure", DEFAULT_BRIBE_AMOUNT);
+    }
+    
+    public void consumeInventory(String type, int amount) {
+        int count = 0;
+        while (count < amount) {
+            Item delete = null;
+            for (Item item : inventory) {
+                if (item.getType().equals(type)) {
+                    delete = item; 
+                }
+            
+            }
+            inventory.remove(delete);
+        }
     }
 
     public void battleWithEnemy(){

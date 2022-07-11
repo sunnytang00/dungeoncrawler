@@ -86,14 +86,6 @@ public class Mercenary extends BribableEnemy {
     }
     
 
-    public void changeState() {
-        if (inRad) { // && playerBribedMerc()
-            setState(new MercBribedState());
-        } else {
-            setState(new MercViciousState());
-        }
-    }
-
     @Override
     public boolean becomeAlly() {
         if (isBribed) {

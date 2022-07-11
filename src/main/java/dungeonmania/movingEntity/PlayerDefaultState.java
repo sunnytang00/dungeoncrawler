@@ -9,7 +9,7 @@ public class PlayerDefaultState implements PlayerState {
     }
 
     @Override
-    public void playeInBattle(Player player, Enemy enemy) {
+    public void playerInBattle(Player player, Enemy enemy) {
         // TODO Auto-generated method stub
         
     }
