@@ -16,17 +16,17 @@ public class Bow extends Weapon implements ItemBuildable {
     }
 
     @Override
-    public Item build(List<Item> items) {
+    public Item build(List<Item> inventory) {
         Item buildableItem = null;
         /**
          * Record all the removing items
          */
         List<Item> removingPosition = new ArrayList<>();
 
-        if (!items.isEmpty()) {
+        if (!inventory.isEmpty()) {
             int woodNumber = 0;
             int arrowsNumber = 0;
-            for (Item item : items) {
+            for (Item item : inventory) {
                 if (item instanceof Wood && woodNumber < 1) {
                     woodNumber++;
                     removingPosition.add(item);
@@ -40,7 +40,7 @@ public class Bow extends Weapon implements ItemBuildable {
             if (1 == woodNumber && 3 == arrowsNumber) {
                 // remove all the items used to craft the buildable item
                 // if it could be crafted by the items in the inventory
-                removingPosition.forEach(i -> items.remove(i));
+                removingPosition.forEach(i -> inventory.remove(i));
                 buildableItem = new Bow(BUILDABLE_TYPE_BOW, new Position(0,0));
             }
         }

@@ -17,10 +17,12 @@ public interface ItemBuildable {
 
     /**
      * Build the complex items by the passing simple items
-     * @param items the items used to craft the complex item
+     * @param inventory the items storing many items which could
+     *                  be used to craft the buildable item
      * @return return a complex item if it craft successfully,
      * otherwise null
      */
-    Item build(List<Item> items);
+    Item build(List<Item> inventory);
 }
+
 
