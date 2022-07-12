@@ -53,6 +53,12 @@ public class StaticEntityTest {
     }
 
     @Test
+    public void CheckExitIsTraversable() {
+        Exit exit = new Exit("exit", new Position(0, 0));
+        assertEquals(true, exit.isTraversable());
+    }
+
+    @Test
     public void BoulderTest() {
 
         Boulder boulder = new Boulder("boulder", new Position(0, 0));
@@ -74,6 +80,46 @@ public class StaticEntityTest {
         assertEquals(floorswitch.isTriggered(), true);
         floorswitch.switchState();
         assertEquals(floorswitch.isTriggered(), false);
+
+    }
+
+    @Test
+    public void TestPortalLinking() {
+
+        ArrayList<Entity> entities = new ArrayList<Entity>();
+
+        Portal portal1 = new Portal("portal", new Position(0, 0), "blue");
+        Portal portal2 = new Portal("portal", new Position(3, 3), "blue");
+        Portal portal3 = new Portal("portal", new Position(-2, -2), "red");
+        Portal portal4 = new Portal("portal", new Position(-5, -5), "red");
+
+        entities.add(portal1);
+        entities.add(portal2);
+        entities.add(portal3);
+        entities.add(portal4);
+
+        //For each entity in the entities array
+        for (Entity entity : entities) {
+            
+            if (entity instanceof Portal) {
+                //Cast the entity to type portal
+                Portal portal = (Portal) entity;
+                //Link portal
+                portal.linkPortals(entities);
+            }
+        }
+
+        //Checking if linked correctly
+        assertEquals(portal2, portal1.getPair());
+        assertEquals(portal1, portal2.getPair());
+        assertEquals(portal4, portal3.getPair());
+        assertEquals(portal3, portal4.getPair());
+
+        assertEquals("portal_blue", portal1.getType());
+        assertEquals("portal_blue", portal2.getType());
+        assertEquals("portal_red", portal3.getType());
+        assertEquals("portal_red", portal4.getType());
+
 
     }
 }

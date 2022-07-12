@@ -11,8 +11,17 @@ public class StaticEntity extends Entity {
         this.isTraversable = false;
     }
 
+    public StaticEntity(String type, Position position, String colour) {
+        super(type, position, colour);
+        this.isTraversable = true;
+    }
+
     public boolean isTraversable() {
         return isTraversable;
+    }
+
+    public void setTraversable(boolean isTraversable) {
+        this.isTraversable = isTraversable;
     }
 
 }

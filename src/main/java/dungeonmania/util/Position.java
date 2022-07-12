@@ -107,35 +107,4 @@ public final class Position {
         adjacentPositions.add(new Position(x-1, y));
         return adjacentPositions;
     }
-
-    public List<Position> getCardinallyAdjacentPositions() {
-        List<Position> adjacentPositions = new ArrayList<>();
-        adjacentPositions.add(new Position(x  , y-1));
-        adjacentPositions.add(new Position(x  , y+1));
-        adjacentPositions.add(new Position(x-1, y));
-        adjacentPositions.add(new Position(x+1, y));
-        return adjacentPositions;
-    }
-
-    // Return Adjacent positions in an array list with the following element positions:
-    // 6 7 0
-    // 5 p 1
-    // 4 3 2
-    public List<Position> getCircularAdjacentPositions() {
-        List<Position> adjacentPositions = new ArrayList<>();
-        adjacentPositions.add(new Position(x+1, y-1));
-        adjacentPositions.add(new Position(x+1, y));
-        adjacentPositions.add(new Position(x+1, y+1));
-        adjacentPositions.add(new Position(x  , y+1));
-        adjacentPositions.add(new Position(x-1, y+1));
-        adjacentPositions.add(new Position(x-1, y));
-        adjacentPositions.add(new Position(x-1, y-1));
-        adjacentPositions.add(new Position(x  , y-1));
-        return adjacentPositions;
-    }
-
-    public double getDistanceBetween(Position pos) {
-        double d = Math.sqrt(Math.pow((this.getX() - pos.getX()), 2) + Math.pow((this.getY() - pos.getY()), 2));
-        return d;
-    }
 }
