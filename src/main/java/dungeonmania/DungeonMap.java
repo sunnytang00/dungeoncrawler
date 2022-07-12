@@ -3,6 +3,7 @@ package dungeonmania;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import dungeonmania.Entity;
 import dungeonmania.movingEntity.Player;
 import dungeonmania.util.Position;
 
@@ -20,8 +21,8 @@ public class DungeonMap {
 
     public List<Entity> getEntityFromPos(Position position) {
         List<Entity> currEntity = mapEntities.stream()
-                            .filter(entity -> position.equals(entity.getPosition())).collect(Collectors.toList ());
-        return currEntity;    
+                .filter(entity -> position.equals(entity.getPosition())).toList();
+        return currEntity;
     }
 
     public boolean checkTypeEntityAtPos(String type, Position position) {
@@ -32,11 +33,12 @@ public class DungeonMap {
     
     public Player getPlayer() {
         Player player = (Player) mapEntities.stream()
-                                    .filter(entity -> entity.getType().equals("player"))
-                                    .findAny()
-                                    .orElse(null);
+                .filter(entity -> entity.getType().equals("player"))
+                .findAny()
+                .orElse(null);
         return player;
     }
 
 
 }
+
