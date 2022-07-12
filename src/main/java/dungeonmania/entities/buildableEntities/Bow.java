@@ -17,7 +17,7 @@ public class Bow extends Weapon implements ItemBuildable {
 
     @Override
     public Item build(List<Item> inventory) {
-        Item buildableItem = null;
+        //Item buildableItem = null;
         /**
          * Record all the removing items
          */
@@ -41,11 +41,11 @@ public class Bow extends Weapon implements ItemBuildable {
                 // remove all the items used to craft the buildable item
                 // if it could be crafted by the items in the inventory
                 removingPosition.forEach(i -> inventory.remove(i));
-                buildableItem = new Bow(BUILDABLE_TYPE_BOW, new Position(0,0));
+                return new Bow(BUILDABLE_TYPE_BOW, new Position(0,0));
             }
         }
 
-        return buildableItem;
+        return null;
     }
 }
 
