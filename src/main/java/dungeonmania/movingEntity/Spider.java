@@ -29,7 +29,7 @@ public class Spider extends Enemy {
         this.isClockwiseMove = true; // initially true for spider
     }
     
-    @Override
+    
     public void move(MovingEntity movingEntity, DungeonMap map) {
         getMovingStrategy().move(this, map);  
     }

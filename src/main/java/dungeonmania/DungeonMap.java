@@ -43,7 +43,7 @@ public class DungeonMap {
 
     public List<Entity> getEntityFromPos(Position position) {
         List<Entity> currEntity = mapEntities.stream()
-                            .filter(entity -> position.equals(entity.getPosition())).toList();
+                            .filter(entity -> position.equals(entity.getPosition())).collect(Collectors.toList ());
         return currEntity;    
     }
 
@@ -61,6 +61,7 @@ public class DungeonMap {
         return player;
     }
 
+<<<<<<< HEAD
     public List<EntityResponse> getEntityResponses() {
         return mapEntities.stream().map(Entity::getEntityResponse).collect(Collectors.toList());
     }
@@ -68,4 +69,7 @@ public class DungeonMap {
     public String getDungeonName() {
         return dungeonName;
     }
+=======
+
+>>>>>>> moving_entity
 }

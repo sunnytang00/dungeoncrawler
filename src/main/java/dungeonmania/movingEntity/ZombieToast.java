@@ -25,7 +25,6 @@ public class ZombieToast extends Enemy {
         this.setNonTraversibles(Arrays.asList("boulder", "wall", "door"));
     }
 
-    @Override
     public void move(MovingEntity movingEntity, DungeonMap map) {
         if (map.getPlayer().isInvincible()) {
             setMovingStrategy(new RunAway());

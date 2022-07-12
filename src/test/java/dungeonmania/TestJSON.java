@@ -18,9 +18,9 @@ public class TestJSON {
         DungeonResponse dResponse = dmc.newGame("d_movementTest_testMovementDown", "c_battleTests_basicMercenaryMercenaryDies");
   
         assertEquals(dResponse.getDungeonName(), "d_movementTest_testMovementDown");
-        System.out.println(dResponse.getDungeonId());      
-        System.out.println(dResponse.getGoals());
-        System.out.println(dResponse.getEntities());
+        // System.out.println(dResponse.getDungeonId());      
+        // System.out.println(dResponse.getGoals());
+        // System.out.println(dResponse.getEntities());
     }
 
     // @Test
