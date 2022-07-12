@@ -59,7 +59,7 @@ public class DungeonManiaController {
         JSONMap jMap = new JSONMap(is);
         
         List<Entity> entities = jMap.getInitialMapEntities();
-        DungeonMap dungeonMap = new DungeonMap(entities, dungeonName);
+        DungeonMap dungeonMap = currentDungeonMap(entities, dungeonName);
         
         List<EntityResponse> entityResponses = dungeonMap.getEntityResponses();
         DungeonGame dGame = new DungeonGame(jMap.getGoals(), null, null, null);
@@ -102,18 +102,7 @@ public class DungeonManiaController {
     }
 
     //HELPERS DOWN HERE
-
-    // public JSONConfig getConfig(String filename) throws IOException {
-
-    //     // Gson gson = new Gson();
-    //     // String content = FileLoader.loadResourceFile("/configs/" + filename + ".json");
-        
-    //     // JSONConfig config = gson.fromJson(content, JSONConfig.class);
-
-    //     return JSONConfig.loadConfigFile(filename);
-    // }
-
-    // public void getConfig(String filename) throws IOException {
-    //     JSONConfig.loadConfigFile(filename);
-    // }
+    public DungeonMap currentDungeonMap(List<Entity> entities, String dungeonName) {
+        return new DungeonMap(entities, dungeonName);
+    }
 }

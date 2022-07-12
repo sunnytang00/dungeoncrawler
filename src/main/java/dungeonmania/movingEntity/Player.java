@@ -14,9 +14,9 @@ import dungeonmania.util.Position;
 
 public class Player extends MovingEntity {
 
-    // private static final int DEFAULT_BRIBE_AMOUNT = 0; // JSONConfig.bribe_amount
     private static final int DEFAULT_BRIBE_AMOUNT = JSONConfig.getConfig("bribe_amount");
-
+    private static final int DEFAULT_PLAYER_HEALTH = JSONConfig.getConfig("player_health");
+    private static final int DEFAULT_PLAYER_ATTACK = JSONConfig.getConfig("player_attack");
 
     private boolean isInvisible;
     private boolean isInvincible;
@@ -31,7 +31,10 @@ public class Player extends MovingEntity {
         this.isInvisible = false;
         this.isInvincible = false;
         this.prevPosition = null;
-        this.wealth = 0; // imitially has not collected any treasure
+        this.setHealth(DEFAULT_PLAYER_HEALTH);
+        this.setAttack(DEFAULT_PLAYER_ATTACK);
+        this.wealth = 0; // initially has not collected any treasure
+        this.setState(new PlayerDefaultState());
         this.setNonTraversibles(Arrays.asList("wall", "door"));
     }
 
@@ -71,7 +74,8 @@ public class Player extends MovingEntity {
         this.prevPosition = getPosition().translateBy(newD);
 
     }
-    
+
+
     public int getWealth() {
         int totalTreasure = (int) inventory.stream().filter(i -> i instanceof Treasure).count();
         

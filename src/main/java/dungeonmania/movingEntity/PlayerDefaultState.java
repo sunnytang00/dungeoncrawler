@@ -4,8 +4,9 @@ public class PlayerDefaultState implements PlayerState {
 
     @Override
     public void playerStateChange(Player player) {
-        // TODO Auto-generated method stub
-        
+        player.setInvisible(false);
+        player.setInvincible(false); 
+        player.setInteractable(true);       
     }
 
     @Override

@@ -6,11 +6,8 @@ import java.util.stream.Collectors;
 import dungeonmania.movingEntity.*;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
-import dungeonmania.util.Position;
-import dungeonmania.util.FileLoader;
-import dungeonmania.util.JSONMap;
-import dungeonmania.util.Position;
 import dungeonmania.Entity;
+import dungeonmania.util.*;
 import dungeonmania.StaticEntities.*;
 
 import java.util.ArrayList;
@@ -55,13 +52,12 @@ public class DungeonMap {
     
     public Player getPlayer() {
         Player player = (Player) mapEntities.stream()
-                                    .filter(entity -> entity.getType().equals("player"))
-                                    .findAny()
-                                    .orElse(null);
+                .filter(entity -> entity.getType().equals("player"))
+                .findAny()
+                .orElse(null);
         return player;
     }
 
-<<<<<<< HEAD
     public List<EntityResponse> getEntityResponses() {
         return mapEntities.stream().map(Entity::getEntityResponse).collect(Collectors.toList());
     }
@@ -69,7 +65,13 @@ public class DungeonMap {
     public String getDungeonName() {
         return dungeonName;
     }
-=======
+    
+    public void addEntityToMap(Entity entity) {
+        mapEntities.add(entity);
+    }
 
->>>>>>> moving_entity
+    public void removeEntityFromMap(Entity entity) {
+        mapEntities.remove(entity);
+    }
 }
+

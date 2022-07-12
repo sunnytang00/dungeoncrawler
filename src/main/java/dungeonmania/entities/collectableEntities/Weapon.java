@@ -24,6 +24,6 @@ public abstract class Weapon extends Item {
     public void setDamageValue(int damageValue) {
         this.damageValue = damageValue;
     }
-
 }
+
 

@@ -3,24 +3,27 @@ package dungeonmania;
 import java.util.List;
 import java.util.UUID;
 
+import dungeonmania.entities.Item;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
+import dungeonmania.util.Battle;
 
 public class DungeonGame {
 
+    private int currentTick = 0;
     private String dungeonId;
     private String goals;
     private List<Item> inventories;
     private List<Battle> battles;
     private List<String> buildables;
 
-    public DungeonGame(String goals, List<Item> inventories, List<Battle> battles, List<String> buidables) {
+    public DungeonGame(String goals, List<Item> inventories, List<Battle> battles, List<String> buildables) {
         this.dungeonId = UUID.randomUUID().toString();
         this.goals = goals;
         this.inventories = inventories;
         this.battles = battles;
-        this.buidables = buildables;
+        this.buildables = buildables;
     }
 
     public String getDungeonId() {
@@ -31,11 +34,11 @@ public class DungeonGame {
         return goals;
     }
 
-    public final List<ItemResponse> getInventory() {
+    public List<Item> getInventory() {
         return inventories;
     }
 
-    public final List<BattleResponse> getBattles(){
+    public final List<Battle> getBattles(){
         return battles;
     }
 
@@ -63,6 +66,13 @@ public class DungeonGame {
         this.buildables = buildables;
     }
 
-    
+    // assuming game starts with tick 0
+    public int getCurrentTick() {
+        return currentTick;
+    }
+
+    public void incrementTick() {
+        currentTick += 1;
+    }
     
 }

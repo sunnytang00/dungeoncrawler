@@ -7,19 +7,18 @@ public class Key extends Item {
     /**
      * The door key id recording the door the key could open
      */
-    private String doorKeyId;
+    private int doorKeyId;
 
-    public Key(String type, Position position) {
+    public Key(String type, Position position, int doorKeyId) {
         super(type, position);
-        // the key just could be used one time
-        setUsedTimes(1);
+        this.doorKeyId = doorKeyId;
     }
 
-    public String getDoorKeyId() {
+    public int getDoorKeyId() {
         return doorKeyId;
     }
 
-    public void setDoorKeyId(String doorKeyId) {
+    public void setDoorKeyId(int doorKeyId) {
         this.doorKeyId = doorKeyId;
     }
 }

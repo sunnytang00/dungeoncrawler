@@ -4,11 +4,16 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.JSONMap;
-import static dungeonmania.TestUtils.getGoals;;
+import dungeonmania.util.Position;
+
+import static dungeonmania.TestUtils.getGoals;
+import static dungeonmania.TestHelpers.*;
 
 public class TestJSON {
     
@@ -17,29 +22,19 @@ public class TestJSON {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse dResponse = dmc.newGame("d_movementTest_testMovementDown", "c_battleTests_basicMercenaryMercenaryDies");
   
-        assertEquals(dResponse.getDungeonName(), "d_movementTest_testMovementDown");
-        // System.out.println(dResponse.getDungeonId());      
-        // System.out.println(dResponse.getGoals());
-        // System.out.println(dResponse.getEntities());
-    }
-
-    // @Test
-    // public void testMapWithComplexGoals() throws IOException{
-    //     DungeonManiaController dmc = new DungeonManiaController();
-    //     JSONMap map = dmc.getMap("d_complexGoalsTest_andAll");
-  
-    //     assertEquals(map.getEntityList(), new ArrayList<>(List.of(
-    //         "{\"x\":1,\"y\":1,\"type\":\"player\"}", 
-    //         "{\"x\":2,\"y\":2,\"type\":\"spider\"}", 
-    //         "{\"x\":3,\"y\":1,\"type\":\"boulder\"}", 
-    //         "{\"x\":4,\"y\":1,\"type\":\"switch\"}", 
-    //         "{\"x\":3,\"y\":2,\"type\":\"treasure\"}", 
-    //         "{\"x\":3,\"y\":3,\"type\":\"exit\"}")));
-    //     assertEquals(map.getGoals(), 
-    //     "{\"goal\":\"AND\"," + 
-    //     "\"subgoals\":" + 
-    //     "[{\"goal\":\"AND\",\"subgoals\":[{\"goal\":\"exit\"},{\"goal\":\"treasure\"}]}," +
-    //     "{\"goal\":\"AND\",\"subgoals\":[{\"goal\":\"boulders\"},{\"goal\":\"enemies\"}]}]}");
+        assertEquals(dResponse.getDungeonName(), "d_movementTest_testMovementDown");     
+        assertEquals(dResponse.getGoals(), "{\"goal\":\"exit\"}");
         
-    // }
+        List<String> types = new ArrayList<>();
+        dResponse.getEntities().stream().forEach(s -> types.add(s.getType()));
+        assertListAreEqualIgnoringOrder(Arrays.asList("exit", "player"), types);
+
+        List<Integer> posX = new ArrayList<>();
+        dResponse.getEntities().stream().forEach(s -> posX.add(s.getPosition().getX()));
+        assertListAreEqualIgnoringOrder(Arrays.asList(1, 1), posX);
+
+        List<Integer> posY = new ArrayList<>();
+        dResponse.getEntities().stream().forEach(s -> posY.add(s.getPosition().getY()));
+        assertListAreEqualIgnoringOrder(Arrays.asList(1, 3), posY);
+    }
 }
