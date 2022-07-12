@@ -7,9 +7,12 @@ import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
 public class Mercenary extends Enemy {
-    private static final int DEFAULT_MERC_HEALTH = 0;//JSONConfig.mercenary_health
-    private static final int DEFAULT_MERC_ATTACK = 0;//JSONConfig.mercenary_attack
-    private static final int DEFAULT_BRIBE_RADIUS = 0;//JSONConfig.bribe_radius
+    // private static final int DEFAULT_MERC_HEALTH = 0;//JSONConfig.mercenary_health
+    // private static final int DEFAULT_MERC_ATTACK = 0;//JSONConfig.mercenary_attack
+    // private static final int DEFAULT_BRIBE_RADIUS = 0;//JSONConfig.bribe_radius
+    private static final int DEFAULT_MERC_HEALTH = JSONConfig.getConfig("mercenary_health");
+    private static final int DEFAULT_MERC_ATTACK = JSONConfig.getConfig("mercenary_attack");
+    private static final int DEFAULT_BRIBE_RADIUS = JSONConfig.getConfig("bribe_radius");
 
     private boolean isInRadius;
 

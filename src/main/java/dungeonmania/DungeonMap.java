@@ -1,16 +1,40 @@
 package dungeonmania;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import dungeonmania.movingEntity.Player;
+import dungeonmania.movingEntity.*;
+import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Position;
+import dungeonmania.util.FileLoader;
+import dungeonmania.util.JSONMap;
+import dungeonmania.util.Position;
+import dungeonmania.Entity;
+import dungeonmania.StaticEntities.*;
+
+import java.util.ArrayList;
+
+import org.eclipse.jetty.websocket.api.InvalidWebSocketException;
+import org.json.JSONArray;
+import org.json.JSONML;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
+import netscape.javascript.JSObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class DungeonMap {
     // assume mapEntities contain all current entities on the map
     private List<Entity> mapEntities;
+    private String dungeonName;
 
-    public DungeonMap(List<Entity> mapEntities) {
+    public DungeonMap(List<Entity> mapEntities, String dungeonName) {
         this.mapEntities = mapEntities;
+        this.dungeonName = dungeonName;
     }
 
     public List<Entity> getMapEntities() {
@@ -37,4 +61,11 @@ public class DungeonMap {
         return player;
     }
 
+    public List<EntityResponse> getEntityResponses() {
+        return mapEntities.stream().map(Entity::getEntityResponse).collect(Collectors.toList());
+    }
+
+    public String getDungeonName() {
+        return dungeonName;
+    }
 }

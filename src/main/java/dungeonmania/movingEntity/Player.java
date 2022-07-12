@@ -11,7 +11,9 @@ import dungeonmania.util.Position;
 
 public class Player extends MovingEntity {
 
-    private static final int DEFAULT_BRIBE_AMOUNT = 0; // JSONConfig.bribe_amount
+    // private static final int DEFAULT_BRIBE_AMOUNT = 0; // JSONConfig.bribe_amount
+    private static final int DEFAULT_BRIBE_AMOUNT = JSONConfig.getConfig("bribe_amount");
+
 
     private boolean isInvisible;
     private boolean isInvincible;
