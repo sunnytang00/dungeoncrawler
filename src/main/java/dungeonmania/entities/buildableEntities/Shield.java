@@ -2,17 +2,21 @@ package dungeonmania.entities.buildableEntities;
 
 import dungeonmania.entities.Item;
 import dungeonmania.entities.collectableEntities.*;
-import dungeonmania.util.Position;
+import dungeonmania.util.JSONConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Shield extends Weapon implements ItemBuildable {
 
-    private int defence;
+    private static final int DEFAULT_SHILED_DURABILITY = JSONConfig.getConfig("shield_durability");
+    private static final int DEFAULT_SHILED_DEFENCE = JSONConfig.getConfig("shield_defence");
+
+    private int shield_durability;
 
     public Shield(String type) {
         super(type);
+        shield_durability = DEFAULT_SHILED_DURABILITY;
     }
 
     @Override
@@ -46,12 +50,17 @@ public class Shield extends Weapon implements ItemBuildable {
         return null;
     }
 
-    public int getDefence() {
-        return defence;
+    public int getShieldDurability() {
+        return shield_durability;
     }
 
-    public void setDefence(int defence) {
-        this.defence = defence;
+    public void useShield() {
+        shield_durability -= 1;
     }
+
+    public int getShieldDefence() {
+        return DEFAULT_SHILED_DEFENCE;
+    }
+
 }
 

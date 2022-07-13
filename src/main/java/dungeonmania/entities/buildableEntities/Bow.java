@@ -4,15 +4,20 @@ import dungeonmania.entities.Item;
 import dungeonmania.entities.collectableEntities.Arrows;
 import dungeonmania.entities.collectableEntities.Weapon;
 import dungeonmania.entities.collectableEntities.Wood;
-import dungeonmania.util.Position;
+import dungeonmania.util.JSONConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bow extends Weapon implements ItemBuildable {
 
+    private static final int DEFAULT_BOW_DURABILITY = JSONConfig.getConfig("bow_durability");
+
+    private int bow_durability;
+
     public Bow(String type) {
         super(type);
+        this.bow_durability = DEFAULT_BOW_DURABILITY;
     }
 
     @Override
@@ -46,5 +51,14 @@ public class Bow extends Weapon implements ItemBuildable {
         }
         return null;
     }
+
+    public int getBowDurability() {
+        return bow_durability;
+    }
+
+    public void useBow() {
+        bow_durability -= 1;
+    }
+    
 }
 
