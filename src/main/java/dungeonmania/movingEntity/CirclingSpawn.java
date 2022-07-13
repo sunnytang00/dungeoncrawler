@@ -68,6 +68,7 @@ public class CirclingSpawn implements MovingStrategy {
             int newIndex = (circIndex + 1) % 8;
             Position newCircPos = adjPos.get(newIndex);
             int newAntiIndex = (circIndex - 1) % 8;
+            if (newAntiIndex == -1) {newAntiIndex = 7;}
             Position newAntiCircPos = adjPos.get(newAntiIndex);
             // if no boulder, follow simple clockwise circular path
             if (!containsBoulder(adjEntities)) {

@@ -26,11 +26,11 @@ import java.io.InputStream;
 
 public class DungeonMap {
     // assume mapEntities contain all current entities on the map
-    private List<Entity> mapEntities;
+    private List<Entity> mapEntities = new ArrayList<Entity>();
     private String dungeonName;
 
     public DungeonMap(List<Entity> mapEntities, String dungeonName) {
-        this.mapEntities = new ArrayList<Entity>();
+        this.mapEntities = mapEntities;
         this.dungeonName = dungeonName;
     }
 

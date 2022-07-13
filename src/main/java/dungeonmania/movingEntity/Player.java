@@ -213,6 +213,8 @@ public class Player extends MovingEntity {
         } else if (entity instanceof Door) {
             // check if door is already opened 
             // check if corresponding key is in inventory 
+            Door door = (Door) entity;
+            door.unlockDoor(currKey);
         } else if (entity instanceof Portal) {
         
         } else if (entity instanceof Enemy) {
