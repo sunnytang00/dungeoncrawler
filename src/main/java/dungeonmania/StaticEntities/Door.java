@@ -13,8 +13,6 @@ public class Door extends StaticEntity {
     public Door(String type, Position position, int keyID) {
         super(type, position);
         this.keyID = keyID;
-        setType("door_close");
-        
     }
 
     public void unlockDoor(Key key) {
