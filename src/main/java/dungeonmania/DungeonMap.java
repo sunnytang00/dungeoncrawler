@@ -30,12 +30,16 @@ public class DungeonMap {
     private String dungeonName;
 
     public DungeonMap(List<Entity> mapEntities, String dungeonName) {
-        this.mapEntities = mapEntities;
+        this.mapEntities = new ArrayList<Entity>();
         this.dungeonName = dungeonName;
     }
 
     public List<Entity> getMapEntities() {
         return mapEntities;
+    }
+
+    public void setMapEntities(List<Entity> mapEntities) {
+        this.mapEntities = mapEntities;
     }
 
     public List<Entity> getEntityFromPos(Position position) {
@@ -60,6 +64,19 @@ public class DungeonMap {
 
     public List<EntityResponse> getEntityResponses() {
         return mapEntities.stream().map(Entity::getEntityResponse).collect(Collectors.toList());
+    }
+
+    public int getNumOfAlly() {
+        int count = 0;
+        for (Entity entity : mapEntities) {
+            if (entity instanceof Mercenary) {
+                Mercenary merc = (Mercenary) entity;
+                if (merc.isBribed()) {
+                    count+=1;
+                }
+            }
+        }
+        return count;
     }
 
     public String getDungeonName() {

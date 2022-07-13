@@ -2,7 +2,6 @@ package dungeonmania.entities;
 
 import dungeonmania.Entity;
 import dungeonmania.response.models.ItemResponse;
-import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public abstract class Item extends Entity {
@@ -10,10 +9,6 @@ public abstract class Item extends Entity {
      * Record the position of the item in the map
      */
     protected Position position;
-    /**
-     * Record the moving direction of the item in the map
-     */
-    protected Direction direction;
     /**
      * Indicate whether the current potion is activated
      */
@@ -42,21 +37,6 @@ public abstract class Item extends Entity {
         this.position = position;
     }
 
-    public Direction getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-    }
-
-    public boolean isTriggered() {
-        return isTriggered;
-    }
-
-    public void setTriggered(boolean triggered) {
-        isTriggered = triggered;
-    }
 
     public int getUsedTimes() {
         return usedTimes;

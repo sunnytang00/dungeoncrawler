@@ -12,11 +12,5 @@ public class InvincibleState implements PlayerState {
         player.setNonTraversibles(Arrays.asList("wall", "door"));
     }
 
-    @Override
-    public void playerInBattle(Player player, Enemy enemy) {
-        // TODO Auto-generated method stub
-        
-    }
-
     
 }

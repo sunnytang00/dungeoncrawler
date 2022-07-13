@@ -18,6 +18,7 @@ public class DungeonGame {
     private List<Battle> battles;
     private List<String> buildables;
 
+
     public DungeonGame(String goals, List<Item> inventories, List<Battle> battles, List<String> buildables) {
         this.dungeonId = UUID.randomUUID().toString();
         this.goals = goals;
@@ -74,5 +75,6 @@ public class DungeonGame {
     public void incrementTick() {
         currentTick += 1;
     }
+
     
 }
