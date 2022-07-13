@@ -2,6 +2,7 @@ package dungeonmania.entities.buildableEntities;
 
 import dungeonmania.entities.Item;
 import dungeonmania.entities.collectableEntities.*;
+import dungeonmania.movingEntity.Player;
 import dungeonmania.util.JSONConfig;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class Shield extends Weapon implements ItemBuildable {
         super(type);
         setDurability(DEFAULT_SHILED_DURABILITY);
     }
-
+    
     // @Override
     // public Shield build(List<Item> inventory) {
     //     /**
@@ -52,6 +53,12 @@ public class Shield extends Weapon implements ItemBuildable {
     @Override
     public int getDefence() {
         return DEFAULT_SHILED_DEFENCE;
+    }
+
+    @Override
+    public void build(List<Item> inventory, Player player) {
+        // TODO Auto-generated method stub
+        
     }
 
 }
