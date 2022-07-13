@@ -107,7 +107,12 @@ public class Player extends MovingEntity {
 
 
     public Key getCurrKey() {
-        return currKey;
+        for (Item item : inventory) {
+            if (item instanceof Key) {
+                return (Key) item;
+            }
+        }
+        return null;
     }
 
 
@@ -213,8 +218,12 @@ public class Player extends MovingEntity {
         } else if (entity instanceof Door) {
             // check if door is already opened 
             // check if corresponding key is in inventory 
-            Door door = (Door) entity;
-            door.unlockDoor(currKey);
+            currKey = getCurrKey();
+            if (currKey != null) {
+                Door door = (Door) entity;
+                door.unlockDoor(currKey);
+                inventory.remove(currKey);
+            }
         } else if (entity instanceof Portal) {
         
         } else if (entity instanceof Enemy) {
