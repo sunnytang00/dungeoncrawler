@@ -11,8 +11,6 @@ public class ZombieToast extends Enemy {
     private static final int DEFAULT_ZOMBIE_HEALTH = JSONConfig.getConfig("zombie_health");
     private static final int DEFAULT_ZOMBIE_ATTACK = JSONConfig.getConfig("zombie_attack");
 
-    private int spawnRate;
-
     public ZombieToast(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
         this.setHealth(DEFAULT_ZOMBIE_HEALTH);
@@ -30,10 +28,6 @@ public class ZombieToast extends Enemy {
             setMovingStrategy(new RandomSpawn());
         }   
         getMovingStrategy().move(this, map);  
-    }
-
-    public int getSpawnRate() {
-        return spawnRate;
     }
     
 }
