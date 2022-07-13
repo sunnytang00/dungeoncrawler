@@ -1,13 +1,15 @@
 package dungeonmania.movingEntity;
 
+import dungeonmania.util.JSONConfig;
+
 public class MercBribedState implements MercenaryState {
 
-    private static final int DEFAULT_ALLY_HEALTH = 0;//JSONConfig.ally_health
-    private static final int DEFAULT_ALLY_ATTACK = 0;//JSONConfig.ally_attack
+    private static final double DEFAULT_ALLY_DEFENCE = JSONConfig.getConfig("ally_defence");
+    private static final double DEFAULT_ALLY_ATTACK = JSONConfig.getConfig("ally_attack");
 
     @Override
     public void currentState(Mercenary merc) {
-        merc.setHealth(DEFAULT_ALLY_HEALTH);
+        merc.setDefence(DEFAULT_ALLY_DEFENCE);
         merc.setAttack(DEFAULT_ALLY_ATTACK);
         merc.setBribed(true);
     }

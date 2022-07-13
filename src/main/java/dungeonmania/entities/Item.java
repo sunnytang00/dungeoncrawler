@@ -23,6 +23,10 @@ public abstract class Item extends Entity {
      */
     private int usedTimes;
 
+    public Item(String type) {
+        super(type);
+    }
+
     public Item(String type, Position position) {
         super(type, position);
     }

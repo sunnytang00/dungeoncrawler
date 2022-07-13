@@ -13,6 +13,10 @@ public abstract class Weapon extends Item {
      */
     protected int damageValue;
 
+    public Weapon(String type) {
+        super(type);
+    }
+
     public Weapon(String type, Position position) {
         super(type, position);
     }

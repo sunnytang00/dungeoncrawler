@@ -3,6 +3,7 @@ package dungeonmania.entities.collectableEntities;
 import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
 import dungeonmania.movingEntity.*;
+import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
 import java.util.ArrayList;
@@ -10,18 +11,15 @@ import java.util.List;
 
 public class Bomb extends Weapon {
 
-    private int bombRadius;
+    private static final int DEFAULT_BOMB_RADIUS = JSONConfig.getConfig("bomb_radius");
+
 
     public Bomb(String type, Position position) {
         super(type, position);
     }
 
     public int getBombRadius() {
-        return bombRadius;
-    }
-
-    public void setBombRadius(int bombRadius) {
-        this.bombRadius = bombRadius;
+        return DEFAULT_BOMB_RADIUS;
     }
 
     public void explode(DungeonMap map) {

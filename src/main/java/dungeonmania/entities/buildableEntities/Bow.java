@@ -4,19 +4,24 @@ import dungeonmania.entities.Item;
 import dungeonmania.entities.collectableEntities.Arrows;
 import dungeonmania.entities.collectableEntities.Weapon;
 import dungeonmania.entities.collectableEntities.Wood;
-import dungeonmania.util.Position;
+import dungeonmania.util.JSONConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bow extends Weapon implements ItemBuildable {
 
-    public Bow(String type, Position position) {
-        super(type, position);
+    private static final int DEFAULT_BOW_DURABILITY = JSONConfig.getConfig("bow_durability");
+
+    private int bow_durability;
+
+    public Bow(String type) {
+        super(type);
+        this.bow_durability = DEFAULT_BOW_DURABILITY;
     }
 
     @Override
-    public Item build(List<Item> inventory) {
+    public Bow build(List<Item> inventory) {
         //Item buildableItem = null;
         /**
          * Record all the removing items
@@ -41,11 +46,19 @@ public class Bow extends Weapon implements ItemBuildable {
                 // remove all the items used to craft the buildable item
                 // if it could be crafted by the items in the inventory
                 removingPosition.forEach(i -> inventory.remove(i));
-                return new Bow(BUILDABLE_TYPE_BOW, new Position(0,0));
+                return new Bow(BUILDABLE_TYPE_BOW);
             }
         }
-
         return null;
     }
+
+    public int getBowDurability() {
+        return bow_durability;
+    }
+
+    public void useBow() {
+        bow_durability -= 1;
+    }
+    
 }
 

@@ -14,7 +14,9 @@ import dungeonmania.util.Position;
 
 public class Player extends MovingEntity {
 
-    private static final int DEFAULT_BRIBE_AMOUNT = 0; // JSONConfig.bribe_amount
+    private static final int DEFAULT_BRIBE_AMOUNT = JSONConfig.getConfig("bribe_amount");
+    private static final int DEFAULT_PLAYER_HEALTH = JSONConfig.getConfig("player_health");
+    private static final int DEFAULT_PLAYER_ATTACK = JSONConfig.getConfig("player_attack");
 
     private boolean isInvisible;
     private boolean isInvincible;
@@ -29,8 +31,10 @@ public class Player extends MovingEntity {
         this.isInvisible = false;
         this.isInvincible = false;
         this.prevPosition = null;
-        this.wealth = 0; // imitially has not collected any treasure
-        this.setNonTraversibles(Arrays.asList("wall", "door"));
+        this.setHealth(DEFAULT_PLAYER_HEALTH);
+        this.setAttack(DEFAULT_PLAYER_ATTACK);
+        this.wealth = 0; // initially has not collected any treasure
+        this.setState(new PlayerDefaultState());
     }
 
 
@@ -69,7 +73,8 @@ public class Player extends MovingEntity {
         this.prevPosition = getPosition().translateBy(newD);
 
     }
-    
+
+
     public int getWealth() {
         int totalTreasure = (int) inventory.stream().filter(i -> i instanceof Treasure).count();
         
@@ -129,23 +134,29 @@ public class Player extends MovingEntity {
     public void interact(Entity entity) {
 
         // create interact method in each entity
-        // if (entity instanceof Boulder) {
-        //     pushBoulder();
-        // } else if (entity instanceof Exit) {
-            
-        // } else if (entity instanceof Item) {
-        //     collectToInventory();
-        // } else if (entity instanceof Enemy) {
-        //     Enemy enemy = (Enemy) entity;
-        //     if (!enemy.becomeAlly()) {
-        //         // could not only bribe when encounter, could also bribe within certain radius
-        //         if (entity instanceof Mercenary && hasEnoughToBribe()) {
-        //             bribeMerc();
-        //         } else {
-        //             battleWithEnemy();
-        //         }
-        //     }
-        // }
+        if (entity instanceof Boulder) {
+            pushBoulder();
+        } else if (entity instanceof Exit) {
+            // remove exit from goals 
+            // remove player from map entities 
+        } else if (entity instanceof Item) {
+            collectToInventory((Item) entity);
+        } else if (entity instanceof Door) {
+            // check if door is already opened 
+            // check if corresponding key is in inventory 
+        } else if (entity instanceof Portal) {
+        
+        } else if (entity instanceof Enemy) {
+            Enemy enemy = (Enemy) entity;
+            if (!enemy.becomeAlly()) {
+                // could not only bribe when encounter, could also bribe within certain radius
+                if (entity instanceof Mercenary && hasEnoughToBribe()) {
+                    bribeMerc();
+                } else {
+                    battleWithEnemy();
+                }
+            }
+        }
 
     }
 
@@ -197,4 +208,9 @@ public class Player extends MovingEntity {
 
         return true;
     }
+
+    public boolean hasKey() {
+        return inventory.stream().anyMatch(i -> i.getType() == "key");
+    }
+
 }

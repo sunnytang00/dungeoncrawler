@@ -1,6 +1,7 @@
 package dungeonmania.movingEntity;
 
 import dungeonmania.Entity;
+import dungeonmania.StaticEntities.*;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -11,13 +12,15 @@ public abstract class MovingEntity extends Entity  {
 
     private Position initialPosition;
     private Direction direction;
-    private int health;
-    private int attack;
+    private double health;
+    private double attack;
+    private double defence;
     private List<String> nontraversibles = new ArrayList<String>();
 
     public MovingEntity(String type, Position position, boolean isInteractable) {
         super(type, position);
         this.initialPosition = position;
+        this.nontraversibles = null;
     }
     
 
@@ -35,34 +38,37 @@ public abstract class MovingEntity extends Entity  {
     
     public boolean blockedBy(List<Entity> atAdj) {
         for (Entity entity : atAdj) {
-            String type = entity.getType();
-            if (nontraversibles.contains(type)) {
-                // if (type.equals("door")) {
-                //     Door door = (Door) atAdj;
-                //     if (door.isOpen()) {
-                //         return true;
-                //     }
-                // }
+            if (nontraversibles.contains(entity.getType())) {
                 return false;
             }
         }
         return true;
     }
 
-    public int getHealth() {
+    public double getHealth() {
         return health;
     }
 
-    public void setHealth(int health) {
+    public void setHealth(double health) {
         this.health = health;
     }
 
-    public int getAttack() {
+    public double getAttack() {
         return attack;
     }
 
-    public void setAttack(int attack) {
+    public void setAttack(double attack) {
         this.attack = attack;
+    }
+    
+
+    public double getDefence() {
+        return defence;
+    }
+
+
+    public void setDefence(double defence) {
+        this.defence = defence;
     }
 
 
