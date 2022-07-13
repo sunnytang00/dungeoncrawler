@@ -84,10 +84,6 @@ public class JSONMap {
                 entity = new Bomb(type, position); break;
             case "sword":
                 entity = new Sword(type, position); break;
-            case "bow":
-                entity = new Bow(type, position); break;
-            case "shield":
-                entity = new Shield(type, position); break;
         }
         initialMapEntities.add(entity);
     }
