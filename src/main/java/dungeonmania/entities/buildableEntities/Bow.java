@@ -11,12 +11,12 @@ import java.util.List;
 
 public class Bow extends Weapon implements ItemBuildable {
 
-    public Bow(String type, Position position) {
-        super(type, position);
+    public Bow(String type) {
+        super(type);
     }
 
     @Override
-    public Item build(List<Item> inventory) {
+    public Bow build(List<Item> inventory) {
         //Item buildableItem = null;
         /**
          * Record all the removing items
@@ -41,10 +41,9 @@ public class Bow extends Weapon implements ItemBuildable {
                 // remove all the items used to craft the buildable item
                 // if it could be crafted by the items in the inventory
                 removingPosition.forEach(i -> inventory.remove(i));
-                return new Bow(BUILDABLE_TYPE_BOW, new Position(0,0));
+                return new Bow(BUILDABLE_TYPE_BOW);
             }
         }
-
         return null;
     }
 }

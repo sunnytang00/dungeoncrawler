@@ -11,13 +11,12 @@ public class Shield extends Weapon implements ItemBuildable {
 
     private int defence;
 
-    public Shield(String type, Position position) {
-        super(type, position);
+    public Shield(String type) {
+        super(type);
     }
 
     @Override
-    public Item build(List<Item> inventory) {
-        Item buildableItem = null;
+    public Shield build(List<Item> inventory) {
         /**
          * Record all the removing items
          */
@@ -41,11 +40,10 @@ public class Shield extends Weapon implements ItemBuildable {
                 // remove all the items used to craft the buildable item
                 // if it could be crafted by the items in the inventory
                 removingPosition.forEach(i -> inventory.remove(i));
-                buildableItem = new Shield(BUILDABLE_TYPE_SHIELD, new Position(0,0));
+                return new Shield(BUILDABLE_TYPE_SHIELD);
             }
         }
-
-        return buildableItem;
+        return null;
     }
 
     public int getDefence() {
