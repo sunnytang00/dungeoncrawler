@@ -10,11 +10,15 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.StaticEntities.*;
+import dungeonmania.entities.collectableEntities.Key;
+import dungeonmania.movingEntity.Player;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
+import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 import static dungeonmania.TestUtils.getEntities;
+import static dungeonmania.TestUtils.countEntityOfType;
 
 public class StaticEntityTest {
 
@@ -120,6 +124,27 @@ public class StaticEntityTest {
         assertEquals("portal_red", portal3.getType());
         assertEquals("portal_red", portal4.getType());
 
-
     }
+    
+    //Begin testing with json and actual class
+    @Test
+    public void TestEntityCreation() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse intialResponse = dmc.newGame("d_bombTest_placeBombRadius2", "c_battleTests_basicMercenaryMercenaryDies");
+
+        assertEquals(null, intialResponse.getInventory());
+        assertEquals("d_bombTest_placeBombRadius2", intialResponse.getDungeonName());
+        assertEquals(countEntityOfType(intialResponse, "player"), 1);
+        assertEquals(countEntityOfType(intialResponse, "treasure"), 2);
+        assertEquals(countEntityOfType(intialResponse, "boulder"), 1);
+        assertEquals(countEntityOfType(intialResponse, "switch"), 1);
+        assertEquals(countEntityOfType(intialResponse, "wall"), 2);
+        assertEquals(countEntityOfType(intialResponse, "exit"), 1);
+        assertEquals(countEntityOfType(intialResponse, "bomb"), 1);
+        
+    }
+
+
 }

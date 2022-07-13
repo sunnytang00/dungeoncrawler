@@ -12,19 +12,25 @@ public abstract class Entity {
     protected boolean isInteractable;
     private String colour;
 
-    public Entity(String type, Position position) {
+    public Entity(String type) {
         this.id = UUID.randomUUID().toString();
         this.type = type;
+    }
+
+    public Entity(String type, Position position) {
+        this(type);
         this.position = position;
         this.isInteractable = false;
     }
 
     public Entity(String type, Position position, String colour) {
-        this.id = UUID.randomUUID().toString();
-        this.type = type;
-        this.position = position;
-        this.isInteractable = false;
+        this(type, position);
         this.colour = colour;
+    }
+
+    public Entity(String type, Position position, boolean isInteractable) {
+        this(type, position);
+        this.isInteractable = isInteractable;
     }
 
     public String getId() {
@@ -61,6 +67,10 @@ public abstract class Entity {
 
     public boolean isInteractable() {
         return isInteractable;
+    }
+
+    public void setInteractable(boolean isInteractable) {
+        this.isInteractable = isInteractable;
     }
 
     public EntityResponse getEntityResponse() {
