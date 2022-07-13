@@ -14,6 +14,7 @@ public abstract class MovingEntity extends Entity  {
     private Direction direction;
     private double health;
     private double attack;
+    private double defence;
     private List<String> nontraversibles = new ArrayList<String>();
 
     public MovingEntity(String type, Position position, boolean isInteractable) {
@@ -58,6 +59,16 @@ public abstract class MovingEntity extends Entity  {
 
     public void setAttack(double attack) {
         this.attack = attack;
+    }
+    
+
+    public double getDefence() {
+        return defence;
+    }
+
+
+    public void setDefence(double defence) {
+        this.defence = defence;
     }
 
 
