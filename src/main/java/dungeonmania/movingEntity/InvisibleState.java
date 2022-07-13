@@ -7,6 +7,7 @@ public class InvisibleState implements PlayerState {
         player.setInvisible(true);
         player.setInvincible(false); 
         player.setInteractable(false); 
+        player.setNonTraversibles(null);
     }
 
     @Override

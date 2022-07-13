@@ -1,6 +1,7 @@
 package dungeonmania.movingEntity;
 
 import dungeonmania.Entity;
+import dungeonmania.StaticEntities.*;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -18,6 +19,7 @@ public abstract class MovingEntity extends Entity  {
     public MovingEntity(String type, Position position, boolean isInteractable) {
         super(type, position);
         this.initialPosition = position;
+        this.nontraversibles = null;
     }
     
 
@@ -35,14 +37,7 @@ public abstract class MovingEntity extends Entity  {
     
     public boolean blockedBy(List<Entity> atAdj) {
         for (Entity entity : atAdj) {
-            String type = entity.getType();
-            if (nontraversibles.contains(type)) {
-                // if (type.equals("door")) {
-                //     Door door = (Door) atAdj;
-                //     if (door.isOpen()) {
-                //         return true;
-                //     }
-                // }
+            if (nontraversibles.contains(entity.getType())) {
                 return false;
             }
         }

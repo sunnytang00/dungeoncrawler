@@ -35,7 +35,6 @@ public class Player extends MovingEntity {
         this.setAttack(DEFAULT_PLAYER_ATTACK);
         this.wealth = 0; // initially has not collected any treasure
         this.setState(new PlayerDefaultState());
-        this.setNonTraversibles(Arrays.asList("wall", "door"));
     }
 
 
@@ -135,23 +134,29 @@ public class Player extends MovingEntity {
     public void interact(Entity entity) {
 
         // create interact method in each entity
-        // if (entity instanceof Boulder) {
-        //     pushBoulder();
-        // } else if (entity instanceof Exit) {
-            
-        // } else if (entity instanceof Item) {
-        //     collectToInventory();
-        // } else if (entity instanceof Enemy) {
-        //     Enemy enemy = (Enemy) entity;
-        //     if (!enemy.becomeAlly()) {
-        //         // could not only bribe when encounter, could also bribe within certain radius
-        //         if (entity instanceof Mercenary && hasEnoughToBribe()) {
-        //             bribeMerc();
-        //         } else {
-        //             battleWithEnemy();
-        //         }
-        //     }
-        // }
+        if (entity instanceof Boulder) {
+            pushBoulder();
+        } else if (entity instanceof Exit) {
+            // remove exit from goals 
+            // remove player from map entities 
+        } else if (entity instanceof Item) {
+            collectToInventory((Item) entity);
+        } else if (entity instanceof Door) {
+            // check if door is already opened 
+            // check if corresponding key is in inventory 
+        } else if (entity instanceof Portal) {
+        
+        } else if (entity instanceof Enemy) {
+            Enemy enemy = (Enemy) entity;
+            if (!enemy.becomeAlly()) {
+                // could not only bribe when encounter, could also bribe within certain radius
+                if (entity instanceof Mercenary && hasEnoughToBribe()) {
+                    bribeMerc();
+                } else {
+                    battleWithEnemy();
+                }
+            }
+        }
 
     }
 
@@ -203,4 +208,9 @@ public class Player extends MovingEntity {
 
         return true;
     }
+
+    public boolean hasKey() {
+        return inventory.stream().anyMatch(i -> i.getType() == "key");
+    }
+
 }
