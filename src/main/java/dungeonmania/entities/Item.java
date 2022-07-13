@@ -1,6 +1,7 @@
 package dungeonmania.entities;
 
 import dungeonmania.Entity;
+import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -72,6 +73,10 @@ public abstract class Item extends Entity {
      */
     public boolean canBeStillUsed() {
         return usedTimes > 0;
+    }
+
+    public ItemResponse getItemResponse() {
+        return new ItemResponse(getId(), getType());
     }
 }
 

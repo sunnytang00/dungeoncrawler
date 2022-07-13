@@ -3,6 +3,7 @@ package dungeonmania.entities.buildableEntities;
 import dungeonmania.entities.Item;
 import dungeonmania.entities.collectableEntities.*;
 import dungeonmania.util.JSONConfig;
+import dungeonmania.movingEntity.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class Shield extends Weapon implements ItemBuildable {
     }
 
     @Override
-    public Shield build(List<Item> inventory) {
+    public void build(List<Item> inventory, Player player) {
         /**
          * Record all the removing items
          */
@@ -44,10 +45,9 @@ public class Shield extends Weapon implements ItemBuildable {
                 // remove all the items used to craft the buildable item
                 // if it could be crafted by the items in the inventory
                 removingPosition.forEach(i -> inventory.remove(i));
-                return new Shield(BUILDABLE_TYPE_SHIELD);
+                player.collectToInventory(new Shield(BUILDABLE_TYPE_SHIELD));
             }
         }
-        return null;
     }
 
     public int getShieldDurability() {
@@ -61,6 +61,9 @@ public class Shield extends Weapon implements ItemBuildable {
     public int getShieldDefence() {
         return DEFAULT_SHILED_DEFENCE;
     }
+
+    
+    
 
 }
 
