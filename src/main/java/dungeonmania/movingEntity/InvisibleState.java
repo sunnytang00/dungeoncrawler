@@ -1,5 +1,10 @@
 package dungeonmania.movingEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import dungeonmania.Entity;
+
 public class InvisibleState implements PlayerState {
 
     @Override
@@ -7,15 +12,8 @@ public class InvisibleState implements PlayerState {
         player.setInvisible(true);
         player.setInvincible(false); 
         player.setInteractable(false); 
-        player.setNonTraversibles(null);
+        List<String> types = new ArrayList<String>();
+        player.setNonTraversibles(types);
     }
 
-    @Override
-    public void playerInBattle(Player player, Enemy enemy) {
-        // TODO Auto-generated method stub
-        
-    }
-
-
-    
 }

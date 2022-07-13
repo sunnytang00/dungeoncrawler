@@ -15,8 +15,16 @@ public class PotionQueue {
         potionQueue.add(potion);
     }
 
+    public void removePotionFromQueue(Potion potion) {
+        potionQueue.remove(potion);
+    }
+
     public List<Potion> getPotionQueue() {
         return potionQueue;
+    }
+
+    public int getSize() {
+        return potionQueue.size();
     }
 
     public void updatePotionQueue() {

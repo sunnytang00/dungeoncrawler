@@ -5,22 +5,28 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
 import dungeonmania.StaticEntities.*;
-import dungeonmania.entities.Item;
+import dungeonmania.entities.*;
+import dungeonmania.entities.buildableEntities.*;
 import dungeonmania.entities.collectableEntities.*;
 import dungeonmania.response.models.ItemResponse;
+import dungeonmania.util.Battle;
 import dungeonmania.util.Direction;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
-import dungeonmania.entities.*;;
+import dungeonmania.util.PotionQueue;
+import dungeonmania.util.Round;
 
 public class Player extends MovingEntity {
 
     private static final int DEFAULT_BRIBE_AMOUNT = JSONConfig.getConfig("bribe_amount");
     private static final int DEFAULT_PLAYER_HEALTH = JSONConfig.getConfig("player_health");
     private static final int DEFAULT_PLAYER_ATTACK = JSONConfig.getConfig("player_attack");
+    private static final double DEFAULT_ALLY_DEFENCE = JSONConfig.getConfig("ally_defence");
+    private static final double DEFAULT_ALLY_ATTACK = JSONConfig.getConfig("ally_attack");
 
     private boolean isInvisible;
     private boolean isInvincible;
@@ -28,17 +34,27 @@ public class Player extends MovingEntity {
     private int wealth;
     private PlayerState state;
     private List<Item> inventory;
+    private List<Enemy> battleQueue;
+    private PotionQueue potionQueue;
+    private Potion currPotion;
+    private Key currKey;
+    private boolean playerWin;
 
     public Player(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
-        //TODO Auto-generated constructor stub
-        this.isInvisible = false;
-        this.isInvincible = false;
         this.prevPosition = null;
         this.setHealth(DEFAULT_PLAYER_HEALTH);
         this.setAttack(DEFAULT_PLAYER_ATTACK);
         this.wealth = 0; // initially has not collected any treasure
         this.setState(new PlayerDefaultState());
+        state.playerStateChange(this);
+        this.battleQueue = new ArrayList<Enemy>();
+        this.potionQueue = new PotionQueue();
+        this.currKey = null;
+        this.currPotion = null;
+        this.playerWin = false;
+        this.inventory = new ArrayList<Item>();
+        
     }
 
 
@@ -78,6 +94,37 @@ public class Player extends MovingEntity {
 
     }
 
+    
+
+    public Potion getCurrPotion() {
+        return currPotion;
+    }
+
+
+    public void setCurrPotion(Potion currPotion) {
+        this.currPotion = currPotion;
+    }
+
+
+    public Key getCurrKey() {
+        return currKey;
+    }
+
+
+    public void setCurrKey(Key currKey) {
+        this.currKey = currKey;
+    }
+
+
+    public boolean isPlayerWin() {
+        return playerWin;
+    }
+
+
+    public void setPlayerWin(boolean playerWin) {
+        this.playerWin = playerWin;
+    }
+
 
     public int getWealth() {
         int totalTreasure = (int) inventory.stream().filter(i -> i instanceof Treasure).count();
@@ -95,6 +142,11 @@ public class Player extends MovingEntity {
     }
 
     
+
+    public void setBattleQueue(List<Enemy> battleQueue) {
+        this.battleQueue = battleQueue;
+    }
+
 
     public PlayerState getState() {
         return state;
@@ -116,7 +168,11 @@ public class Player extends MovingEntity {
     }
 
 
-    public void move(DungeonMap map, Direction direction) {
+    public List<Enemy> getBattleQueue() {
+        return battleQueue;
+    }
+
+    public void move(DungeonGame game, DungeonMap map, Direction direction) {
 
         boolean blocked = false;
 
@@ -125,17 +181,26 @@ public class Player extends MovingEntity {
         List<Entity> encounters = map.getEntityFromPos(newPos);
         // interact
         for (Entity encounter : encounters) {
-            interact(encounter);
+            if (!isInvisible()) {
+                interact(encounter, map);
+            }
             if (getNonTraversibles().contains(encounter.getType())) {
                 blocked = true;
             }
         }
+
+        if (battleQueue.size() > 0) {
+            List<Battle> battles = battleWithEnemies(battleQueue, map);
+            game.setBattles(battles);
+        }
+
         if (!blocked) {
             this.setPosition(newPos);
         }
     }
 
-    public void interact(Entity entity) {
+
+    public void interact(Entity entity, DungeonMap map) {
 
         // create interact method in each entity
         if (entity instanceof Boulder) {
@@ -144,7 +209,7 @@ public class Player extends MovingEntity {
             // remove exit from goals 
             // remove player from map entities 
         } else if (entity instanceof Item) {
-            collectToInventory((Item) entity);
+            collectToInventory((Item) entity, map);
         } else if (entity instanceof Door) {
             // check if door is already opened 
             // check if corresponding key is in inventory 
@@ -155,12 +220,99 @@ public class Player extends MovingEntity {
             if (!enemy.becomeAlly()) {
                 // could not only bribe when encounter, could also bribe within certain radius
                 if (entity instanceof Mercenary && hasEnoughToBribe()) {
-                    //bribeMerc();
+                    // bribeMerc();
                 } else {
-                    battleWithEnemy();
+                    battleQueue.add(enemy);
                 }
             }
         }
+    }
+
+    public List<Battle> battleWithEnemies(List<Enemy> battleQueue, DungeonMap map) {
+        List<Battle> battles = new ArrayList<Battle>();
+        double iniPlayerHealth = this.getHealth();
+        
+        for (Enemy enemy : battleQueue) {
+            List<Item> weaponryUsed = checkBattleBonuses(map);
+            boolean hasShield = false;
+            for (Item weapon : weaponryUsed) {
+                if (weapon instanceof Shield) {
+                    hasShield = true;
+                }
+            }
+
+            List<Round> rounds = new ArrayList<Round>();
+            double iniEnemyHealth = enemy.getHealth();
+            Battle currBattle = new Battle(enemy.getType(), rounds, iniPlayerHealth, iniEnemyHealth);
+            double deltaPlayerHealth = - enemy.getAttack()/10;
+            double deltaEnemyHealth = - getAttack()/5;
+            if (hasShield) {
+                deltaEnemyHealth *= 2;
+            }
+            double newHealth = getHealth() + deltaPlayerHealth;
+            double enemyHealth = enemy.getHealth() + deltaEnemyHealth;
+            setHealth(newHealth);
+            enemy.setHealth(enemyHealth);
+            if (isInvincible()) {
+                weaponryUsed.add(getCurrPotion());
+            }
+            Round currRound = new Round(deltaPlayerHealth, deltaEnemyHealth, weaponryUsed);
+            rounds.add(currRound);
+            currBattle.setRounds(rounds);
+            
+            for (Item weapon : weaponryUsed) {
+                Weapon w = (Weapon) weapon;
+                w.useWeapon();
+            }
+
+            if (newHealth <= 0) {
+                // player dies
+                map.removeEntityFromMap(this);
+                return battles;
+            } else if (enemyHealth <= 0) {
+                // enemy dies
+                map.removeEntityFromMap(enemy);
+            }
+            
+            if (isInvincible()) {
+                setPlayerWin(true);
+                battles.add(currBattle);
+
+                return battles;
+            }
+        }
+
+        return battles;
+    }
+
+    public List<Item> checkBattleBonuses(DungeonMap map) {
+
+        List<Item> weaponryUsed = new ArrayList<Item>();
+        double attackBonus = 0;
+        double defenceBonus = 0;
+        int numAlly = map.getNumOfAlly();
+        
+        for (Item item: inventory) {
+            if (item instanceof Weapon) {
+                Weapon weapon = (Weapon) item;
+                if (weapon.isUsable()) {
+                    attackBonus += weapon.getDamageValue();
+                    defenceBonus += weapon.getDefence();
+                    weaponryUsed.add((Item)weapon);
+                }
+            }
+        }
+
+        if (numAlly != 0) {
+
+            attackBonus += numAlly * DEFAULT_ALLY_ATTACK;
+            defenceBonus += numAlly * DEFAULT_ALLY_DEFENCE;
+        }
+
+        this.setAttack(DEFAULT_PLAYER_ATTACK + attackBonus);
+        this.setDefence(defenceBonus);
+
+        return weaponryUsed;
 
     }
 
@@ -168,13 +320,31 @@ public class Player extends MovingEntity {
 
     }
 
-    public void collectToInventory(Item item) {
+    public void collectToInventory(Item item, DungeonMap map) {
         inventory.add(item);
+        List<Entity> newMapEntities = map.getMapEntities();
+        newMapEntities.remove(item);
+        map.setMapEntities(newMapEntities);
     }
 
-    public void consumePotion() {
-
-        // setState()
+    // may need to debug later, update potion queue etc, turn currPotion to null whenever ticks over
+    public void consumePotion(String potionType) {
+        for (Item item : inventory) {
+            if (item.getType().equals(potionType)) {
+                potionQueue.addPotionToQueue((Potion) item);
+                if (getCurrPotion() == null && !isInvincible() && !isInvisible()) {
+                    inventory.remove(item);
+                    potionQueue.removePotionFromQueue((Potion) item);
+                    setCurrPotion((Potion)item);
+                    if (potionType.equals("invincibility_potion")) {
+                        setState(new InvincibleState());
+                    } else if (potionType.equals("invisibility_potion")){
+                        setState(new InvisibleState());
+                    }
+                    state.playerStateChange(this);
+                } 
+            }
+        }
 
     }
 
@@ -202,10 +372,6 @@ public class Player extends MovingEntity {
             }
             inventory.remove(delete);
         }
-    }
-
-    public void battleWithEnemy(){
-
     }
 
     public boolean isAlive() {
