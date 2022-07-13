@@ -9,7 +9,7 @@ public class PlayerDefaultState implements PlayerState {
         player.setInvisible(false);
         player.setInvincible(false); 
         player.setInteractable(true);
-        this.setNonTraversibles(Arrays.asList("wall", "door"));     
+        player.setNonTraversibles(Arrays.asList("wall", "door"));     
     }
 
     @Override

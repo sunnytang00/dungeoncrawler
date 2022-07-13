@@ -8,8 +8,8 @@ import dungeonmania.util.Position;
 
 public class ZombieToast extends Enemy {
 
-    private static final int DEFAULT_ZOMBIE_HEALTH = JSONConfig.getConfig("zombie_health");
-    private static final int DEFAULT_ZOMBIE_ATTACK = JSONConfig.getConfig("zombie_attack");
+    private static final double DEFAULT_ZOMBIE_HEALTH = JSONConfig.getConfig("zombie_health");
+    private static final double DEFAULT_ZOMBIE_ATTACK = JSONConfig.getConfig("zombie_attack");
 
     public ZombieToast(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);

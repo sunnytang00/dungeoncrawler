@@ -12,8 +12,8 @@ public abstract class MovingEntity extends Entity  {
 
     private Position initialPosition;
     private Direction direction;
-    private int health;
-    private int attack;
+    private double health;
+    private double attack;
     private List<String> nontraversibles = new ArrayList<String>();
 
     public MovingEntity(String type, Position position, boolean isInteractable) {
@@ -44,19 +44,19 @@ public abstract class MovingEntity extends Entity  {
         return true;
     }
 
-    public int getHealth() {
+    public double getHealth() {
         return health;
     }
 
-    public void setHealth(int health) {
+    public void setHealth(double health) {
         this.health = health;
     }
 
-    public int getAttack() {
+    public double getAttack() {
         return attack;
     }
 
-    public void setAttack(int attack) {
+    public void setAttack(double attack) {
         this.attack = attack;
     }
 

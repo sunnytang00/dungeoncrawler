@@ -4,8 +4,8 @@ import dungeonmania.util.JSONConfig;
 
 public class MercViciousState implements MercenaryState {
 
-    private static final int DEFAULT_MERC_HEALTH = JSONConfig.getConfig("mercenary_health");
-    private static final int DEFAULT_MERC_ATTACK = JSONConfig.getConfig("mercenary_attack");
+    private static final double DEFAULT_MERC_HEALTH = JSONConfig.getConfig("mercenary_health");
+    private static final double DEFAULT_MERC_ATTACK = JSONConfig.getConfig("mercenary_attack");
 
     @Override
     public void currentState(Mercenary merc) {
