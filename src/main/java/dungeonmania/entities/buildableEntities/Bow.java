@@ -32,14 +32,14 @@ public class Bow extends Weapon implements ItemBuildable {
             for (Item item : inventory) {
                 if (item instanceof Wood && woodNumber < 1) {
                     woodNumber++;
-                    removingPosition.add(item);
+                    removingPosition.add(item); 
                 }
                 if (item instanceof Arrows && arrowsNumber < 3) {
                     arrowsNumber++;
                     removingPosition.add(item);
                 }
             }
-
+ 
             if (1 == woodNumber && 3 == arrowsNumber) {
                 // remove all the items used to craft the buildable item
                 // if it could be crafted by the items in the inventory

@@ -53,5 +53,9 @@ public abstract class Item extends Entity {
     public boolean canBeStillUsed() {
         return usedTimes > 0;
     }
+
+    public ItemResponse getItemResponse() {
+        return new ItemResponse(getId(), getType());
+    }
 }
 

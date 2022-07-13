@@ -91,5 +91,16 @@ public class DungeonMap {
         return count;
     }
 
+    public String getDungeonName() {
+        return dungeonName;
+    }
+    
+    public void addEntityToMap(Entity entity) {
+        mapEntities.add(entity);
+    }
+
+    public void removeEntityFromMap(Entity entity) {
+        mapEntities.remove(entity);
+    }
 }
 

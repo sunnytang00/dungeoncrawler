@@ -16,6 +16,10 @@ public abstract class Weapon extends Item {
         super(type);
     }
 
+    public Weapon(String type) {
+        super(type);
+    }
+
     public Weapon(String type, Position position) {
         super(type, position);
     }

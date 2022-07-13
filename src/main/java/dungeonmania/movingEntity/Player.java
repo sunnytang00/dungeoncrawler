@@ -3,6 +3,7 @@ package dungeonmania.movingEntity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
@@ -379,6 +380,79 @@ public class Player extends MovingEntity {
 
     public boolean hasKey() {
         return inventory.stream().anyMatch(i -> i.getType() == "key");
+    }
+
+    public List<ItemResponse> getInventoryResponses() {
+        return inventory.stream().map(Item::getItemResponse).collect(Collectors.toList());
+    }
+
+    public List<String> getBuildables() {
+
+        List<String> ret = new ArrayList<String>();
+        
+        if (canBuildBow()) {
+            ret.add("bow");
+        }
+
+        if (canBuildShield()) {
+            ret.add("shield");
+        }
+        
+        return ret;
+    }
+
+    public boolean canBuildShield() {
+        
+        if (!inventory.isEmpty()) {
+            int woodNumber = 0;
+            int treasureOrKeyNumber = 0;
+            
+            for (Item item : inventory) {
+
+                if (item instanceof Wood) {
+                    woodNumber++;
+                }
+
+                if (item instanceof Treasure || item instanceof Key) {
+                    treasureOrKeyNumber++;
+                }
+            }
+
+            if ((woodNumber >= 2) && (treasureOrKeyNumber >= 1)) {
+                return true;
+            } else {
+                return false;
+            }
+                
+        }
+        return false;
+    }
+
+    public boolean canBuildBow() {
+
+        if (!inventory.isEmpty()) {
+            int woodNumber = 0;
+            int arrowsNumber = 0;
+            
+            for (Item item : inventory) {
+
+                if (item instanceof Wood) {
+                    woodNumber++;
+                }
+
+                if (item instanceof Arrows) {
+                    arrowsNumber++;
+                }
+            }
+
+            if ((woodNumber >= 1) && (arrowsNumber >= 3)) {
+                return true;
+            } else {
+                return false;
+            }
+                
+        }
+        return false;
     }
 
 }

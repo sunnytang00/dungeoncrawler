@@ -1,6 +1,7 @@
 package dungeonmania.entities.buildableEntities;
 
 import dungeonmania.entities.Item;
+import dungeonmania.movingEntity.*;
 
 import java.util.List;
 
@@ -9,11 +10,11 @@ public interface ItemBuildable {
     /**
      * The bow type name
      */
-    String BUILDABLE_TYPE_BOW = "BOW";
+    String BUILDABLE_TYPE_BOW = "bow";
     /**
      * The shield type name
      */
-    String BUILDABLE_TYPE_SHIELD = "SHIELD";
+    String BUILDABLE_TYPE_SHIELD = "shield";
 
     /**
      * Build the complex items by the passing simple items
@@ -22,7 +23,7 @@ public interface ItemBuildable {
      * @return return a complex item if it craft successfully,
      * otherwise null
      */
-    Item build(List<Item> inventory);
+    void build(List<Item> inventory, Player player);
 }
 
 
