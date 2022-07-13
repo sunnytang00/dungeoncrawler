@@ -66,18 +66,6 @@ public class DungeonMap {
         return mapEntities.stream().map(Entity::getEntityResponse).collect(Collectors.toList());
     }
 
-    public String getDungeonName() {
-        return dungeonName;
-    }
-    
-    public void addEntityToMap(Entity entity) {
-        mapEntities.add(entity);
-    }
-
-    public void removeEntityFromMap(Entity entity) {
-        mapEntities.remove(entity);
-    }
-
     public int getNumOfAlly() {
         int count = 0;
         for (Entity entity : mapEntities) {

@@ -17,36 +17,36 @@ public class Shield extends Weapon implements ItemBuildable {
         setDurability(DEFAULT_SHILED_DURABILITY);
     }
 
-    @Override
-    public Shield build(List<Item> inventory) {
-        /**
-         * Record all the removing items
-         */
-        List<Item> removingPosition = new ArrayList<>();
+    // @Override
+    // public Shield build(List<Item> inventory) {
+    //     /**
+    //      * Record all the removing items
+    //      */
+    //     List<Item> removingPosition = new ArrayList<>();
 
-        if (!inventory.isEmpty()) {
-            int woodNumber = 0;
-            int treasureOrKeyNumber = 0;
-            for (Item item : inventory) {
-                if (item instanceof Wood && woodNumber < 2) {
-                    woodNumber++;
-                    removingPosition.add(item);
-                }
-                if ((item instanceof Treasure || item instanceof Key) && treasureOrKeyNumber < 1) {
-                    treasureOrKeyNumber++;
-                    removingPosition.add(item);
-                }
-            }
+    //     if (!inventory.isEmpty()) {
+    //         int woodNumber = 0;
+    //         int treasureOrKeyNumber = 0;
+    //         for (Item item : inventory) {
+    //             if (item instanceof Wood && woodNumber < 2) {
+    //                 woodNumber++;
+    //                 removingPosition.add(item);
+    //             }
+    //             if ((item instanceof Treasure || item instanceof Key) && treasureOrKeyNumber < 1) {
+    //                 treasureOrKeyNumber++;
+    //                 removingPosition.add(item);
+    //             }
+    //         }
 
-            if (2 == woodNumber && 1 == treasureOrKeyNumber) {
-                // remove all the items used to craft the buildable item
-                // if it could be crafted by the items in the inventory
-                removingPosition.forEach(i -> inventory.remove(i));
-                return new Shield(BUILDABLE_TYPE_SHIELD);
-            }
-        }
-        return null;
-    }
+    //         if (2 == woodNumber && 1 == treasureOrKeyNumber) {
+    //             // remove all the items used to craft the buildable item
+    //             // if it could be crafted by the items in the inventory
+    //             removingPosition.forEach(i -> inventory.remove(i));
+    //             return new Shield(BUILDABLE_TYPE_SHIELD);
+    //         }
+    //     }
+    //     return null;
+    // }
 
 
     @Override

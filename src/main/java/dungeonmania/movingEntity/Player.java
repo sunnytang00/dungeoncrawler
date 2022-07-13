@@ -12,6 +12,7 @@ import dungeonmania.StaticEntities.*;
 import dungeonmania.entities.*;
 import dungeonmania.entities.buildableEntities.*;
 import dungeonmania.entities.collectableEntities.*;
+import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Battle;
 import dungeonmania.util.Direction;
 import dungeonmania.util.JSONConfig;

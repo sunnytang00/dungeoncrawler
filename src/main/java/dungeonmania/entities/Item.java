@@ -1,6 +1,7 @@
 package dungeonmania.entities;
 
 import dungeonmania.Entity;
+import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Position;
 
 public abstract class Item extends Entity {
