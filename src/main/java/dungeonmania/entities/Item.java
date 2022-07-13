@@ -32,16 +32,6 @@ public abstract class Item extends Entity {
         super(type, position);
     }
 
-    @Override
-    public Position getPosition() {
-        return position;
-    }
-
-    @Override
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
     public Direction getDirection() {
         return direction;
     }

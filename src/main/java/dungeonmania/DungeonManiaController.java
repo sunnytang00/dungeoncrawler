@@ -11,6 +11,7 @@ import dungeonmania.util.Position;
 import dungeonmania.Entity;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.JSONMap;
+import dungeonmania.entities.Item;
 import dungeonmania.entities.buildableEntities.*;
 import dungeonmania.movingEntity.*;
 
@@ -70,7 +71,7 @@ public class DungeonManiaController {
         map = new DungeonMap(entities, dungeonName);
         
         List<EntityResponse> entityResponses = map.getEntityResponses();
-        game = new DungeonGame(jMap.getGoals(), null, null, null);
+        game = new DungeonGame(jMap.getGoals(), new ArrayList<Item>() , null, null);
 
         return new DungeonResponse(game.getDungeonId(), dungeonName, entityResponses, null, null, null, jMap.getGoals());
     }
@@ -96,7 +97,11 @@ public class DungeonManiaController {
      * /game/tick/movement
      */
     public DungeonResponse tick(Direction movementDirection) {
-        return null;
+        Player player = getCurrentMap().getPlayer();
+
+        player.move(map, movementDirection);
+
+        return getDungeonResponseModel();
     }
 
     /**

@@ -14,7 +14,7 @@ import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
-import dungeonmania.entities.*;;
+import dungeonmania.entities.*;
 
 public class Player extends MovingEntity {
 
@@ -27,7 +27,7 @@ public class Player extends MovingEntity {
     private Position prevPosition;
     private int wealth;
     private PlayerState state;
-    private List<Item> inventory;
+    private List<Item> inventory = new ArrayList<Item>();
 
     public Player(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
@@ -117,7 +117,7 @@ public class Player extends MovingEntity {
 
 
     public void move(DungeonMap map, Direction direction) {
-
+        
         boolean blocked = false;
 
         this.setDirection(direction);
@@ -218,6 +218,7 @@ public class Player extends MovingEntity {
     }
 
     public List<ItemResponse> getInventoryResponses() {
+        System.out.print(inventory);
         return inventory.stream().map(Item::getItemResponse).collect(Collectors.toList());
     }
 

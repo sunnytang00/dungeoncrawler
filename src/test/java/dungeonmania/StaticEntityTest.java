@@ -145,22 +145,22 @@ public class StaticEntityTest {
 
         //List<EntityResponse> actual = new ArrayList<EntityResponse>();
 
-        DungeonResponse intialResponse = dmc.newGame("d_bombTest_placeBombRadius2", "c_battleTests_basicMercenaryMercenaryDies");
+        DungeonResponse initialResponse = dmc.newGame("d_bombTest_placeBombRadius2", "c_battleTests_basicMercenaryMercenaryDies");
 
         // actual.addAll(getEntities(intialResponse, "player"));
         // actual.addAll(getEntities(intialResponse, "wall"));
         // actual.addAll(getEntities(intialResponse, "door"));
         // actual.addAll(getEntities(intialResponse, "key"));
 
-        assertEquals(null, intialResponse.getInventory());
-        assertEquals("d_bombTest_placeBombRadius2", intialResponse.getDungeonName());
-        assertEquals(countEntityOfType(intialResponse, "player"), 1);
-        assertEquals(countEntityOfType(intialResponse, "treasure"), 2);
-        assertEquals(countEntityOfType(intialResponse, "boulder"), 1);
-        assertEquals(countEntityOfType(intialResponse, "switch"), 1);
-        assertEquals(countEntityOfType(intialResponse, "wall"), 2);
-        assertEquals(countEntityOfType(intialResponse, "exit"), 1);
-        assertEquals(countEntityOfType(intialResponse, "bomb"), 1);
+        assertEquals(null, initialResponse.getInventory());
+        assertEquals("d_bombTest_placeBombRadius2", initialResponse.getDungeonName());
+        assertEquals(countEntityOfType(initialResponse, "player"), 1);
+        assertEquals(countEntityOfType(initialResponse, "treasure"), 2);
+        assertEquals(countEntityOfType(initialResponse, "boulder"), 1);
+        assertEquals(countEntityOfType(initialResponse, "switch"), 1);
+        assertEquals(countEntityOfType(initialResponse, "wall"), 2);
+        assertEquals(countEntityOfType(initialResponse, "exit"), 1);
+        assertEquals(countEntityOfType(initialResponse, "bomb"), 1);
 
         //assertEquals(actual, intialResponse.getEntities());
         

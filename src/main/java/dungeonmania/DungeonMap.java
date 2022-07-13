@@ -39,8 +39,16 @@ public class DungeonMap {
     }
 
     public List<Entity> getEntityFromPos(Position position) {
-        List<Entity> currEntity = mapEntities.stream()
-                            .filter(entity -> position.equals(entity.getPosition())).collect(Collectors.toList ());
+        List<Entity> currEntity = new ArrayList<Entity>();
+        // List<Entity> currEntity = mapEntities.stream()
+        //                     .filter(entity -> position.equals(entity.getPosition())).collect(Collectors.toList ());
+        
+        for (Entity entity : mapEntities) {
+
+            if (entity.getPosition().equals(position)) {
+                currEntity.add(entity);
+            }
+        }
         return currEntity;    
     }
 
