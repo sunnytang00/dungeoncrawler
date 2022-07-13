@@ -1,11 +1,15 @@
 package dungeonmania.movingEntity;
 
+import java.util.Arrays;
+
 public class InvincibleState implements PlayerState {
 
     @Override
     public void playerStateChange(Player player) {
-        // TODO Auto-generated method stub
-        
+        player.setInvisible(false);
+        player.setInvincible(true); 
+        player.setInteractable(true);
+        player.setNonTraversibles(Arrays.asList("wall", "door"));
     }
 
     @Override

@@ -6,9 +6,13 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 import dungeonmania.util.Position;
+import dungeonmania.Entity;
 import dungeonmania.util.JSONConfig;
+import dungeonmania.util.JSONMap;
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,7 +20,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import com.google.gson.*;
+
+import org.json.JSONArray;
+
 
 public class DungeonManiaController {
     public String getSkin() {
@@ -45,11 +51,19 @@ public class DungeonManiaController {
      * /game/new
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
-        // List<Entity> entities = new ArrayList<Entity>();
-        // entities.add(new Entity("player", new Position(1, 1) , true));
-        // List<EntityResponse> entityResponses = entities.stream().map(Entity::getEntityResponse).collect(Collectors.toList());
-        // return new DungeonResponse("dungeonTestId", dungeonName, entityResponses, null, null, null,null);
-        return null;
+
+        JSONConfig.setConfig(configName);
+        // get initial entities from json dungeon map, create a dungeon map instance of the game and store all initial entities
+        InputStream is = FileLoader.class.getResourceAsStream("/dungeons/" + dungeonName + ".json");
+        if (is == null) { throw new IllegalArgumentException(); }
+        JSONMap jMap = new JSONMap(is);
+        
+        List<Entity> entities = jMap.getInitialMapEntities();
+        DungeonMap dungeonMap = currentDungeonMap(entities, dungeonName);
+        
+        List<EntityResponse> entityResponses = dungeonMap.getEntityResponses();
+        DungeonGame dGame = new DungeonGame(jMap.getGoals(), null, null, null);
+        return new DungeonResponse(dGame.getDungeonId(), dungeonName, entityResponses, null, null, null, jMap.getGoals());
     }
 
     /**
@@ -88,15 +102,7 @@ public class DungeonManiaController {
     }
 
     //HELPERS DOWN HERE
-
-    public JSONConfig getConfig(String filename) throws IOException {
-
-        Gson gson = new Gson();
-        String content = FileLoader.loadResourceFile("/configs/" + filename + ".json");
-
-        JSONConfig config = gson.fromJson(content, JSONConfig.class);
-
-        return config;
+    public DungeonMap currentDungeonMap(List<Entity> entities, String dungeonName) {
+        return new DungeonMap(entities, dungeonName);
     }
-
 }

@@ -8,10 +8,8 @@ import dungeonmania.util.Position;
 
 public class ZombieToast extends Enemy {
 
-    private static final int DEFAULT_ZOMBIE_HEALTH = 0; //JSONConfig.zombie_health
-    private static final int DEFAULT_ZOMBIE_ATTACK = 0; //JSONConfig.zombie_attack
-
-    private int spawnRate;
+    private static final double DEFAULT_ZOMBIE_HEALTH = JSONConfig.getConfig("zombie_health");
+    private static final double DEFAULT_ZOMBIE_ATTACK = JSONConfig.getConfig("zombie_attack");
 
     public ZombieToast(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
@@ -30,10 +28,6 @@ public class ZombieToast extends Enemy {
             setMovingStrategy(new RandomSpawn());
         }   
         getMovingStrategy().move(this, map);  
-    }
-
-    public int getSpawnRate() {
-        return spawnRate;
     }
     
 }

@@ -7,11 +7,10 @@ import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
 public class Spider extends Enemy {
-
-    private static final int DEFAULT_SPIDER_HEALTH = 0; //JSONConfig.spider_health
-    private static final int DEFAULT_SPIDER_ATTACK = 0; //JSONConfig.spider_attack
-    private static final int DEFAULT_SPIDER_SPAWN_RATE = 0; //JSONConfig.spider_spawn_rate
-
+    
+    private static final double DEFAULT_SPIDER_HEALTH = JSONConfig.getConfig("spider_health");
+    private static final double DEFAULT_SPIDER_ATTACK = JSONConfig.getConfig("spider_attack");
+    private static final int DEFAULT_SPIDER_SPAWN_RATE = JSONConfig.getConfig("spider_spawn_rate");
 
     private boolean isClockwiseMove;
     private int spawnRate;

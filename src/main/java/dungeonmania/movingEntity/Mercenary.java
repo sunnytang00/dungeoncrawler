@@ -7,8 +7,8 @@ import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
 public class Mercenary extends BribableEnemy {
-
-    private static final int DEFAULT_BRIBE_RADIUS = 0;//JSONConfig.bribe_radius
+    
+    private static final int DEFAULT_BRIBE_RADIUS = JSONConfig.getConfig("bribe_radius");
 
     private MercenaryState state;
     private boolean inRad;
