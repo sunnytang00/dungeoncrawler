@@ -13,11 +13,9 @@ public class Bow extends Weapon implements ItemBuildable {
 
     private static final int DEFAULT_BOW_DURABILITY = JSONConfig.getConfig("bow_durability");
 
-    private int bow_durability;
-
     public Bow(String type) {
         super(type);
-        this.bow_durability = DEFAULT_BOW_DURABILITY;
+        setDurability(DEFAULT_BOW_DURABILITY);
     }
 
     @Override
@@ -52,13 +50,5 @@ public class Bow extends Weapon implements ItemBuildable {
         return null;
     }
 
-    public int getBowDurability() {
-        return bow_durability;
-    }
-
-    public void useBow() {
-        bow_durability -= 1;
-    }
-    
 }
 

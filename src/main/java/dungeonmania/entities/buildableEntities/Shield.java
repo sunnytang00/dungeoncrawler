@@ -12,11 +12,9 @@ public class Shield extends Weapon implements ItemBuildable {
     private static final int DEFAULT_SHILED_DURABILITY = JSONConfig.getConfig("shield_durability");
     private static final int DEFAULT_SHILED_DEFENCE = JSONConfig.getConfig("shield_defence");
 
-    private int shield_durability;
-
     public Shield(String type) {
         super(type);
-        shield_durability = DEFAULT_SHILED_DURABILITY;
+        setDurability(DEFAULT_SHILED_DURABILITY);
     }
 
     @Override
@@ -50,15 +48,9 @@ public class Shield extends Weapon implements ItemBuildable {
         return null;
     }
 
-    public int getShieldDurability() {
-        return shield_durability;
-    }
 
-    public void useShield() {
-        shield_durability -= 1;
-    }
-
-    public int getShieldDefence() {
+    @Override
+    public int getDefence() {
         return DEFAULT_SHILED_DEFENCE;
     }
 

@@ -16,7 +16,7 @@ public class Battle {
         this.initialPlayerHealth = initialPlayerHealth;
         this.initialEnemyHealth = initialEnemyHealth;
         this.enemy = enemy;
-        this.rounds = rounds;
+        this.rounds = new ArrayList<Round>();
     }
 
 
@@ -39,6 +39,10 @@ public class Battle {
 
     public void setRounds(List<Round> rounds) {
         this.rounds = rounds;
+    }
+
+    public void addRound(Round round) {
+        rounds.add(round);
     }
 
     

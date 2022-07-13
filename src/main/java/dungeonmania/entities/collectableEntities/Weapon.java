@@ -8,10 +8,9 @@ import dungeonmania.util.Position;
  */
 public abstract class Weapon extends Item {
 
-    /**
-     * The damage value the weapon is used
-     */
-    protected int damageValue;
+
+    private int durability;
+
 
     public Weapon(String type) {
         super(type);
@@ -22,12 +21,36 @@ public abstract class Weapon extends Item {
     }
 
     public int getDamageValue() {
-        return damageValue;
+        return 0;
     }
 
-    public void setDamageValue(int damageValue) {
-        this.damageValue = damageValue;
+    public int getDefence(){
+        return 0;
     }
+
+    public int getDurability() {
+        return durability;
+    }
+
+    public void setDurability(int durability) {
+        this.durability = durability;
+    }
+
+    public boolean isUsable() {
+        if (getDurability() > 0) {
+            return true;
+        } 
+        return false;  
+    }
+
+    public void useWeapon() {
+        
+        if (this.isUsable()) {
+            int newDurability = this.getDurability() - 1;
+            this.setDurability(newDurability);
+        }
+    }
+
 }
 
 
