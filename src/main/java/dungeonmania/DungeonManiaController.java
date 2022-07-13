@@ -1,14 +1,16 @@
 package dungeonmania;
 
+import dungeonmania.entities.Item;
+import dungeonmania.entities.collectableEntities.Bomb;
+import dungeonmania.entities.collectableEntities.InvincibilityPotion;
+import dungeonmania.entities.collectableEntities.InvisibilityPotion;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.movingEntity.Player;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
-import dungeonmania.util.Direction;
-import dungeonmania.util.FileLoader;
-import dungeonmania.util.Position;
+import dungeonmania.response.models.ItemResponse;
+import dungeonmania.util.*;
 import dungeonmania.Entity;
-import dungeonmania.util.JSONConfig;
-import dungeonmania.util.JSONMap;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -25,6 +27,10 @@ import org.json.JSONArray;
 
 
 public class DungeonManiaController {
+
+    private DungeonMap dungeonMap;
+    private JSONMap jMap;
+
     public String getSkin() {
         return "default";
     }
@@ -56,10 +62,10 @@ public class DungeonManiaController {
         // get initial entities from json dungeon map, create a dungeon map instance of the game and store all initial entities
         InputStream is = FileLoader.class.getResourceAsStream("/dungeons/" + dungeonName + ".json");
         if (is == null) { throw new IllegalArgumentException(); }
-        JSONMap jMap = new JSONMap(is);
+        jMap = new JSONMap(is);
         
         List<Entity> entities = jMap.getInitialMapEntities();
-        DungeonMap dungeonMap = currentDungeonMap(entities, dungeonName);
+        dungeonMap = currentDungeonMap(entities, dungeonName);
         
         List<EntityResponse> entityResponses = dungeonMap.getEntityResponses();
         DungeonGame dGame = new DungeonGame(jMap.getGoals(), null, null, null);
@@ -77,7 +83,58 @@ public class DungeonManiaController {
      * /game/tick/item
      */
     public DungeonResponse tick(String itemUsedId) throws IllegalArgumentException, InvalidActionException {
-        return null;
+        if (null == itemUsedId || "".equals(itemUsedId)) {
+            throw new InvalidActionException("Not found the item with the given id(" + itemUsedId + ")");
+        }
+        Player player = dungeonMap.getPlayer();
+        List<Item> inventory = player.getInventory();
+        Item targetItem = null;
+        for (Item item : inventory) {
+            if (itemUsedId.equals(item.getId())) {
+                targetItem = item;
+                break;
+            }
+        }
+
+        if (null == targetItem) {
+            throw new InvalidActionException("Not found the item with the given id(" + itemUsedId + ")");
+        }
+
+        if (!(targetItem instanceof Bomb)
+                && !(targetItem instanceof InvincibilityPotion)
+                && !(targetItem instanceof InvisibilityPotion)) {
+            throw new IllegalArgumentException();
+        }
+
+        // firstly, remove the item from the player's inventory
+        inventory.remove(targetItem);
+
+        if (targetItem instanceof Bomb) {
+            Bomb bomb = (Bomb)targetItem;
+            bomb.explode(dungeonMap);
+        }
+
+        if (targetItem instanceof InvincibilityPotion) {
+            InvincibilityPotion invincibilityPotion = (InvincibilityPotion)targetItem;
+            if (invincibilityPotion.isTriggered()) {
+                player.setInvincible(true);
+                invincibilityPotion.updateTicks();
+            }
+        }
+
+        if (targetItem instanceof InvisibilityPotion) {
+            InvisibilityPotion invisibilityPotion = (InvisibilityPotion)targetItem;
+            if (invisibilityPotion.isTriggered()) {
+                player.setInvisible(true);
+                invisibilityPotion.updateTicks();
+            }
+        }
+
+        List<EntityResponse> entityResponses = dungeonMap.getEntityResponses();
+        String goals = jMap.getGoals();
+        DungeonGame dDame = new DungeonGame(goals, inventory, null, null);
+        List<ItemResponse> itemResponses = Helper.convertFromItem(inventory);
+        return new DungeonResponse(dDame.getDungeonId(), dungeonMap.getDungeonName(), entityResponses, itemResponses, null, null, goals);
     }
 
     /**
@@ -106,3 +163,5 @@ public class DungeonManiaController {
         return new DungeonMap(entities, dungeonName);
     }
 }
+
+//M
