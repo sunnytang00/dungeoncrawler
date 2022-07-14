@@ -11,7 +11,6 @@ public abstract class Enemy extends MovingEntity {
     }
 
     public MovingStrategy getMovingStrategy() {
-        System.out.println(movingStrategy);
         return movingStrategy;
     }
 

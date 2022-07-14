@@ -12,6 +12,7 @@ import dungeonmania.StaticEntities.*;
 import dungeonmania.entities.*;
 import dungeonmania.entities.buildableEntities.*;
 import dungeonmania.entities.collectableEntities.*;
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Battle;
 import dungeonmania.util.Direction;
@@ -143,7 +144,6 @@ public class Player extends MovingEntity {
 
     public void setBattleQueue(List<Enemy> battleQueue) {
         this.battleQueue = battleQueue;
-        System.out.println("battle: " + battleQueue);
     }
 
 
@@ -179,27 +179,25 @@ public class Player extends MovingEntity {
         this.setDirection(direction);
         Position newPos = getPosition().translateBy(direction);
         List<Entity> encounters = map.getEntityFromPos(newPos);
-        System.out.println(encounters);
 
-        // interact
+        // interact with non-moving entities 
         for (Entity encounter : encounters) {
-            System.out.println(encounter.getType());
 
-            if (!isInvisible()) {
-                System.out.println("entering interact");
-                interact(encounter, map);
+            if (!isInvisible() && !(encounter instanceof Enemy)) {
+                System.out.println("entering interact with non-moving entities");
+                interactWithEntities(encounter, map);
             }
             if (getNonTraversibles().contains(encounter.getType())) {
                 blocked = true;
             }
         }
 
-        if (battleQueue.size() > 0) {
-            System.out.println("battle queue has item");
+        // if (battleQueue.size() > 0) {
+        //     System.out.println("battle queue has item");
 
-            List<Battle> battles = battleWithEnemies(battleQueue, map);
-            game.setBattles(battles);
-        }
+        //     List<Battle> battles = battleWithEnemies(battleQueue, map);
+        //     game.setBattles(battles);
+        // }
 
         if (!blocked) {
             this.setPosition(newPos);
@@ -207,7 +205,7 @@ public class Player extends MovingEntity {
     }
 
 
-    public void interact(Entity entity, DungeonMap map) {
+    public void interactWithEntities(Entity entity, DungeonMap map) {
         System.out.println("entered interact");
 
         // create interact method in each entity
@@ -229,24 +227,31 @@ public class Player extends MovingEntity {
             }
         } else if (entity instanceof Portal) {
         
-        } else if (entity instanceof Enemy) {
-            Enemy enemy = (Enemy) entity;
-            if (!enemy.becomeAlly()) {
-                // could not only bribe when encounter, could also bribe within certain radius
-                if (entity instanceof Mercenary && hasEnoughToBribe()) {
-                    // bribeMerc();
-                } else {
-                    System.out.println("battle queue");
-                    battleQueue.add(enemy);
-                }
+        }
+    }
+
+    public void interactWithEnemies(Enemy enemy, DungeonMap map) {
+        if (!enemy.becomeAlly()) {
+            // could not only bribe when encounter, could also bribe within certain radius
+            if (enemy instanceof Mercenary && hasEnoughToBribe()) {
+                // bribeMerc();
+            } else {
+                System.out.println("battle queue");
+                battleQueue.add(enemy);
+                System.out.println("interact with enemy: " + battleQueue);
             }
         }
     }
 
-    public List<Battle> battleWithEnemies(List<Enemy> battleQueue, DungeonMap map) {
+    public void battleWithEnemies(DungeonMap map, DungeonGame game) {
+        if (battleQueue.size() <= 0) {
+            return;
+        }
+        System.out.println("battle queue has item");
         List<Battle> battles = new ArrayList<Battle>();
         double iniPlayerHealth = this.getHealth();
-        
+        Battle currBattle = null;
+
         for (Enemy enemy : battleQueue) {
             List<Item> weaponryUsed = checkBattleBonuses(map);
             boolean hasShield = false;
@@ -258,7 +263,7 @@ public class Player extends MovingEntity {
 
             List<Round> rounds = new ArrayList<Round>();
             double iniEnemyHealth = enemy.getHealth();
-            Battle currBattle = new Battle(enemy.getType(), rounds, iniPlayerHealth, iniEnemyHealth);
+            currBattle = new Battle(enemy.getType(), rounds, iniPlayerHealth, iniEnemyHealth);
             double deltaPlayerHealth = - enemy.getAttack()/10;
             double deltaEnemyHealth = - getAttack()/5;
             if (hasShield) {
@@ -283,7 +288,9 @@ public class Player extends MovingEntity {
             if (newHealth <= 0) {
                 // player dies
                 map.removeEntityFromMap(this);
-                return battles;
+                game.setBattles(currBattle);
+                System.out.println("player dies: " + currBattle);
+                // return battles;
             } else if (enemyHealth <= 0) {
                 // enemy dies
                 map.removeEntityFromMap(enemy);
@@ -292,12 +299,12 @@ public class Player extends MovingEntity {
             if (isInvincible()) {
                 setPlayerWin(true);
                 battles.add(currBattle);
-
-                return battles;
+                game.setBattles(currBattle);
+                // return battles;
             }
         }
-
-        return battles;
+        System.out.println("battle in method: " + currBattle);
+        game.setBattles(currBattle);
     }
 
     public List<Item> checkBattleBonuses(DungeonMap map) {
