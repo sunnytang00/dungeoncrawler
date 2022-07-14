@@ -62,6 +62,14 @@ public class DungeonMap {
         return player;
     }
 
+    public Entity getEntityFromID(String id) {
+        Entity entity = (Player) mapEntities.stream()
+                .filter(e -> e.getId().equals(id))
+                .findAny()
+                .orElse(null);
+        return entity;
+    }
+
     public List<EntityResponse> getEntityResponses() {
         return mapEntities.stream().map(Entity::getEntityResponse).collect(Collectors.toList());
     }

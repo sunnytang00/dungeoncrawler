@@ -74,7 +74,7 @@ public class DungeonManiaController {
      */
     public DungeonResponse getDungeonResponseModel() {
 
-        Player player = getCurrentMap().getPlayer();
+        Player player = map.getPlayer();
         //game.getBattleResponse()
         return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), player.getInventoryResponses(), new ArrayList<BattleResponse>() , player.getBuildables(), game.getGoals());
     }
@@ -150,16 +150,20 @@ public class DungeonManiaController {
      * /game/tick/movement
      */
     public DungeonResponse tick(Direction movementDirection) {
-        Player player = getCurrentMap().getPlayer();
+        Player player = map.getPlayer();
         player.move(game, map, movementDirection);
+        List<Enemy> enemies = new ArrayList<>();
         for (Entity entity : map.getMapEntities()) {
              if (entity instanceof Enemy) {
                 Enemy enemy = (Enemy) entity;
-                System.out.println("controller: " + enemy.getMovingStrategy());
+                enemies.add(enemy);
                 enemy.getMovingStrategy().move(enemy, map);
             }
         }
-
+        for (Enemy enemy : enemies) {
+            player.interactWithEnemies(enemy, map);
+            player.battleWithEnemies(map, game);
+        }
 
         return getDungeonResponseModel();
     }
@@ -170,7 +174,7 @@ public class DungeonManiaController {
      */
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
     
-        Player player = getCurrentMap().getPlayer();
+        Player player = map.getPlayer();
 
         switch(buildable) {
             case "bow":
@@ -192,6 +196,10 @@ public class DungeonManiaController {
      * /game/interact
      */
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
+        // Player player = map.getPlayer();
+        // player.interactWithEnemies((Enemy) map.getEntityFromID(entityId), map);
+        
+        // return getDungeonResponseModel();
         return null;
     }
 
@@ -202,9 +210,9 @@ public class DungeonManiaController {
     //     return new DungeonMap(entities, dungeonName);
     // }
 
-    public DungeonMap getCurrentMap() {
-        return map;
-    }
+    // public DungeonMap getCurrentMap() {
+    //     return map;
+    // }
 
 
 }
