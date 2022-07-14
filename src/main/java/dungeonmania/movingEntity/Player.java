@@ -33,12 +33,12 @@ public class Player extends MovingEntity {
     private Position prevPosition;
     private int wealth;
     private PlayerState state;
-    private List<Item> inventory;
-    private List<Enemy> battleQueue;
-    private PotionQueue potionQueue;
-    private Potion currPotion;
-    private Key currKey;
-    private boolean playerWin;
+    private List<Item> inventory = new ArrayList<Item>();
+    private List<Enemy> battleQueue = new ArrayList<Enemy>();
+    private PotionQueue potionQueue = new PotionQueue();
+    private Potion currPotion = null;
+    private Key currKey = null;
+    private boolean playerWin = false;
 
     public Player(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
@@ -48,13 +48,6 @@ public class Player extends MovingEntity {
         this.wealth = 0; // initially has not collected any treasure
         this.setState(new PlayerDefaultState());
         state.playerStateChange(this);
-        this.battleQueue = new ArrayList<Enemy>();
-        this.potionQueue = new PotionQueue();
-        this.currKey = null;
-        this.currPotion = null;
-        this.playerWin = false;
-        this.inventory = new ArrayList<Item>();
-        
     }
 
 
@@ -150,6 +143,7 @@ public class Player extends MovingEntity {
 
     public void setBattleQueue(List<Enemy> battleQueue) {
         this.battleQueue = battleQueue;
+        System.out.println("battle: " + battleQueue);
     }
 
 
@@ -178,15 +172,21 @@ public class Player extends MovingEntity {
     }
 
     public void move(DungeonGame game, DungeonMap map, Direction direction) {
+        System.out.println("entered move");
 
         boolean blocked = false;
 
         this.setDirection(direction);
         Position newPos = getPosition().translateBy(direction);
         List<Entity> encounters = map.getEntityFromPos(newPos);
+        System.out.println(encounters);
+
         // interact
         for (Entity encounter : encounters) {
+            System.out.println(encounter.getType());
+
             if (!isInvisible()) {
+                System.out.println("entering interact");
                 interact(encounter, map);
             }
             if (getNonTraversibles().contains(encounter.getType())) {
@@ -195,6 +195,8 @@ public class Player extends MovingEntity {
         }
 
         if (battleQueue.size() > 0) {
+            System.out.println("battle queue has item");
+
             List<Battle> battles = battleWithEnemies(battleQueue, map);
             game.setBattles(battles);
         }
@@ -206,6 +208,7 @@ public class Player extends MovingEntity {
 
 
     public void interact(Entity entity, DungeonMap map) {
+        System.out.println("entered interact");
 
         // create interact method in each entity
         if (entity instanceof Boulder) {
@@ -233,6 +236,7 @@ public class Player extends MovingEntity {
                 if (entity instanceof Mercenary && hasEnoughToBribe()) {
                     // bribeMerc();
                 } else {
+                    System.out.println("battle queue");
                     battleQueue.add(enemy);
                 }
             }

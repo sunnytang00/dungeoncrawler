@@ -153,8 +153,9 @@ public class DungeonManiaController {
         Player player = getCurrentMap().getPlayer();
         player.move(game, map, movementDirection);
         for (Entity entity : map.getMapEntities()) {
-            if (entity instanceof Enemy) {
+             if (entity instanceof Enemy) {
                 Enemy enemy = (Enemy) entity;
+                System.out.println("controller: " + enemy.getMovingStrategy());
                 enemy.getMovingStrategy().move(enemy, map);
             }
         }

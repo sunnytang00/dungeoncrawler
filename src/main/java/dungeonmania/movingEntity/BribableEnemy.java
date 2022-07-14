@@ -1,24 +1,28 @@
 package dungeonmania.movingEntity;
 
+import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
 public abstract class BribableEnemy extends Enemy {
 
-    private int bribeRadius;
+    // private int bribeRadius;
+    private static final int DEFAULT_BRIBE_RADIUS = JSONConfig.getConfig("bribe_radius");
 
     public BribableEnemy(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
-        this.bribeRadius = 0;
-        
+        // this.bribeRadius = DEFAULT_BRIBE_RADIUS;
+        setMovingStrategy(new RandomSpawn());
+        System.out.println(this.getMovingStrategy());
     }
 
     public int getBribeRadius() {
-        return bribeRadius;
+        // return bribeRadius;
+        return DEFAULT_BRIBE_RADIUS;
     }
 
-    public void setBribeRadius(int bribeRadius) {
-        this.bribeRadius = bribeRadius;
-    }
+    // public void setBribeRadius(int bribeRadius) {
+    //     this.bribeRadius = bribeRadius;
+    // }
 
     
     
