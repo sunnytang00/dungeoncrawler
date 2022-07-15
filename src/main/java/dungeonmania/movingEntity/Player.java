@@ -40,6 +40,7 @@ public class Player extends MovingEntity {
     private Potion currPotion = null;
     private Key currKey = null;
     private boolean playerWin = false;
+    private int slayedEnemy = 0;
 
     public Player(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
@@ -131,6 +132,13 @@ public class Player extends MovingEntity {
         return totalTreasure;
     }
 
+    puclic int getSlayedEnemy(){
+        return slayedEnemy;
+    }
+`
+    public void setSlayedEnemy() {
+        this.slayedEnemy = slayedEnemy;
+    }
 
     public boolean hasEnoughToBribe() {
         boolean enoughWealth = false;
@@ -246,62 +254,65 @@ public class Player extends MovingEntity {
         System.out.println("player initial health: " + iniPlayerHealth);
 
         for (Enemy enemy : battleQueue) {
-            List<Item> weaponryUsed = checkBattleBonuses(map);
-            boolean hasShield = false;
-            for (Item weapon : weaponryUsed) {
-                if (weapon instanceof Shield) {
-                    hasShield = true;
-                }
-            }
 
             List<Round> rounds = new ArrayList<Round>();
             double iniEnemyHealth = enemy.getHealth();
-            System.out.println("enemy initial health: " + iniEnemyHealth);
             currBattle = new Battle(enemy.getType(), rounds, iniPlayerHealth, iniEnemyHealth);
-            double deltaPlayerHealth = - enemy.getAttack()/10;
-            System.out.print("delta player health" + deltaPlayerHealth);
-            System.out.print("enemy get attack" + enemy.getAttack());
-            double deltaEnemyHealth = - getAttack()/5;
-            if (hasShield) {
-                deltaEnemyHealth *= 2;
-            }
-            double newHealth = getHealth() + deltaPlayerHealth;
-            double enemyHealth = enemy.getHealth() + deltaEnemyHealth;
-            setHealth(newHealth);
-            enemy.setHealth(enemyHealth);
-            if (isInvincible()) {
-                weaponryUsed.add(getCurrPotion());
-            }
-            Round currRound = new Round(deltaPlayerHealth, deltaEnemyHealth, weaponryUsed);
-            rounds.add(currRound);
-            currBattle.setRounds(rounds);
-            
-            for (Item weapon : weaponryUsed) {
-                Weapon w = (Weapon) weapon;
-                w.useWeapon();
-            }
 
-            if (newHealth <= 0) {
-                // player dies
-                map.removeEntityFromMap(this);
-                game.setBattles(currBattle);
-                System.out.println("player dies: " + currBattle);
-                return;
-                // return battles;
-            } else if (enemyHealth <= 0) {
-                // enemy dies
-                map.removeEntityFromMap(enemy);
-            }
-            
-            if (isInvincible()) {
-                setPlayerWin(true);
-                battles.add(currBattle);
-                game.setBattles(currBattle);
-                return;
+            while (this.getHealth() > 0 && enemy.getHealth() > 0) {
+                List<Item> weaponryUsed = checkBattleBonuses(map);
+                boolean hasShield = false;
+                for (Item weapon : weaponryUsed) {
+                    if (weapon instanceof Shield) {
+                        hasShield = true;
+                    }
+                }
+                double deltaPlayerHealth = - enemy.getAttack()/10;
+                double deltaEnemyHealth = - getAttack()/5;
+                if (hasShield) {
+                    deltaEnemyHealth *= 2;
+                }
+                double newHealth = getHealth() + deltaPlayerHealth;
+                double enemyHealth = enemy.getHealth() + deltaEnemyHealth;
+                setHealth(newHealth);
+                enemy.setHealth(enemyHealth);
+                if (isInvincible()) {
+                    weaponryUsed.add(getCurrPotion());
+                }
+                Round currRound = new Round(deltaPlayerHealth, deltaEnemyHealth, weaponryUsed);
+                rounds.add(currRound);
+                currBattle.setRounds(rounds);
+                
+                for (Item weapon : weaponryUsed) {
+                    Weapon w = (Weapon) weapon;
+                    w.useWeapon();
+                }
+
+                if (newHealth <= 0) {
+                    // player dies
+                    map.removeEntityFromMap(this);
+                    game.setBattles(currBattle);
+                    System.out.println("player dies: " + currBattle);
+                    return;
+                    // return battles;
+                } else if (enemyHealth <= 0) {
+                    // enemy dies
+                    map.removeEntityFromMap(enemy);
+                    // increment slayed enemy number
+                    setSlayedEnemy(slayedEnemy+1);
+                }
+                
+                if (isInvincible()) {
+                    setPlayerWin(true);
+                    battles.add(currBattle);
+                    game.setBattles(currBattle);
+                    return;
+                }
             }
         }
         System.out.println("battle in method: " + currBattle);
         game.setBattles(currBattle);
+        setPlayerWin(true);
     }
 
     public List<Item> checkBattleBonuses(DungeonMap map) {
