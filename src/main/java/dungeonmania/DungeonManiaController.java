@@ -75,8 +75,8 @@ public class DungeonManiaController {
     public DungeonResponse getDungeonResponseModel() {
 
         Player player = map.getPlayer();
-        //game.getBattleResponse()
-        return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), player.getInventoryResponses(), new ArrayList<BattleResponse>() , player.getBuildables(), game.getGoals());
+        List<BattleResponse> battles = map.getBattleResponses(game.getBattles());
+        return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), player.getInventoryResponses(), battles , player.getBuildables(), game.getGoals());
     }
 
     /**

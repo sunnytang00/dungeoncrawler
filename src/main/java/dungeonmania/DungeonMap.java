@@ -4,8 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dungeonmania.movingEntity.*;
-import dungeonmania.response.models.DungeonResponse;
-import dungeonmania.response.models.EntityResponse;
+import dungeonmania.response.models.*;
 import dungeonmania.Entity;
 import dungeonmania.util.*;
 import dungeonmania.StaticEntities.*;
@@ -72,6 +71,10 @@ public class DungeonMap {
 
     public List<EntityResponse> getEntityResponses() {
         return mapEntities.stream().map(Entity::getEntityResponse).collect(Collectors.toList());
+    }
+
+    public List<BattleResponse> getBattleResponses(List<Battle> battles) {
+        return battles.stream().map(Battle::getBattleResponse).collect(Collectors.toList());
     }
 
     public int getNumOfAlly() {

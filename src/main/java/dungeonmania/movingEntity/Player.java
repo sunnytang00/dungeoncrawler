@@ -184,20 +184,12 @@ public class Player extends MovingEntity {
         for (Entity encounter : encounters) {
 
             if (!isInvisible() && !(encounter instanceof Enemy)) {
-                System.out.println("entering interact with non-moving entities");
                 interactWithEntities(encounter, map);
             }
             if (getNonTraversibles().contains(encounter.getType())) {
                 blocked = true;
             }
         }
-
-        // if (battleQueue.size() > 0) {
-        //     System.out.println("battle queue has item");
-
-        //     List<Battle> battles = battleWithEnemies(battleQueue, map);
-        //     game.setBattles(battles);
-        // }
 
         if (!blocked) {
             this.setPosition(newPos);
@@ -251,6 +243,7 @@ public class Player extends MovingEntity {
         List<Battle> battles = new ArrayList<Battle>();
         double iniPlayerHealth = this.getHealth();
         Battle currBattle = null;
+        System.out.println("player initial health: " + iniPlayerHealth);
 
         for (Enemy enemy : battleQueue) {
             List<Item> weaponryUsed = checkBattleBonuses(map);
@@ -263,8 +256,11 @@ public class Player extends MovingEntity {
 
             List<Round> rounds = new ArrayList<Round>();
             double iniEnemyHealth = enemy.getHealth();
+            System.out.println("enemy initial health: " + iniEnemyHealth);
             currBattle = new Battle(enemy.getType(), rounds, iniPlayerHealth, iniEnemyHealth);
             double deltaPlayerHealth = - enemy.getAttack()/10;
+            System.out.print("delta player health" + deltaPlayerHealth);
+            System.out.print("enemy get attack" + enemy.getAttack());
             double deltaEnemyHealth = - getAttack()/5;
             if (hasShield) {
                 deltaEnemyHealth *= 2;
@@ -290,6 +286,7 @@ public class Player extends MovingEntity {
                 map.removeEntityFromMap(this);
                 game.setBattles(currBattle);
                 System.out.println("player dies: " + currBattle);
+                return;
                 // return battles;
             } else if (enemyHealth <= 0) {
                 // enemy dies
@@ -300,7 +297,7 @@ public class Player extends MovingEntity {
                 setPlayerWin(true);
                 battles.add(currBattle);
                 game.setBattles(currBattle);
-                // return battles;
+                return;
             }
         }
         System.out.println("battle in method: " + currBattle);
@@ -320,6 +317,7 @@ public class Player extends MovingEntity {
                 if (weapon.isUsable()) {
                     attackBonus += weapon.getDamageValue();
                     defenceBonus += weapon.getDefence();
+                    //System.out.println("Aha" + attackBonus + "oho" + defenceBonus);
                     weaponryUsed.add((Item)weapon);
                 }
             }

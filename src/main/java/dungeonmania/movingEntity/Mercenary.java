@@ -20,6 +20,7 @@ public class Mercenary extends BribableEnemy {
         // this.setBribeRadius(DEFAULT_BRIBE_RADIUS);
         this.setBribed(false);
         this.setState(new MercViciousState());
+        getState().currentState(this);
         this.setNonTraversibles(Arrays.asList("boulder", "wall", "door"));
     }
     
