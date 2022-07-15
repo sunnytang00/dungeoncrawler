@@ -18,8 +18,5 @@ public class Key extends Item {
         return doorKeyId;
     }
 
-    public void setDoorKeyId(int doorKeyId) {
-        this.doorKeyId = doorKeyId;
-    }
 }
 
