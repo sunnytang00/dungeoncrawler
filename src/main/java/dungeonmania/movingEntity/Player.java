@@ -136,7 +136,8 @@ public class Player extends MovingEntity {
         return slayedEnemy;
     }
 
-    public void setSlayedEnemy() {
+
+    public void setSlayedEnemy(int slayedEnemy) {
         this.slayedEnemy = slayedEnemy;
     }
 
