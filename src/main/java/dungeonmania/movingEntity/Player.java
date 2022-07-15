@@ -132,7 +132,7 @@ public class Player extends MovingEntity {
         return totalTreasure;
     }
 
-    puclic int getSlayedEnemy(){
+    public int getSlayedEnemy(){
         return slayedEnemy;
     }
 `
