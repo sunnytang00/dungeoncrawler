@@ -1,5 +1,6 @@
 package dungeonmania.goals;
 
+import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
 import dungeonmania.StaticEntities.Exit;
 import dungeonmania.movingEntity.Player;
@@ -9,25 +10,30 @@ import java.util.List;
 
 public class GetExit extends LeafGoal {
 
-    public GetExit(Player player) {
-        super(player);
+    public GetExit(DungeonMap map) {
+        map.setRemainingConditions(1);
     }
 
     @Override
-    public boolean isAchieve() {
-        boolean flag = false;
-//        List<Entity> entities = player.getEntities();
-//        Position playerPosition = player.getPosition();
-//        for (Entity entity : entities) {
-//            if (entity instanceof Exit) {
-//                Exit exit = (Exit)entity;
-//                Position position = exit.getPosition();
-//                if (position.getX() == playerPosition.getX() && position.getY() == playerPosition.getY()) {
-//                    flag = true;
-//                    break;
-//                }
-//            }
-//        }
-        return flag;
+    public boolean isAchieved(DungeonMap map) {
+        if (map.getRemainingConditions() > 1) { 
+            return false; 
+        }
+        Position playerPosition = map.getPlayer().getPosition();
+
+        Position exitPosition = map.getEntitiesFromType(map.getMapEntities(), "exit")
+                                   .get(0).getPosition();
+        if (playerPosition.equals(exitPosition)) {
+            map.setRemainingConditions(-1);
+            return true;
+        }
+        return false;
     }
+
+    @Override
+    public String getGoalsAsString(DungeonMap map) {
+        if (isAchieved(map)) { return ""; }
+        return ":exit";
+    }
+
 }

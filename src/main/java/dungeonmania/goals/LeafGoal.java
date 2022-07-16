@@ -1,26 +1,26 @@
 package dungeonmania.goals;
 
 
-import dungeonmania.movingEntity.Player;
+import dungeonmania.DungeonMap;
 
 public abstract class LeafGoal implements Goals {
-    /**
-     * Describe the goal name
-     */
-    protected String goal;
 
-    protected Player player;
+    // private static int remainingConditions;
 
-    public LeafGoal(Player player) {
-        this.player = player;
-    }
+    @Override
+    public abstract boolean isAchieved(DungeonMap map);
 
-    protected String getGoal() {
-        return goal;
-    }
+    // @Override
+    // public abstract String getGoalsAsString(DungeonMap map);
 
-    protected void setGoal(String goal) {
-        this.goal = goal;
-    }
+    // public abstract int remainingConditions(DungeonMap map);
 
+    // public void setRemainingConditions(int num) {
+    //     remainingConditions += num;
+    // }
+
+    // public int getRemainingConditions() {
+    //     return remainingConditions;
+    // }
+    
 }
