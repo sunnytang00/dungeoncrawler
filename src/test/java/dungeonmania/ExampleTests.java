@@ -88,7 +88,6 @@ public class ExampleTests {
         // Assert Circular Movement of Spider
         for (int i = 0; i <= 20; ++i) {
             res = dmc.tick(Direction.UP);
-            // System.out.println("Spide move" + movementTrajectory.get(nextPositionElement) + "actual" + getEntities(res, "spider").get(0).getPosition());
             assertEquals(movementTrajectory.get(nextPositionElement), getEntities(res, "spider").get(0).getPosition());
             
             nextPositionElement++;

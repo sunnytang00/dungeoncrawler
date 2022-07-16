@@ -130,8 +130,7 @@ public class SpiderTest {
         for (int i = 0; i < movementTrajectory.size(); ++i) {
             res = dmc.tick(Direction.UP);
             assertEquals(movementTrajectory.get(nextPositionElement), getEntities(res, "spider").get(0).getPosition());
-            //System.out.println("expected" + movementTrajectory.get(nextPositionElement) + "actual" +  getEntities(res, "spider").get(0).getPosition());
-
+            
             nextPositionElement++;
 
         }
@@ -172,8 +171,7 @@ public class SpiderTest {
         for (int i = 0; i < movementTrajectory.size(); ++i) {
             res = dmc.tick(Direction.UP);
             assertEquals(movementTrajectory.get(nextPositionElement), getEntities(res, "spider").get(0).getPosition());
-            //System.out.println("expected" + movementTrajectory.get(nextPositionElement) + "actual" +  getEntities(res, "spider").get(0).getPosition());
-
+        
             nextPositionElement++;
 
         }

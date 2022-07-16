@@ -60,7 +60,6 @@ public class DungeonGame {
     }
 
     public void setBattles(List<Battle> battles) {
-        // System.out.println("battle in dungeon game: " + battles);
         this.battles = battles;
     }
 

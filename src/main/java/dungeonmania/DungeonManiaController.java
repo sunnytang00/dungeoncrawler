@@ -81,7 +81,6 @@ public class DungeonManiaController {
 
         Player player = map.getPlayer();
         List<BattleResponse> battles = map.getBattleResponses(game.getBattles());
-        // System.out.println(map.getPlayer());
         // return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), player.getInventoryResponses(), battles , player.getBuildables(), game.getGoalsAsString());
         return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), player.getInventoryResponses(), battles , player.getBuildables(), goals.getGoalsAsString(map));
     
@@ -178,7 +177,6 @@ public class DungeonManiaController {
         // potion effect
         player.playerPotionQueueUpdateTick();
         player.move(game, map, movementDirection);
-        // System.out.println("playerhere" + player.getPosition());
         List<Enemy> enemies = new ArrayList<>();
         List<ZombieToast> zombiesToAdd = new ArrayList<>();
 
@@ -203,11 +201,6 @@ public class DungeonManiaController {
         }
 
         for (Enemy enemy : enemies) {
-<<<<<<< HEAD
-            // System.out.println("Merccccc" + enemy.getMovingStrategy() + enemy.getPosition() + enemy.getType() + "player" + player.getPosition());
-=======
-            //System.out.println("Merccccc" + enemy.getMovingStrategy() + enemy.getPosition() + enemy.getType() + "player" + player.getPosition());
->>>>>>> joanna_debug
             player.interactWithEnemies(enemy, map);
             player.battleWithEnemies(map, game);
         }

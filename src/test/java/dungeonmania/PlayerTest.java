@@ -225,7 +225,6 @@ public class PlayerTest {
         // move player rightwards to red portal
         DungeonResponse actualDungonRes = dmc.tick(Direction.RIGHT);;
         EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
-        System.out.println(actualPlayer.getPosition());
         // create the expected result
         EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(6, 1), false);
 

@@ -34,7 +34,6 @@ public class MoveTowardsPlayer implements MovingStrategy {
 
                 List<Entity> atAdj = map.getEntityFromPos(pos);
                 if (atAdj != null || !movingEntity.blockedBy(atAdj)) {
-                    //System.out.println("entermove towards" + playerPos + "curr" + pos);
                     moveablePos.add(pos);
                 }    
             }
@@ -43,7 +42,6 @@ public class MoveTowardsPlayer implements MovingStrategy {
             return;
         }
         movingEntity.setPosition(getRandomPosition(moveablePos));
-        //System.out.println("finally" + movingEntity.getPosition());
         
     }
 

@@ -184,15 +184,12 @@ public class Player extends MovingEntity {
     }
 
     public void move(DungeonGame game, DungeonMap map, Direction direction) {
-        // System.out.println("entered move");
 
 
         boolean blocked = false;
 
         this.setDirection(direction);
-        // System.out.println("Pos: " + getPosition() + "direction: " + direction);
         Position newPos = getPosition().translateBy(direction);
-        // System.out.println("newPos: " + newPos);
         List<Entity> encounters = map.getEntityFromPos(newPos);
 
         // interact with non-moving entities 
@@ -242,12 +239,7 @@ public class Player extends MovingEntity {
 
     public void interactWithEnemies(Enemy enemy, DungeonMap map) {
         if (enemy.getPosition().equals(this.getPosition()) && !enemy.becomeAlly()) {
-            System.out.println("entered interact with enemy");
-            
-            System.out.println("battle queue");
             battleQueue.add(enemy);
-            System.out.println("interact with enemy: " + battleQueue);
-
         }
     }
 
@@ -255,17 +247,14 @@ public class Player extends MovingEntity {
         if (battleQueue.size() <= 0) {
             return;
         }
-        // System.out.println("battle queue has item");
         List<Battle> battles = new ArrayList<Battle>();
         double iniPlayerHealth = this.getHealth();
         Battle currBattle = null;
-        // System.out.println("player initial health: " + iniPlayerHealth);
 
         for (Enemy enemy : battleQueue) {
 
             List<Round> rounds = new ArrayList<Round>();
             double iniEnemyHealth = enemy.getHealth();
-            // System.out.println("Enemy initial health: " + iniEnemyHealth);
             currBattle = new Battle(enemy.getType(), rounds, iniPlayerHealth, iniEnemyHealth);
 
             while (this.getHealth() > 0 && enemy.getHealth() > 0) {
@@ -286,7 +275,6 @@ public class Player extends MovingEntity {
                 
                 setHealth(newHealth);
                 enemy.setHealth(enemyHealth);
-                // System.out.println("Round player" + getHealth() + "enemyHealth" + enemy.getHealth());
                 if (isInvincible()) {
                     weaponryUsed.add(getCurrPotion());
                 }
@@ -300,11 +288,8 @@ public class Player extends MovingEntity {
                 }
 
                 if (newHealth <= 0) {
-                    // player dies, should remove?????????
-                    // map.removeEntityFromMap(this);
                     game.addToBattles(currBattle);
                     setPlayerDied(true);
-                    // System.out.println("player dies: " + currBattle);
                     return;
                     // return battles;
                 } else if (enemyHealth <= 0) {
@@ -322,7 +307,6 @@ public class Player extends MovingEntity {
                 }
             }
         }
-        // System.out.println("battle in method: " + currBattle);
         game.addToBattles(currBattle);
         setPlayerWin(true);
     }
@@ -338,7 +322,6 @@ public class Player extends MovingEntity {
             
             attackBonus += weapon.getDamageValue();
             defenceBonus += weapon.getDefence();
-            //System.out.println("Aha" + attackBonus + "oho" + defenceBonus);
             weaponryUsed.add(weapon);
         }
 
@@ -540,7 +523,6 @@ public class Player extends MovingEntity {
             Position teleportedP = this.getPosition();
             
             Entity newPortal = map.getPortalAtPos(teleportedP);
-            //System.out.println("portal" + newPortal.getColour() + newPortal.getPosition());
             if (newPortal == null) { return teleportByPortal; }
 
             return teleportThroughPortal(newPortal, map);
