@@ -28,7 +28,9 @@ public class PotionQueue {
     }
 
     public Potion updatePotionQueue() {
-        if (potionQueue == null) { return null; }
+        if (potionQueue == null || potionQueue.size() == 0) { 
+            return null; 
+        }
         
         Potion currentPotion = potionQueue.get(0);
         currentPotion.updateTicks();
