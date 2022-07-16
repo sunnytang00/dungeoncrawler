@@ -65,8 +65,6 @@ public class DungeonGame {
     //     this.battles = battles;
     // }
     public void setBattles(Battle battle) {
-        System.out.println("original battle list: " + battles);
-        System.out.println("battle in dungeon game: " + battle);
         battles.add(battle);
     }
 

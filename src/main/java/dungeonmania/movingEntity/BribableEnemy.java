@@ -12,7 +12,6 @@ public abstract class BribableEnemy extends Enemy {
         super(type, position, isInteractable);
         // this.bribeRadius = DEFAULT_BRIBE_RADIUS;
         setMovingStrategy(new RandomSpawn());
-        System.out.println(this.getMovingStrategy());
     }
 
     public int getBribeRadius() {

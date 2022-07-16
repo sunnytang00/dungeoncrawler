@@ -3,6 +3,7 @@ package dungeonmania.StaticEntities;
 import dungeonmania.DungeonMap;
 import dungeonmania.StaticEntity;
 import dungeonmania.movingEntity.ZombieToast;
+import dungeonmania.util.Direction;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
@@ -20,13 +21,16 @@ public class ZombieToastSpawner extends StaticEntity {
      * @param currentTick curent tick 
      * @param spawnTick zombe_spawn_rate, read in from the config file
      */
-    public void spawnZombie(int currentTick, DungeonMap map) {
+    public ZombieToast spawnZombie(int currentTick, DungeonMap map) {
 
-        if ((currentTick + 1) % DEFAULT_ZOMBIE_SPAWN_RATE == 0) {
+        if ((currentTick) % DEFAULT_ZOMBIE_SPAWN_RATE == 0) {
             //spawn zombie to zombie spwaner position 
-            ZombieToast newZToast = new ZombieToast("zombie_toast", this.getPosition(), true);
-            map.addEntityToMap(newZToast);
+            //ZombieToast newZToast = new ZombieToast("zombie_toast", this.getPosition().translateBy(Direction.UP), true);
+            //map.addEntityToMap(newZToast);
+            return new ZombieToast("zombie_toast", this.getPosition().translateBy(Direction.UP), true);
         }
+
+        return null;
 
     }
 }

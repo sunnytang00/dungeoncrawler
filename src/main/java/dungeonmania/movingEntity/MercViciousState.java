@@ -9,7 +9,6 @@ public class MercViciousState implements MercenaryState {
 
     @Override
     public void currentState(Mercenary merc) {
-        System.out.println("merc vicious");
         merc.setHealth(DEFAULT_MERC_HEALTH);
         merc.setAttack(DEFAULT_MERC_ATTACK);
         merc.setBribed(false);
