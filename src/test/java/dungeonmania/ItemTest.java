@@ -119,7 +119,55 @@ public class ItemTest {
         assertEquals(expectedPlayer, actualPlayer);
 
         actualDungeonRes = dmc.build("shield");
-        assertEquals(getInventory(actualDungeonRes, "shield"), actualDungeonRes.getInventory());
+        ItemResponse shield = new ItemResponse("1", "shield");
+        assertEquals(shield.getType(), actualDungeonRes.getInventory().get(0).getType());
+
+    }
+
+    @Test
+    public void TestBuildBow() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse initialResponse = dmc.newGame("build_bow", "c_battleTests_basicMercenaryMercenaryDies");
+
+        EntityResponse initPlayer = getPlayer(initialResponse).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(2, 1), false);
+
+        // move player right
+        DungeonResponse actualDungeonRes = dmc.tick(Direction.RIGHT);
+        EntityResponse actualPlayer = getPlayer(actualDungeonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+
+        expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(3, 1), false);
+
+        // move player right
+        actualDungeonRes = dmc.tick(Direction.RIGHT);
+        actualPlayer = getPlayer(actualDungeonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+
+        expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(4, 1), false);
+
+        // move player right
+        actualDungeonRes = dmc.tick(Direction.RIGHT);
+        actualPlayer = getPlayer(actualDungeonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+
+        actualDungeonRes = dmc.tick(Direction.RIGHT);
+
+        // assert after movement
+
+        actualDungeonRes = dmc.build("bow");
+        ItemResponse bow = new ItemResponse("1", "bow");
+        assertEquals(bow.getType(), actualDungeonRes.getInventory().get(0).getType());
 
     }
 

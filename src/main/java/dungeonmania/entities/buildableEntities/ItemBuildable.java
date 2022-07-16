@@ -1,6 +1,8 @@
 package dungeonmania.entities.buildableEntities;
 
+import dungeonmania.DungeonMap;
 import dungeonmania.entities.Item;
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.movingEntity.*;
 
 import java.util.List;
@@ -22,8 +24,9 @@ public interface ItemBuildable {
      *                  be used to craft the buildable item
      * @return return a complex item if it craft successfully,
      * otherwise null
+     * @throws InvalidActionException
      */
-    void build(List<Item> inventory, Player player);
+    void build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException;
 }
 
 
