@@ -191,7 +191,7 @@ public class SpiderTest {
         // Assert Circular Movement of Spider
         for (int i = 0; i < 5; ++i) {
             res = dmc.tick(Direction.UP);
-            // assertEquals(newPos, getEntities(res, "spider").get(0).getPosition());
+            assertEquals(newPos, getEntities(res, "spider").get(0).getPosition());
 
         }
     }

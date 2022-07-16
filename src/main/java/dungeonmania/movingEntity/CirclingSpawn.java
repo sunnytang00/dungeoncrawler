@@ -77,11 +77,17 @@ public class CirclingSpawn implements MovingStrategy {
 
                 if ((spider.isClockwiseMove() && bouldersPos.contains(newCircPos)) || 
                     (!spider.isClockwiseMove() && !bouldersPos.contains(newAntiCircPos))) {
+                    if (bouldersPos.contains(newAntiCircPos)) {
+                        return;
+                    }
                     spider.setClockwiseMove(false);
                     spider.setPosition(newAntiCircPos);
 
                 } else if ((!spider.isClockwiseMove() && bouldersPos.contains(newAntiCircPos)) ||
-                            (spider.isClockwiseMove() && ! bouldersPos.contains(newCircPos))) {      
+                            (spider.isClockwiseMove() && ! bouldersPos.contains(newCircPos))) {
+                    if (bouldersPos.contains(newCircPos)) {
+                        return;
+                    }
                     spider.setClockwiseMove(true);
                     spider.setPosition(newCircPos);
 
