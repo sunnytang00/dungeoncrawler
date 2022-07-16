@@ -54,7 +54,7 @@ public class DungeonMap {
         return anyMatch;
     }
 
-    public Entity getTypeEntityAtPos(String type, Position position) {
+    public Entity getPortalAtPos(Position position) {
         List<Entity> entitiesAtPos = this.getEntityFromPos(position);
         for (Entity entity : entitiesAtPos) {
             if (entity instanceof Portal) {

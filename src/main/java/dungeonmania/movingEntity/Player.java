@@ -542,8 +542,7 @@ public class Player extends MovingEntity {
             teleportByPortal = true;
             Position teleportedP = this.getPosition();
             
-            Entity newPortal = map.getTypeEntityAtPos("portal", teleportedP);
-            System.out.println("here" + newPortal);
+            Entity newPortal = map.getPortalAtPos(teleportedP);
             //System.out.println("portal" + newPortal.getColour() + newPortal.getPosition());
             if (newPortal == null) { return teleportByPortal; }
 
