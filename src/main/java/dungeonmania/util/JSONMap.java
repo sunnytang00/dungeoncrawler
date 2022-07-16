@@ -23,7 +23,6 @@ public class JSONMap {
 
     private ArrayList<Entity> initialMapEntities = new ArrayList<Entity>();
     private JSONObject JSONgoals;
-    // private JSONArray JSONgoals;
 
     public JSONMap(InputStream is) {
 
@@ -39,8 +38,7 @@ public class JSONMap {
             JSONObject obj = entitiesJSON.getJSONObject(i);
             String type = obj.getString("type");
             initialiseMapEntities(type, obj);
-        }
-        
+        }   
     }
 
     private void initialiseMapEntities(String type, JSONObject obj) {
@@ -102,23 +100,15 @@ public class JSONMap {
     public Goals getComposedGoals(JSONObject goals, DungeonMap map) {
         switch(goals.getString("goal")) {
             case "AND":
-                // CompositeGoal compositeAndGoal = new CompositeAnd();
                 JSONArray subgoalsAnd = goals.getJSONArray("subgoals");
-                // for (int i = 0; i < subgoals1.length(); ++i) {
-                //     JSONObject subgoal = subgoals1.getJSONObject(i);
-                //     compositeAndGoal.composeGoal(getComposedGoals(subgoal));
-                // }
                 CompositeGoal compositeAndGoal = new CompositeAnd(getComposedGoals(subgoalsAnd.getJSONObject(0), map),
                                                                   getComposedGoals(subgoalsAnd.getJSONObject(1), map));
                 return compositeAndGoal;
-            // case "OR":
-            //     CompositeGoal compositeOrGoal = new CompositeOr();
-            //     JSONArray subgoals2 = goals.getJSONArray("subgoals");
-            //     for (int i = 0; i < subgoals2.length(); ++i) {
-            //         JSONObject subgoal = subgoals2.getJSONObject(i);
-            //         compositeOrGoal.composeGoal(getComposedGoals(subgoal));
-            //     }
-            //     return compositeOrGoal;
+            case "OR":
+                JSONArray subgoalsOr = goals.getJSONArray("subgoals");
+                CompositeGoal compositeOrGoal = new CompositeOr(getComposedGoals(subgoalsOr.getJSONObject(0), map),
+                                                                 getComposedGoals(subgoalsOr.getJSONObject(1), map));
+                return compositeOrGoal;
             case "exit":
                 return new GetExit(map);
             case "enemies":
