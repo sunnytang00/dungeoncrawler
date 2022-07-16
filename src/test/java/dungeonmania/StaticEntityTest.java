@@ -215,6 +215,8 @@ public class StaticEntityTest {
          
         DungeonResponse move = dmc.tick(Direction.RIGHT);
 
+        
+
         assertEquals("", getGoals(move));
 
     }

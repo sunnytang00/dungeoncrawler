@@ -10,6 +10,7 @@ import dungeonmania.Entity;
 import dungeonmania.util.*;
 import dungeonmania.StaticEntities.*;
 
+
 import java.util.ArrayList;
 
 import org.eclipse.jetty.websocket.api.InvalidWebSocketException;
@@ -161,6 +162,24 @@ public class DungeonMap {
     public boolean containsType(List<Entity> entities, String type) {
         boolean found = entities.stream().anyMatch(entity -> entity.getType().equals(type));
         return found;    
+    }
+
+    public void BoulderSwitchOverlap() {
+
+        for (Entity entity : mapEntities) {
+            if (entity instanceof FloorSwitch) {
+                FloorSwitch floorSwitch = (FloorSwitch) entity;
+                List<Entity> eList = getEntityFromPos(floorSwitch.getPosition());
+                for (Entity e : eList) {
+                    if (e instanceof Boulder) {
+                        floorSwitch.setTriggered(true);
+                        break;
+                    } else {
+                        floorSwitch.setTriggered(false);
+                    }
+                } 
+            }
+        }
     }
 }
 

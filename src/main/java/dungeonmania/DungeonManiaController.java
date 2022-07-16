@@ -157,7 +157,7 @@ public class DungeonManiaController {
             }
         }
         map.addEntitiesToMap(zombiesToAdd);
-
+        map.BoulderSwitchOverlap();
         //return new DungeonResponse(dDame.getDungeonId(), map.getDungeonName(), entityResponses, itemResponses, null, null, goals);
         return getDungeonResponseModel();
     }
@@ -207,8 +207,9 @@ public class DungeonManiaController {
         if (spiderToAdd != null) { 
             map.addEntityToMap(spiderToAdd);
         }
-        
+        map.BoulderSwitchOverlap();
         return getDungeonResponseModel();
+        
     }
 
 
@@ -229,7 +230,7 @@ public class DungeonManiaController {
                 Shield shield = new Shield(buildable);
                 shield.build(player.getInventory(), player, map);
                 break;
-                
+
             default:
                 throw new IllegalArgumentException(buildable + " is not one of bow, shield");
 
