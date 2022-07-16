@@ -171,7 +171,7 @@ public class DungeonManiaController {
         game.incrementTick();
         Player player = map.getPlayer();
         player.move(game, map, movementDirection);
-        System.out.println("playerhere" + player.getPosition());
+        // System.out.println("playerhere" + player.getPosition());
         List<Enemy> enemies = new ArrayList<>();
         List<ZombieToast> zombiesToAdd = new ArrayList<>();
 
@@ -239,11 +239,32 @@ public class DungeonManiaController {
      * /game/interact
      */
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
-        // Player player = map.getPlayer();
-        // player.interactWithEnemies((Enemy) map.getEntityFromID(entityId), map);
+        Player player = map.getPlayer();
+        Entity interact = map.getEntityFromID(entityId);
+
+        if (interact == null) {
+            throw new InvalidActionException("Not found the item with the given id(" + entityId + ")");
+        }
+
+        if (!(interact instanceof ZombieToastSpawner)
+                && !(interact instanceof Mercenary)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (interact instanceof ZombieToastSpawner) {
+            player.interactWithSpawner((ZombieToastSpawner) interact, map);
+        }
+
+        if (interact instanceof Mercenary) {
+            Mercenary mercenary = (Mercenary) interact;
+            // mercenary has been bribed
+            if (mercenary.isBribed()) {
+                throw new IllegalArgumentException();
+            }
+            player.interactWithMercenary((Mercenary) interact, map);
+        }
         
-        // return getDungeonResponseModel();
-        return null;
+        return getDungeonResponseModel();
     }
 
     //HELPERS DOWN HERE

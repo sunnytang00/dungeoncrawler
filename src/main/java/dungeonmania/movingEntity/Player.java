@@ -148,7 +148,7 @@ public class Player extends MovingEntity {
 
     public boolean hasEnoughToBribe() {
         boolean enoughWealth = false;
-        if (this.wealth >= JSONConfig.getConfig("bribe_amount")) {
+        if (this.getWealth() >= JSONConfig.getConfig("bribe_amount")) {
             enoughWealth = true;
         }
         return enoughWealth;
@@ -220,8 +220,9 @@ public class Player extends MovingEntity {
         if (entity instanceof Boulder) {
             interfereByEntity = pushBoulder(map, direction);
         } else if (entity instanceof Exit) {
-            // remove exit from goals 
-            // remove player from map entities 
+            // check if only goal left is exits
+            // if so exit, remove player from map, game wins
+
         } else if (entity instanceof Item) {
             collectToInventory((Item) entity, map);
         } else if (entity instanceof Door) {
@@ -242,14 +243,11 @@ public class Player extends MovingEntity {
     public void interactWithEnemies(Enemy enemy, DungeonMap map) {
         if (enemy.getPosition().equals(this.getPosition()) && !enemy.becomeAlly()) {
             System.out.println("entered interact with enemy");
-            // could not only bribe when encounter, could also bribe within certain radius
-            if (enemy instanceof Mercenary && hasEnoughToBribe()) {
-                // bribeMerc();
-            } else {
-                System.out.println("battle queue");
-                battleQueue.add(enemy);
-                System.out.println("interact with enemy: " + battleQueue);
-            }
+            
+            System.out.println("battle queue");
+            battleQueue.add(enemy);
+            System.out.println("interact with enemy: " + battleQueue);
+
         }
     }
 
@@ -335,17 +333,13 @@ public class Player extends MovingEntity {
         double attackBonus = 0;
         double defenceBonus = 0;
         int numAlly = map.getNumOfAlly();
-        
-        for (Item item: inventory) {
-            if (item instanceof Weapon) {
-                Weapon weapon = (Weapon) item;
-                if (weapon.isUsable()) {
-                    attackBonus += weapon.getDamageValue();
-                    defenceBonus += weapon.getDefence();
-                    //System.out.println("Aha" + attackBonus + "oho" + defenceBonus);
-                    weaponryUsed.add((Item)weapon);
-                }
-            }
+        List<Weapon> usableWeapon = getUsableWeapon();
+        for (Weapon weapon: usableWeapon) {
+            
+            attackBonus += weapon.getDamageValue();
+            defenceBonus += weapon.getDefence();
+            //System.out.println("Aha" + attackBonus + "oho" + defenceBonus);
+            weaponryUsed.add(weapon);
         }
 
         if (numAlly != 0) {
@@ -359,6 +353,19 @@ public class Player extends MovingEntity {
 
         return weaponryUsed;
 
+    }
+
+    public List<Weapon> getUsableWeapon() {
+        List<Weapon> usableWeapon = new ArrayList<Weapon>();
+        for (Item item: inventory) {
+            if (item instanceof Weapon) {
+                Weapon weapon = (Weapon) item;
+                if (weapon.isUsable()) {
+                    usableWeapon.add(weapon);
+                }
+            }
+        }
+        return usableWeapon;
     }
 
     public boolean pushBoulder(DungeonMap map, Direction direction) {
@@ -409,17 +416,6 @@ public class Player extends MovingEntity {
 
     }
 
-    public void destorySpawner(){
-
-    }
-
-    public void bribeMerc(Mercenary merc) {
-        if (!merc.isBribed() && merc.isInRad() && this.hasEnoughToBribe()) {
-            merc.setState(new MercBribedState());
-        }
-        
-        consumeInventory("treasure", JSONConfig.getConfig("bribe_amount"));
-    }
     
     public void consumeInventory(String type, int amount) {
         int count = 0;
@@ -435,10 +431,6 @@ public class Player extends MovingEntity {
         }
     }
 
-    public boolean isAlive() {
-
-        return true;
-    }
 
     public boolean hasKey() {
         return inventory.stream().anyMatch(i -> i.getType() == "key");
@@ -550,5 +542,35 @@ public class Player extends MovingEntity {
         }
         return teleportByPortal;
     }
+
+
+    public void interactWithSpawner(ZombieToastSpawner spawner, DungeonMap map) throws InvalidActionException {
+        Position spawnerPos = spawner.getPosition();
+        List<Position> cdjPositions = spawnerPos.getCardinallyAdjacentPositions();
+        if (!cdjPositions.contains(getPosition())) {
+            throw new InvalidActionException("Player is not cardinally adjacent to the spawner");
+        } else if (getUsableWeapon() == null || getUsableWeapon().size() == 0) {
+            throw new InvalidActionException("the player does not have a weapon");
+        } else {
+            map.removeEntityFromMap(spawner);
+        }
+    }
+
+
+    public void interactWithMercenary(Mercenary merc, DungeonMap map) throws InvalidActionException {
+    
+        if (!merc.isInRad(map)) {
+            throw new InvalidActionException("Mercenary not in radius");
+        } else if (!this.hasEnoughToBribe()) {
+            throw new InvalidActionException("Player does not have enough treasure to bribe");
+        } else {
+            merc.setState(new MercBribedState());
+            merc.getState().currentState(merc);
+            consumeInventory("treasure", JSONConfig.getConfig("bribe_amount"));
+        }
+        
+    }
+
+
 
 }
