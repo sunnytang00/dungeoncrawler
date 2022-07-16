@@ -1,16 +1,11 @@
 package dungeonmania.util;
 
 import java.util.List;
-<<<<<<< HEAD
 import java.util.stream.Collectors;
 
 import dungeonmania.entities.Item;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.response.models.RoundResponse;
-=======
-
-import dungeonmania.entities.Item;
->>>>>>> 6ccb4a5227bd5b4cacedc0a31e75bfda8a6574d8
 
 public class Round {
     private double deltaPlayerHealth;
@@ -32,7 +27,6 @@ public class Round {
     }
 
     public List<Item> getWeaponryUsed() { return weaponryUsed; }
-<<<<<<< HEAD
 
     public List<ItemResponse> getItemResponses(List<Item> items) {
         return items.stream().map(Item::getItemResponse).collect(Collectors.toList());
@@ -41,6 +35,4 @@ public class Round {
     public RoundResponse getRoundResponse() {
         return new RoundResponse(deltaPlayerHealth, deltaEnemyHealth, getItemResponses(weaponryUsed));
     }
-=======
->>>>>>> 6ccb4a5227bd5b4cacedc0a31e75bfda8a6574d8
 }

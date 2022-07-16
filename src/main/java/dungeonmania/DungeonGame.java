@@ -63,6 +63,10 @@ public class DungeonGame {
         System.out.println("battle in dungeon game: " + battles);
         this.battles = battles;
     }
+
+    public void addToBattles(Battle battle) {
+        battles.add(battle);
+    }
     
     public void setBuildables(List<String> buildables) {
         this.buildables = buildables;
