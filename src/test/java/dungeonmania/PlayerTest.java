@@ -30,7 +30,84 @@ import dungeonmania.util.Position;
 public class PlayerTest {
     @Test
     @DisplayName("Test the player can move UP")
-    public void testMovementDown() {
+    public void testMovementUp() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_movementTest_testMovementDown", "c_movementTest_testMovementDown");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 0), false);
+
+        // move player downward
+        DungeonResponse actualDungonRes = dmc.tick(Direction.UP);
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
+    @DisplayName("Test the player block by wall")
+    public void testMovementBlockbyWall() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("maze", "simple");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 1), false);
+
+        // move player up
+        DungeonResponse actualDungonRes = dmc.tick(Direction.UP);
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+
+        
+        // move player left
+        actualDungonRes = dmc.tick(Direction.LEFT);
+        actualPlayer = getPlayer(actualDungonRes).get();
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+
+        // move player right
+        actualDungonRes = dmc.tick(Direction.RIGHT);
+        actualPlayer = getPlayer(actualDungonRes).get();
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+
+        expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 2), false);
+        // move player down
+        actualDungonRes = dmc.tick(Direction.DOWN);
+        actualPlayer = getPlayer(actualDungonRes).get();
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+
+        // move player left
+        actualDungonRes = dmc.tick(Direction.LEFT);
+        actualPlayer = getPlayer(actualDungonRes).get();
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+
+        // move player right
+        actualDungonRes = dmc.tick(Direction.RIGHT);
+        actualPlayer = getPlayer(actualDungonRes).get();
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+
+        expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 1), false);
+
+        // move player up
+        actualDungonRes = dmc.tick(Direction.UP);
+        actualPlayer = getPlayer(actualDungonRes).get();
+        // assert after movement
+        assertEquals(expectedPlayer, actualPlayer);
+
+        
+    }
+
+    @Test
+    @DisplayName("Test the player block by unopen door")
+    public void testMovementBlockbyDoor() {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse initDungonRes = dmc.newGame("d_movementTest_testMovementDown", "c_movementTest_testMovementDown");
         EntityResponse initPlayer = getPlayer(initDungonRes).get();
@@ -85,11 +162,6 @@ public class PlayerTest {
         assertEquals(expectedPlayer, actualPlayer);
     }
     
-    @Test
-    @DisplayName("Test if player do not have current key, cound not open and walk through a door")
-    public void NoKeyCannotWalkThroughOpenDoor() {
-
-    }
 
 
     
