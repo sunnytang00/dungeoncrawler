@@ -131,26 +131,8 @@ public class StaticEntityTest {
     public void TestEntityCreation() {
 
         DungeonManiaController dmc = new DungeonManiaController();
-        // List<EntityResponse> actual = new ArrayList<EntityResponse>();
-
-        // Player player = new Player("player", new Position(1,1), false);
-        // Key key = new Key("key", new Position(2,1), 1);
-        // Door door = new Door("door", new Position(3,1), 1);
-        // Exit exit = new Exit("exit", new Position(8,8));
-
-        // EntityResponse playerRes = new EntityResponse(id, "player", new Position(1, 1), false);
-        // EntityResponse keyRes = new EntityResponse(id, "key", new Position(2,1), false);
-        // EntityResponse doorRes = new EntityResponse(id, "door", new Position(3,1), false);
-        // EntityResponse exitRes = new EntityResponse(id, "exit", new Position(8,8), false);
-
-        //List<EntityResponse> actual = new ArrayList<EntityResponse>();
 
         DungeonResponse intialResponse = dmc.newGame("d_bombTest_placeBombRadius2", "c_battleTests_basicMercenaryMercenaryDies");
-
-        // actual.addAll(getEntities(intialResponse, "player"));
-        // actual.addAll(getEntities(intialResponse, "wall"));
-        // actual.addAll(getEntities(intialResponse, "door"));
-        // actual.addAll(getEntities(intialResponse, "key"));
 
         assertEquals(null, intialResponse.getInventory());
         assertEquals("d_bombTest_placeBombRadius2", intialResponse.getDungeonName());
@@ -161,8 +143,6 @@ public class StaticEntityTest {
         assertEquals(countEntityOfType(intialResponse, "wall"), 2);
         assertEquals(countEntityOfType(intialResponse, "exit"), 1);
         assertEquals(countEntityOfType(intialResponse, "bomb"), 1);
-
-        //assertEquals(actual, intialResponse.getEntities());
         
     }
 

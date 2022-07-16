@@ -10,8 +10,8 @@ public class ZombieToastSpawner extends StaticEntity {
 
     private static final int DEFAULT_ZOMBIE_SPAWN_RATE = JSONConfig.getConfig("zombie_spawn_rate");
 
-    public ZombieToastSpawner(String type, Position position) {
-        super(type, position);
+    public ZombieToastSpawner(String type, Position position, boolean isInteractable) {
+        super(type, position, isInteractable);
         this.isTraversable = true;
     }
     

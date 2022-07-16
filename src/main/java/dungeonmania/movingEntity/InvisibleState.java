@@ -11,7 +11,6 @@ public class InvisibleState implements PlayerState {
     public void playerStateChange(Player player) {
         player.setInvisible(true);
         player.setInvincible(false); 
-        player.setInteractable(false); 
         List<String> types = new ArrayList<String>();
         player.setNonTraversibles(types);
     }

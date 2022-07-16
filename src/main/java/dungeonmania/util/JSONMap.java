@@ -47,7 +47,7 @@ public class JSONMap {
         Entity entity = null;
         switch (type) {
             case "player":
-                entity = new Player(type, position, true); break;
+                entity = new Player(type, position, false); break;
             case "wall":
                 entity = new Wall(type, position); break;
             case "exit":
@@ -61,11 +61,11 @@ public class JSONMap {
             case "portal":
                 entity = new Portal(type, position, obj.getString("colour")); break;
             case "zombie_toast_spawner":
-                entity = new ZombieToastSpawner(type, position); break;
+                entity = new ZombieToastSpawner(type, position, true); break;
             case "spider":
-                entity = new Spider(type, position, true); break;
+                entity = new Spider(type, position, false); break;
             case "zombie_toast":
-                entity = new ZombieToast(type, position, true); break;
+                entity = new ZombieToast(type, position, false); break;
             case "mercenary":
                 entity = new Mercenary(type, position, true); break;
             case "treasure":
