@@ -33,11 +33,8 @@ public class Bomb extends Item {
             if (!(entity instanceof Player)) {
                 int x = entity.getXCoordinate();
                 int y = entity.getYCoordinate();
-                System.out.println("OUTSIDE type: " + entity.getType() + " x: " + x + " y: " + y);
-                System.out.println(currX + DEFAULT_BOMB_RADIUS);
                 if ((currX - DEFAULT_BOMB_RADIUS) <= x && x <= (currX + DEFAULT_BOMB_RADIUS) 
                      && (currY - DEFAULT_BOMB_RADIUS) <= y && y <= (currY + DEFAULT_BOMB_RADIUS)) {
-                    System.out.println("INSIDE type: " + entity.getType() + " x: " + x + " y: " + y);
 
                     removable.add(entity);
                 }
