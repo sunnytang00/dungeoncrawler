@@ -1,6 +1,7 @@
 package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.goals.Goals;
 import dungeonmania.response.models.*;
 import dungeonmania.util.*;
 import dungeonmania.util.JSONMap;
@@ -28,6 +29,7 @@ public class DungeonManiaController {
 
     private DungeonMap map;
     private DungeonGame game;
+    private Goals goals;
 
     public String getSkin() {
         return "default";
@@ -64,15 +66,12 @@ public class DungeonManiaController {
         
         List<Entity> entities = jMap.getInitialMapEntities();
         map = new DungeonMap(entities, dungeonName);
-<<<<<<< HEAD
-        // System.out.println("Configissue" + map.getPlayer().getHealth());
-=======
->>>>>>> joanna_debug
-        
+        goals = jMap.getComposedGoals(jMap.getGoals(), map);
+                
         List<EntityResponse> entityResponses = map.getEntityResponses();
-        game = new DungeonGame(jMap.getGoals(), null, null, null);
+        game = new DungeonGame(goals.getGoalsAsString(map), null, null, null);
         
-        return new DungeonResponse(game.getDungeonId(), dungeonName, entityResponses, null, null, null, jMap.getGoals());
+        return new DungeonResponse(game.getDungeonId(), dungeonName, entityResponses, null, null, null, goals.getGoalsAsString(map));
     }
 
     /**
@@ -82,8 +81,10 @@ public class DungeonManiaController {
 
         Player player = map.getPlayer();
         List<BattleResponse> battles = map.getBattleResponses(game.getBattles());
-        System.out.println(map.getPlayer());
-        return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), player.getInventoryResponses(), battles , player.getBuildables(), game.getGoals());
+        // System.out.println(map.getPlayer());
+        // return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), player.getInventoryResponses(), battles , player.getBuildables(), game.getGoalsAsString());
+        return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), player.getInventoryResponses(), battles , player.getBuildables(), goals.getGoalsAsString(map));
+    
     }
 
     /**
@@ -144,8 +145,10 @@ public class DungeonManiaController {
         }
 
         List<EntityResponse> entityResponses = map.getEntityResponses();
-        String goals = game.getGoals();
-        DungeonGame dDame = new DungeonGame(goals, inventory, null, null);
+        // String goals = game.getGoalsAsString();
+        // DungeonGame dDame = new DungeonGame(goals, inventory, null, null);
+        DungeonGame dDame = new DungeonGame(goals.getGoalsAsString(map), inventory, null, null);
+
         List<ItemResponse> itemResponses = Helper.convertFromItem(inventory);
 
         for (Entity entity : map.getMapEntities()) {
@@ -176,7 +179,7 @@ public class DungeonManiaController {
         game.incrementTick();
         Player player = map.getPlayer();
         player.move(game, map, movementDirection);
-        System.out.println("playerhere" + player.getPosition());
+        // System.out.println("playerhere" + player.getPosition());
         List<Enemy> enemies = new ArrayList<>();
         List<ZombieToast> zombiesToAdd = new ArrayList<>();
         for (Entity entity : map.getMapEntities()) {
@@ -201,7 +204,7 @@ public class DungeonManiaController {
 
         }
         for (Enemy enemy : enemies) {
-            System.out.println("Merccccc" + enemy.getMovingStrategy() + enemy.getPosition() + enemy.getType() + "player" + player.getPosition());
+            // System.out.println("Merccccc" + enemy.getMovingStrategy() + enemy.getPosition() + enemy.getType() + "player" + player.getPosition());
             player.interactWithEnemies(enemy, map);
             player.battleWithEnemies(map, game);
         }
@@ -246,15 +249,5 @@ public class DungeonManiaController {
     }
 
     //HELPERS DOWN HERE
-
-    
-    // public DungeonMap currentDungeonMap(List<Entity> entities, String dungeonName) {
-    //     return new DungeonMap(entities, dungeonName);
-    // }
-
-    // public DungeonMap getCurrentMap() {
-    //     return map;
-    // }
-
 
 }
