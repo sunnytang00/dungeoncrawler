@@ -17,6 +17,7 @@ public class MoveTowardsPlayer implements MovingStrategy {
     // https://edstem.org/au/courses/8675/discussion/931224 moves closer in either x or y direction
     @Override
     public void move(MovingEntity movingEntity, DungeonMap map) {
+        
         // change to observer pattern later?
         Player player = map.getPlayer();
         // if player invisible, move randomly
@@ -30,8 +31,10 @@ public class MoveTowardsPlayer implements MovingStrategy {
         List<Position> moveablePos = new ArrayList<Position>();
         for (Position pos : adjPos) {
             if (pos.getDistanceBetween(playerPos) < currPos.getDistanceBetween(playerPos)) {
+
                 List<Entity> atAdj = map.getEntityFromPos(pos);
-                if (atAdj.size() == 0 || !movingEntity.blockedBy(atAdj)) {
+                if (atAdj != null || !movingEntity.blockedBy(atAdj)) {
+                    //System.out.println("entermove towards" + playerPos + "curr" + pos);
                     moveablePos.add(pos);
                 }    
             }
@@ -40,6 +43,7 @@ public class MoveTowardsPlayer implements MovingStrategy {
             return;
         }
         movingEntity.setPosition(getRandomPosition(moveablePos));
+        //System.out.println("finally" + movingEntity.getPosition());
         
     }
 

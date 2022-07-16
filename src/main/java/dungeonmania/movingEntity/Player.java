@@ -40,6 +40,7 @@ public class Player extends MovingEntity {
     private Potion currPotion = null;
     private Key currKey = null;
     private boolean playerWin = false;
+    private boolean playerDied = false;
     private int slayedEnemy = 0;
 
     public Player(String type, Position position, boolean isInteractable) {
@@ -50,6 +51,16 @@ public class Player extends MovingEntity {
         this.wealth = 0; // initially has not collected any treasure
         this.setState(new PlayerDefaultState());
         state.playerStateChange(this);
+    }
+
+    
+    public boolean isPlayerDied() {
+        return playerDied;
+    }
+
+
+    public void setPlayerDied(boolean playerDied) {
+        this.playerDied = playerDied;
     }
 
 
@@ -186,7 +197,9 @@ public class Player extends MovingEntity {
         boolean blocked = false;
 
         this.setDirection(direction);
+        //System.out.println("Pos: " + getPosition() + "direction: " + direction);
         Position newPos = getPosition().translateBy(direction);
+        //System.out.println("newPos: " + newPos);
         List<Entity> encounters = map.getEntityFromPos(newPos);
 
         // interact with non-moving entities 
@@ -232,7 +245,8 @@ public class Player extends MovingEntity {
     }
 
     public void interactWithEnemies(Enemy enemy, DungeonMap map) {
-        if (!enemy.becomeAlly()) {
+        if (enemy.getPosition().equals(this.getPosition()) && !enemy.becomeAlly()) {
+            System.out.println("entered interact with enemy");
             // could not only bribe when encounter, could also bribe within certain radius
             if (enemy instanceof Mercenary && hasEnoughToBribe()) {
                 // bribeMerc();
@@ -258,6 +272,7 @@ public class Player extends MovingEntity {
 
             List<Round> rounds = new ArrayList<Round>();
             double iniEnemyHealth = enemy.getHealth();
+            System.out.println("Enemy initial health: " + iniEnemyHealth);
             currBattle = new Battle(enemy.getType(), rounds, iniPlayerHealth, iniEnemyHealth);
 
             while (this.getHealth() > 0 && enemy.getHealth() > 0) {
@@ -275,8 +290,10 @@ public class Player extends MovingEntity {
                 }
                 double newHealth = getHealth() + deltaPlayerHealth;
                 double enemyHealth = enemy.getHealth() + deltaEnemyHealth;
+                
                 setHealth(newHealth);
                 enemy.setHealth(enemyHealth);
+                System.out.println("Round player" + getHealth() + "enemyHealth" + enemy.getHealth());
                 if (isInvincible()) {
                     weaponryUsed.add(getCurrPotion());
                 }
@@ -290,9 +307,10 @@ public class Player extends MovingEntity {
                 }
 
                 if (newHealth <= 0) {
-                    // player dies
-                    map.removeEntityFromMap(this);
+                    // player dies, should remove?????????
+                    // map.removeEntityFromMap(this);
                     game.addToBattles(currBattle);
+                    setPlayerDied(true);
                     System.out.println("player dies: " + currBattle);
                     return;
                     // return battles;

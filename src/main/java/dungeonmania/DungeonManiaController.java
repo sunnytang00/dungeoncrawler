@@ -111,6 +111,8 @@ public class DungeonManiaController {
 
         if (targetItem instanceof Bomb) {
             Bomb bomb = (Bomb)targetItem;
+            Position newPosition = player.getPosition();
+            bomb.setPosition(newPosition);
             bomb.explode(map);
         }
 
@@ -152,6 +154,7 @@ public class DungeonManiaController {
     public DungeonResponse tick(Direction movementDirection) {
         Player player = map.getPlayer();
         player.move(game, map, movementDirection);
+        System.out.println("playerhere" + player.getPosition());
         List<Enemy> enemies = new ArrayList<>();
         for (Entity entity : map.getMapEntities()) {
              if (entity instanceof Enemy) {
@@ -161,6 +164,7 @@ public class DungeonManiaController {
             }
         }
         for (Enemy enemy : enemies) {
+            System.out.println("Merccccc" + enemy.getMovingStrategy() + enemy.getPosition() + enemy.getType() + "player" + player.getPosition());
             player.interactWithEnemies(enemy, map);
             player.battleWithEnemies(map, game);
         }
