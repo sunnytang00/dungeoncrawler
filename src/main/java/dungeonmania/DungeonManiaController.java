@@ -83,6 +83,7 @@ public class DungeonManiaController {
     /**
      * /game/tick/item
      */
+    
     public DungeonResponse tick(String itemUsedId) throws IllegalArgumentException, InvalidActionException {
         if (null == itemUsedId || "".equals(itemUsedId)) {
             throw new InvalidActionException("Not found the item with the given id(" + itemUsedId + ")");

@@ -218,7 +218,7 @@ public class Player extends MovingEntity {
 
         // create interact method in each entity
         if (entity instanceof Boulder) {
-            pushBoulder();
+            pushBoulder(entity, map);
         } else if (entity instanceof Exit) {
             // remove exit from goals 
             // remove player from map entities 
@@ -360,8 +360,8 @@ public class Player extends MovingEntity {
 
     }
 
-    public void pushBoulder(){
-
+    public void pushBoulder(Entity entity, DungeonMap map){
+        
     }
 
     public void collectToInventory(Item item, DungeonMap map) {
