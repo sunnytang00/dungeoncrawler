@@ -18,6 +18,7 @@ public class Mercenary extends BribableEnemy {
         super(type, position, isInteractable);
         this.setBribed(false);
         setMovingStrategy(new MoveTowardsPlayer());
+        setState(new MercViciousState());
         getState().currentState(this);
         this.setNonTraversibles(Arrays.asList("boulder", "wall", "door"));
     }

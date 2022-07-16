@@ -101,5 +101,19 @@ public class DungeonMap {
     public void removeEntityFromMap(Entity entity) {
         mapEntities.remove(entity);
     }
+
+    public boolean checkIfEntityAdjacentIsEmpty(Entity entity, Direction direction) {
+
+        List<Entity> entityList = getEntityFromPos(entity.getPosition().translateBy(direction));
+
+        if (entityList.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    public void addEntitiesToMap(List<ZombieToast> entities) {
+        mapEntities.addAll(entities);
+    }
 }
 
