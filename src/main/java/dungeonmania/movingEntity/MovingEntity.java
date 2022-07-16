@@ -50,9 +50,7 @@ public abstract class MovingEntity extends Entity  {
     }
 
     public void setHealth(double health) {
-        System.out.println("before: " + health);
         this.health = health;
-        System.out.println("after: " + health);
 
     }
 

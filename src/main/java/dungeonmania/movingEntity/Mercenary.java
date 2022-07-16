@@ -8,18 +8,16 @@ import dungeonmania.util.Position;
 
 public class Mercenary extends BribableEnemy {
     
-    // private static final int DEFAULT_BRIBE_RADIUS = JSONConfig.getConfig("bribe_radius");
 
-    private MercenaryState state;
+    private MercenaryState state = new MercViciousState();
     private boolean inRad;
     private boolean isBribed;
 
 
     public Mercenary(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
-        // this.setBribeRadius(DEFAULT_BRIBE_RADIUS);
         this.setBribed(false);
-        this.setState(new MercViciousState());
+        setMovingStrategy(new MoveTowardsPlayer());
         getState().currentState(this);
         this.setNonTraversibles(Arrays.asList("boulder", "wall", "door"));
     }
