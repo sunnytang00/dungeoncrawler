@@ -270,9 +270,11 @@ public class Player extends MovingEntity {
             while (this.getHealth() > 0 && enemy.getHealth() > 0) {
                 List<Item> weaponryUsed = checkBattleBonuses(map);
                 boolean hasShield = false;
-                for (Item weapon : weaponryUsed) {
-                    if (weapon instanceof Shield) {
-                        hasShield = true;
+                if (weaponryUsed != null) {
+                    for (Item weapon : weaponryUsed) {
+                        if (weapon instanceof Shield) {
+                            hasShield = true;
+                        }
                     }
                 }
                 double deltaPlayerHealth = - enemy.getAttack()/10;
@@ -294,8 +296,10 @@ public class Player extends MovingEntity {
                 currBattle.setRounds(rounds);
                 
                 for (Item weapon : weaponryUsed) {
-                    Weapon w = (Weapon) weapon;
-                    w.useWeapon();
+                    if (weapon != null) {
+                        Weapon w = (Weapon) weapon;
+                        w.useWeapon();
+                    }
                 }
 
                 if (newHealth <= 0) {

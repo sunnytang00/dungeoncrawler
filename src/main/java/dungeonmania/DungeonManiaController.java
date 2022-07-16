@@ -154,6 +154,11 @@ public class DungeonManiaController {
             }
         }
         map.addEntitiesToMap(zombiesToAdd);
+        Spider spiderToAdd = map.spawnSpider(game.getCurrentTick(), map);
+
+        if (spiderToAdd != null) { 
+            map.addEntityToMap(spiderToAdd);
+        }
         map.BoulderSwitchOverlap();
         //return new DungeonResponse(dDame.getDungeonId(), map.getDungeonName(), entityResponses, itemResponses, null, null, goals);
         return getDungeonResponseModel();
