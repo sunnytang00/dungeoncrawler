@@ -1,9 +1,11 @@
 package dungeonmania.util;
 
+import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
 import dungeonmania.StaticEntities.*;
 import dungeonmania.movingEntity.*;
 import dungeonmania.entities.collectableEntities.*;
+import dungeonmania.goals.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +22,8 @@ import java.io.InputStream;
 public class JSONMap {
 
     private ArrayList<Entity> initialMapEntities = new ArrayList<Entity>();
-    private String goals;
+    private JSONObject JSONgoals;
+    // private JSONArray JSONgoals;
 
     public JSONMap(InputStream is) {
 
@@ -28,21 +31,22 @@ public class JSONMap {
         JSONObject object = new JSONObject(tokener);
 
         // complex goals are not handled yet
-        goals = object.getJSONObject("goal-condition").toString();
+        JSONgoals = object.getJSONObject("goal-condition");
+        // JSONgoals = object.getJSONArray("goal-condition");
 
         JSONArray entitiesJSON = object.getJSONArray("entities");
         for (int i = 0; i < entitiesJSON.length(); i++) {
             JSONObject obj = entitiesJSON.getJSONObject(i);
             String type = obj.getString("type");
-            int x = obj.getInt("x");
-            int y = obj.getInt("y");
-            Position pos = new Position(x,y);
-            initialiseMapEntities(type, pos, obj);
+            initialiseMapEntities(type, obj);
         }
         
     }
 
-    private void initialiseMapEntities(String type, Position position, JSONObject obj) {
+    private void initialiseMapEntities(String type, JSONObject obj) {
+        int x = obj.getInt("x");
+        int y = obj.getInt("y");
+        Position position = new Position(x,y);
         Entity entity = null;
         switch (type) {
             case "player":
@@ -91,8 +95,40 @@ public class JSONMap {
         return initialMapEntities;
     }
 
-    public String getGoals() {
-        return goals;
+    public JSONObject getGoals() {
+        return JSONgoals;
     }
- 
+
+    public Goals getComposedGoals(JSONObject goals, DungeonMap map) {
+        switch(goals.getString("goal")) {
+            case "AND":
+                // CompositeGoal compositeAndGoal = new CompositeAnd();
+                JSONArray subgoalsAnd = goals.getJSONArray("subgoals");
+                // for (int i = 0; i < subgoals1.length(); ++i) {
+                //     JSONObject subgoal = subgoals1.getJSONObject(i);
+                //     compositeAndGoal.composeGoal(getComposedGoals(subgoal));
+                // }
+                CompositeGoal compositeAndGoal = new CompositeAnd(getComposedGoals(subgoalsAnd.getJSONObject(0), map),
+                                                                  getComposedGoals(subgoalsAnd.getJSONObject(1), map));
+                return compositeAndGoal;
+            // case "OR":
+            //     CompositeGoal compositeOrGoal = new CompositeOr();
+            //     JSONArray subgoals2 = goals.getJSONArray("subgoals");
+            //     for (int i = 0; i < subgoals2.length(); ++i) {
+            //         JSONObject subgoal = subgoals2.getJSONObject(i);
+            //         compositeOrGoal.composeGoal(getComposedGoals(subgoal));
+            //     }
+            //     return compositeOrGoal;
+            case "exit":
+                return new GetExit(map);
+            case "enemies":
+                return new DestroyEnemy(map);
+            case "boulders":
+                return new BoulderOnSwitch(map);
+            case "treasure":
+                return new CollectTreasure(map);
+        }
+        return null;
+    }
+
 }
