@@ -10,7 +10,8 @@ public abstract class Weapon extends Item {
 
 
     private int durability;
-
+    private int defence;
+    private int damageValue;
 
     public Weapon(String type) {
         super(type);
@@ -20,12 +21,20 @@ public abstract class Weapon extends Item {
         super(type, position);
     }
 
-    public int getDamageValue() {
-        return 0;
+    public int getDefence() {
+        return defence;
     }
 
-    public int getDefence(){
-        return 0;
+    public void setDefence(int defence) {
+        this.defence = defence;
+    }
+
+    public int getDamageValue() {
+        return damageValue;
+    }
+
+    public void setDamageValue(int damageValue) {
+        this.damageValue = damageValue;
     }
 
     public int getDurability() {

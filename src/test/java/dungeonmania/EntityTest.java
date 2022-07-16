@@ -24,7 +24,8 @@ public class EntityTest {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse initDungonRes = dmc.newGame("d_movementTest_testMovementDown", "c_movementTest_testMovementDown");
         EntityResponse initPlayer = getPlayer(initDungonRes).get();
-        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), "player", new Position(1,1), true);
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), "player", new Position(1,1), false);
+        System.out.println(initPlayer.isInteractable());
         assertEquals(expectedPlayer, initPlayer);
     }
 }

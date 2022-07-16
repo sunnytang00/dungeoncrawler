@@ -17,7 +17,7 @@ public class JSONConfig {
         if (is == null) { throw new IllegalArgumentException(); }
         JSONTokener tokener = new JSONTokener(is);
         JSONObject object = new JSONObject(tokener);
-
+        System.out.println("Config:" +  object.getInt(field));
         return object.getInt(field);
     }
 }

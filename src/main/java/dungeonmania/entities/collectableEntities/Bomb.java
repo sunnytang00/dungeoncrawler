@@ -12,15 +12,13 @@ import java.util.List;
 
 public class Bomb extends Item {
 
-    private static final int DEFAULT_BOMB_RADIUS = JSONConfig.getConfig("bomb_radius");
-
 
     public Bomb(String type, Position position) {
         super(type, position);
     }
 
     public int getBombRadius() {
-        return DEFAULT_BOMB_RADIUS;
+        return JSONConfig.getConfig("bomb_radius");
     }
 
     public void explode(DungeonMap map) {
@@ -33,8 +31,11 @@ public class Bomb extends Item {
             if (!(entity instanceof Player)) {
                 int x = entity.getXCoordinate();
                 int y = entity.getYCoordinate();
-                if ((currX - DEFAULT_BOMB_RADIUS) <= x && x <= (currX + DEFAULT_BOMB_RADIUS) 
-                     && (currY - DEFAULT_BOMB_RADIUS) <= y && y <= (currY + DEFAULT_BOMB_RADIUS)) {
+                System.out.println("OUTSIDE type: " + entity.getType() + " x: " + x + " y: " + y);
+                System.out.println(currX + getBombRadius());
+                if ((currX - getBombRadius()) <= x && x <= (currX + getBombRadius()) 
+                     && (currY - getBombRadius()) <= y && y <= (currY + getBombRadius())) {
+                    System.out.println("INSIDE type: " + entity.getType() + " x: " + x + " y: " + y);
 
                     removable.add(entity);
                 }

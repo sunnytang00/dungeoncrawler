@@ -23,12 +23,6 @@ import dungeonmania.util.Round;
 
 public class Player extends MovingEntity {
 
-    private static final int DEFAULT_BRIBE_AMOUNT = JSONConfig.getConfig("bribe_amount");
-    private static final int DEFAULT_PLAYER_HEALTH = JSONConfig.getConfig("player_health");
-    private static final int DEFAULT_PLAYER_ATTACK = JSONConfig.getConfig("player_attack");
-    private static final double DEFAULT_ALLY_DEFENCE = JSONConfig.getConfig("ally_defence");
-    private static final double DEFAULT_ALLY_ATTACK = JSONConfig.getConfig("ally_attack");
-
     private boolean isInvisible;
     private boolean isInvincible;
     private Position prevPosition;
@@ -40,15 +34,27 @@ public class Player extends MovingEntity {
     private Potion currPotion = null;
     private Key currKey = null;
     private boolean playerWin = false;
+    private boolean playerDied = false;
+    private int slayedEnemy = 0;
 
     public Player(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
         this.prevPosition = null;
-        this.setHealth(DEFAULT_PLAYER_HEALTH);
-        this.setAttack(DEFAULT_PLAYER_ATTACK);
+        this.setHealth(JSONConfig.getConfig("player_health"));
+        this.setAttack(JSONConfig.getConfig("player_attack"));
         this.wealth = 0; // initially has not collected any treasure
         this.setState(new PlayerDefaultState());
         state.playerStateChange(this);
+    }
+
+    
+    public boolean isPlayerDied() {
+        return playerDied;
+    }
+
+
+    public void setPlayerDied(boolean playerDied) {
+        this.playerDied = playerDied;
     }
 
 
@@ -131,10 +137,18 @@ public class Player extends MovingEntity {
         return totalTreasure;
     }
 
+    public int getSlayedEnemy(){
+        return slayedEnemy;
+    }
+
+
+    public void setSlayedEnemy(int slayedEnemy) {
+        this.slayedEnemy = slayedEnemy;
+    }
 
     public boolean hasEnoughToBribe() {
         boolean enoughWealth = false;
-        if (this.wealth >= DEFAULT_BRIBE_AMOUNT) {
+        if (this.wealth >= JSONConfig.getConfig("bribe_amount")) {
             enoughWealth = true;
         }
         return enoughWealth;
@@ -172,12 +186,14 @@ public class Player extends MovingEntity {
     }
 
     public void move(DungeonGame game, DungeonMap map, Direction direction) {
-        // System.out.println("entered move");
+        System.out.println("entered move");
 
         boolean blocked = false;
 
         this.setDirection(direction);
+        //System.out.println("Pos: " + getPosition() + "direction: " + direction);
         Position newPos = getPosition().translateBy(direction);
+        //System.out.println("newPos: " + newPos);
         List<Entity> encounters = map.getEntityFromPos(newPos);
 
         // interact with non-moving entities 
@@ -198,7 +214,7 @@ public class Player extends MovingEntity {
 
 
     public void interactWithEntities(Entity entity, DungeonMap map) {
-        // System.out.println("entered interact");
+        System.out.println("entered interact");
 
         // create interact method in each entity
         if (entity instanceof Boulder) {
@@ -223,14 +239,15 @@ public class Player extends MovingEntity {
     }
 
     public void interactWithEnemies(Enemy enemy, DungeonMap map) {
-        if (!enemy.becomeAlly()) {
+        if (enemy.getPosition().equals(this.getPosition()) && !enemy.becomeAlly()) {
+            System.out.println("entered interact with enemy");
             // could not only bribe when encounter, could also bribe within certain radius
             if (enemy instanceof Mercenary && hasEnoughToBribe()) {
                 // bribeMerc();
             } else {
-                // System.out.println("battle queue");
+                System.out.println("battle queue");
                 battleQueue.add(enemy);
-                // System.out.println("interact with enemy: " + battleQueue);
+                System.out.println("interact with enemy: " + battleQueue);
             }
         }
     }
@@ -239,69 +256,76 @@ public class Player extends MovingEntity {
         if (battleQueue.size() <= 0) {
             return;
         }
-        // System.out.println("battle queue has item");
+        System.out.println("battle queue has item");
         List<Battle> battles = new ArrayList<Battle>();
         double iniPlayerHealth = this.getHealth();
         Battle currBattle = null;
-        // System.out.println("player initial health: " + iniPlayerHealth);
+        System.out.println("player initial health: " + iniPlayerHealth);
 
         for (Enemy enemy : battleQueue) {
-            List<Item> weaponryUsed = checkBattleBonuses(map);
-            boolean hasShield = false;
-            for (Item weapon : weaponryUsed) {
-                if (weapon instanceof Shield) {
-                    hasShield = true;
-                }
-            }
 
             List<Round> rounds = new ArrayList<Round>();
             double iniEnemyHealth = enemy.getHealth();
-            // System.out.println("enemy initial health: " + iniEnemyHealth);
+            System.out.println("Enemy initial health: " + iniEnemyHealth);
             currBattle = new Battle(enemy.getType(), rounds, iniPlayerHealth, iniEnemyHealth);
-            double deltaPlayerHealth = - enemy.getAttack()/10;
-            // System.out.print("delta player health" + deltaPlayerHealth);
-            // System.out.print("enemy get attack" + enemy.getAttack());
-            double deltaEnemyHealth = - getAttack()/5;
-            if (hasShield) {
-                deltaEnemyHealth *= 2;
-            }
-            double newHealth = getHealth() + deltaPlayerHealth;
-            double enemyHealth = enemy.getHealth() + deltaEnemyHealth;
-            setHealth(newHealth);
-            enemy.setHealth(enemyHealth);
-            if (isInvincible()) {
-                weaponryUsed.add(getCurrPotion());
-            }
-            Round currRound = new Round(deltaPlayerHealth, deltaEnemyHealth, weaponryUsed);
-            rounds.add(currRound);
-            currBattle.setRounds(rounds);
-            
-            for (Item weapon : weaponryUsed) {
-                Weapon w = (Weapon) weapon;
-                w.useWeapon();
-            }
 
-            if (newHealth <= 0) {
-                // player dies
-                map.removeEntityFromMap(this);
-                game.setBattles(currBattle);
-                // System.out.println("player dies: " + currBattle);
-                return;
-                // return battles;
-            } else if (enemyHealth <= 0) {
-                // enemy dies
-                map.removeEntityFromMap(enemy);
-            }
-            
-            if (isInvincible()) {
-                setPlayerWin(true);
-                battles.add(currBattle);
-                game.setBattles(currBattle);
-                return;
+            while (this.getHealth() > 0 && enemy.getHealth() > 0) {
+                List<Item> weaponryUsed = checkBattleBonuses(map);
+                boolean hasShield = false;
+                for (Item weapon : weaponryUsed) {
+                    if (weapon instanceof Shield) {
+                        hasShield = true;
+                    }
+                }
+                double deltaPlayerHealth = - enemy.getAttack()/10;
+                double deltaEnemyHealth = - getAttack()/5;
+                if (hasShield) {
+                    deltaEnemyHealth *= 2;
+                }
+                double newHealth = getHealth() + deltaPlayerHealth;
+                double enemyHealth = enemy.getHealth() + deltaEnemyHealth;
+                
+                setHealth(newHealth);
+                enemy.setHealth(enemyHealth);
+                System.out.println("Round player" + getHealth() + "enemyHealth" + enemy.getHealth());
+                if (isInvincible()) {
+                    weaponryUsed.add(getCurrPotion());
+                }
+                Round currRound = new Round(deltaPlayerHealth, deltaEnemyHealth, weaponryUsed);
+                rounds.add(currRound);
+                currBattle.setRounds(rounds);
+                
+                for (Item weapon : weaponryUsed) {
+                    Weapon w = (Weapon) weapon;
+                    w.useWeapon();
+                }
+
+                if (newHealth <= 0) {
+                    // player dies, should remove?????????
+                    // map.removeEntityFromMap(this);
+                    game.addToBattles(currBattle);
+                    setPlayerDied(true);
+                    System.out.println("player dies: " + currBattle);
+                    return;
+                    // return battles;
+                } else if (enemyHealth <= 0) {
+                    // enemy dies
+                    map.removeEntityFromMap(enemy);
+                    // increment slayed enemy number
+                    setSlayedEnemy(slayedEnemy+1);
+                }
+                
+                if (isInvincible()) {
+                    setPlayerWin(true);
+                    battles.add(currBattle);
+                    game.addToBattles(currBattle);
+                    return;
+                }
             }
         }
-        // System.out.println("battle in method: " + currBattle);
-        game.setBattles(currBattle);
+        System.out.println("battle in method: " + currBattle);
+        game.addToBattles(currBattle);
+        setPlayerWin(true);
     }
 
     public List<Item> checkBattleBonuses(DungeonMap map) {
@@ -325,11 +349,11 @@ public class Player extends MovingEntity {
 
         if (numAlly != 0) {
 
-            attackBonus += numAlly * DEFAULT_ALLY_ATTACK;
-            defenceBonus += numAlly * DEFAULT_ALLY_DEFENCE;
+            attackBonus += numAlly * JSONConfig.getConfig("ally_attack");
+            defenceBonus += numAlly * JSONConfig.getConfig("ally_defence");
         }
 
-        this.setAttack(DEFAULT_PLAYER_ATTACK + attackBonus);
+        this.setAttack(getAttack() + attackBonus);
         this.setDefence(defenceBonus);
 
         return weaponryUsed;
@@ -377,7 +401,7 @@ public class Player extends MovingEntity {
             merc.setState(new MercBribedState());
         }
         
-        consumeInventory("treasure", DEFAULT_BRIBE_AMOUNT);
+        consumeInventory("treasure", JSONConfig.getConfig("bribe_amount"));
     }
     
     public void consumeInventory(String type, int amount) {
