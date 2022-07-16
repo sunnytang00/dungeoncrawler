@@ -166,24 +166,42 @@ public class DungeonManiaController {
     /**
      * /game/tick/movement
      */
+
     public DungeonResponse tick(Direction movementDirection) {
+        game.incrementTick();
         Player player = map.getPlayer();
         player.move(game, map, movementDirection);
         System.out.println("playerhere" + player.getPosition());
         List<Enemy> enemies = new ArrayList<>();
+        List<ZombieToast> zombiesToAdd = new ArrayList<>();
         for (Entity entity : map.getMapEntities()) {
              if (entity instanceof Enemy) {
                 Enemy enemy = (Enemy) entity;
                 enemies.add(enemy);
                 enemy.getMovingStrategy().move(enemy, map);
             }
+
+ 
+
+            if (entity instanceof ZombieToastSpawner) {
+                ZombieToastSpawner ZTSpawner = (ZombieToastSpawner) entity;
+                ZombieToast zombie = ZTSpawner.spawnZombie(game.getCurrentTick(), map);
+                if (zombie != null) {
+                    zombiesToAdd.add(zombie);
+                }
+            }
+
+ 
+
+
         }
         for (Enemy enemy : enemies) {
             System.out.println("Merccccc" + enemy.getMovingStrategy() + enemy.getPosition() + enemy.getType() + "player" + player.getPosition());
             player.interactWithEnemies(enemy, map);
             player.battleWithEnemies(map, game);
         }
-
+        map.addEntitiesToMap(zombiesToAdd);
+        
         return getDungeonResponseModel();
     }
 
