@@ -1,6 +1,6 @@
 package dungeonmania.movingEntity;
 
-import dungeonmania.util.json.JSONConfig;
+import dungeonmania.util.JSONConfig;
 
 public class MercViciousState implements MercenaryState {
 

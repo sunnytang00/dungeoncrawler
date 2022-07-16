@@ -4,8 +4,8 @@ import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
 import dungeonmania.entities.Item;
 import dungeonmania.movingEntity.*;
+import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
-import dungeonmania.util.json.JSONConfig;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,10 +1,8 @@
-package dungeonmania.util.json;
+package dungeonmania.util;
 
 import dungeonmania.Entity;
 import dungeonmania.StaticEntities.*;
 import dungeonmania.movingEntity.*;
-import dungeonmania.util.Position;
-import dungeonmania.entities.buildableEntities.*;
 import dungeonmania.entities.collectableEntities.*;
 
 import java.io.IOException;
