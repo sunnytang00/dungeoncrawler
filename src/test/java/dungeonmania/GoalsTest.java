@@ -43,8 +43,82 @@ public class GoalsTest {
 
         // move player downward again - goal achieved
         res = dmc.tick(Direction.DOWN);
-        System.out.println("FINAL GOALS" + getGoals(res));
         assertTrue(getGoals(res).equals(""));
+        assertFalse(getGoals(res).contains(":exit"));
+    }
 
+    @Test
+    @DisplayName("Complex goal with AND and OR where goals become unachieved")
+    public void goalBecomesUnachieved() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_complexGoalsTest_AndOr", "c_complexGoalsTest_andAll");
+
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
+
+        // System.out.println("=======================================");
+        // System.out.println("Player: " + getEntities(res, "player").get(0).getPosition());
+        // System.out.println("Boulder: " + getEntities(res, "boulder").get(0).getPosition());
+        // System.out.println("Merc: " + getEntities(res, "mercenary").get(0).getPosition());
+
+        // move boulder onto switch
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertFalse(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
+
+        // move boulder off switch
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
+
+        // kill mercenary
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertFalse(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
+       
+        // move second boulder onto switch
+        res = dmc.tick(Direction.DOWN);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertFalse(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
+
+        // move second boulder off switch
+        res = dmc.tick(Direction.DOWN);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertFalse(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
+
+        // exit successfully
+        res = dmc.tick(Direction.RIGHT);
+        assertFalse(getGoals(res).contains(":exit"));
+        assertFalse(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
+    }
+
+    @Test
+    @DisplayName("Test exit must be last")
+    public void testExitLast() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+
+        // TODO
+
+        // DungeonResponse res = dmc.newGame("d_movementTest_testMovementDown", "c_simpleGoalTest_noGoalConditions");
+
+        // assertTrue(getGoals(res).contains(":exit"));
+
+        // // move player downward - goal still exist
+        // res = dmc.tick(Direction.DOWN);
+        // assertTrue(getGoals(res).contains(":exit"));
+
+        // // move player downward again - goal achieved
+        // res = dmc.tick(Direction.DOWN);
+        // assertTrue(getGoals(res).equals(""));
+        // assertFalse(getGoals(res).contains(":exit"));
     }
 }
