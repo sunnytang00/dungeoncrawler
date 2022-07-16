@@ -1,8 +1,9 @@
-package dungeonmania.util;
+package dungeonmania.util.json;
 
 import dungeonmania.Entity;
 import dungeonmania.StaticEntities.*;
 import dungeonmania.movingEntity.*;
+import dungeonmania.util.Position;
 import dungeonmania.entities.buildableEntities.*;
 import dungeonmania.entities.collectableEntities.*;
 

@@ -1,7 +1,7 @@
 package dungeonmania.movingEntity;
 
-import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
+import dungeonmania.util.json.JSONConfig;
 
 public abstract class BribableEnemy extends Enemy {
 

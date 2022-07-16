@@ -3,8 +3,8 @@ package dungeonmania.StaticEntities;
 import dungeonmania.DungeonMap;
 import dungeonmania.StaticEntity;
 import dungeonmania.movingEntity.ZombieToast;
-import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
+import dungeonmania.util.json.JSONConfig;
 
 public class ZombieToastSpawner extends StaticEntity {
 

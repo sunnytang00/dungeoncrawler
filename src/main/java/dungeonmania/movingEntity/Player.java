@@ -16,10 +16,10 @@ import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Battle;
 import dungeonmania.util.Direction;
-import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 import dungeonmania.util.PotionQueue;
 import dungeonmania.util.Round;
+import dungeonmania.util.json.JSONConfig;
 
 public class Player extends MovingEntity {
 

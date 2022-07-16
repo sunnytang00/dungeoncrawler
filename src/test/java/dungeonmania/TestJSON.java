@@ -9,8 +9,8 @@ import java.util.List;
 
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
-import dungeonmania.util.JSONMap;
 import dungeonmania.util.Position;
+import dungeonmania.util.json.JSONMap;
 
 import static dungeonmania.TestUtils.getGoals;
 import static dungeonmania.TestHelpers.*;

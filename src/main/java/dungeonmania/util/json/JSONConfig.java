@@ -1,8 +1,10 @@
-package dungeonmania.util;
+package dungeonmania.util.json;
 
 import java.io.InputStream;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import dungeonmania.util.FileLoader;
 
 public class JSONConfig {
 

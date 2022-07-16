@@ -3,7 +3,7 @@ package dungeonmania.entities.buildableEntities;
 import dungeonmania.entities.Item;
 import dungeonmania.entities.collectableEntities.*;
 import dungeonmania.movingEntity.Player;
-import dungeonmania.util.JSONConfig;
+import dungeonmania.util.json.JSONConfig;
 
 import java.util.ArrayList;
 import java.util.List;

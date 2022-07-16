@@ -3,8 +3,8 @@ package dungeonmania.movingEntity;
 import java.util.Arrays;
 
 import dungeonmania.DungeonMap;
-import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
+import dungeonmania.util.json.JSONConfig;
 
 public class Spider extends Enemy {
 

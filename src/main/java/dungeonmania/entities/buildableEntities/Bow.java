@@ -5,7 +5,7 @@ import dungeonmania.entities.collectableEntities.Arrows;
 import dungeonmania.entities.collectableEntities.Weapon;
 import dungeonmania.entities.collectableEntities.Wood;
 import dungeonmania.movingEntity.Player;
-import dungeonmania.util.JSONConfig;
+import dungeonmania.util.json.JSONConfig;
 
 import java.util.ArrayList;
 import java.util.List;
