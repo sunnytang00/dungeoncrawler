@@ -13,7 +13,6 @@ public abstract class Enemy extends MovingEntity {
     public MovingStrategy getMovingStrategy() {
         return movingStrategy;
     }
-
     public void setMovingStrategy(MovingStrategy movingStrategy) {
         this.movingStrategy = movingStrategy;
     }

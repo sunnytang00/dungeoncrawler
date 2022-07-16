@@ -186,12 +186,12 @@ public class ExampleTests {
     private void assertBattleCalculations(String enemyType, BattleResponse battle, boolean enemyDies, String configFilePath) {
         List<RoundResponse> rounds = battle.getRounds();
         double playerHealth = Double.parseDouble(getValueFromConfigFile("player_health", configFilePath));
-        double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
+        double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType + "_health", configFilePath));
         double playerAttack = Double.parseDouble(getValueFromConfigFile("player_attack", configFilePath));
         double enemyAttack = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
 
         for (RoundResponse round : rounds) {
-            assertEquals(round.getDeltaCharacterHealth(), -(enemyAttack / 10)); // enemy attack value is wrong
+            assertEquals(round.getDeltaCharacterHealth(), -(enemyAttack / 10));
             assertEquals(round.getDeltaEnemyHealth(), -(playerAttack / 5));
             enemyHealth += round.getDeltaEnemyHealth();
             playerHealth += round.getDeltaCharacterHealth();

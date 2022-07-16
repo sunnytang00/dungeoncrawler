@@ -4,7 +4,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dungeonmania.movingEntity.*;
+<<<<<<< HEAD
 import dungeonmania.response.models.*;
+=======
+import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.EntityResponse;
+>>>>>>> 6ccb4a5227bd5b4cacedc0a31e75bfda8a6574d8
 import dungeonmania.Entity;
 import dungeonmania.util.*;
 import dungeonmania.StaticEntities.*;
@@ -61,6 +66,7 @@ public class DungeonMap {
         return player;
     }
 
+<<<<<<< HEAD
     public Entity getEntityFromID(String id) {
         Entity entity = (Player) mapEntities.stream()
                 .filter(e -> e.getId().equals(id))
@@ -69,14 +75,19 @@ public class DungeonMap {
         return entity;
     }
 
+=======
+>>>>>>> 6ccb4a5227bd5b4cacedc0a31e75bfda8a6574d8
     public List<EntityResponse> getEntityResponses() {
         return mapEntities.stream().map(Entity::getEntityResponse).collect(Collectors.toList());
     }
 
+<<<<<<< HEAD
     public List<BattleResponse> getBattleResponses(List<Battle> battles) {
         return battles.stream().map(Battle::getBattleResponse).collect(Collectors.toList());
     }
 
+=======
+>>>>>>> 6ccb4a5227bd5b4cacedc0a31e75bfda8a6574d8
     public int getNumOfAlly() {
         int count = 0;
         for (Entity entity : mapEntities) {

@@ -2,11 +2,16 @@ package dungeonmania.util;
 
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< HEAD
 import java.util.stream.Collectors;
 
 import dungeonmania.movingEntity.*;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.RoundResponse;
+=======
+
+import dungeonmania.movingEntity.*;
+>>>>>>> 6ccb4a5227bd5b4cacedc0a31e75bfda8a6574d8
 
 public class Battle {
     private String enemy;
@@ -48,6 +53,7 @@ public class Battle {
         rounds.add(round);
     }
 
+<<<<<<< HEAD
     public List<RoundResponse> getRoundResponses(List<Round> rounds) {
         return rounds.stream().map(Round::getRoundResponse).collect(Collectors.toList());
     }
@@ -55,5 +61,8 @@ public class Battle {
     public BattleResponse getBattleResponse() {
         return new BattleResponse(enemy, getRoundResponses(rounds), initialPlayerHealth, initialEnemyHealth);
     }
+=======
+    
+>>>>>>> 6ccb4a5227bd5b4cacedc0a31e75bfda8a6574d8
     
 }

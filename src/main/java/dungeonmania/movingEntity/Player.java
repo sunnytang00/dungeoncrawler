@@ -12,7 +12,10 @@ import dungeonmania.StaticEntities.*;
 import dungeonmania.entities.*;
 import dungeonmania.entities.buildableEntities.*;
 import dungeonmania.entities.collectableEntities.*;
+<<<<<<< HEAD
 import dungeonmania.exceptions.InvalidActionException;
+=======
+>>>>>>> 6ccb4a5227bd5b4cacedc0a31e75bfda8a6574d8
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Battle;
 import dungeonmania.util.Direction;
@@ -34,6 +37,7 @@ public class Player extends MovingEntity {
     private Position prevPosition;
     private int wealth;
     private PlayerState state;
+<<<<<<< HEAD
     private List<Item> inventory = new ArrayList<Item>();
     private List<Enemy> battleQueue = new ArrayList<Enemy>();
     private PotionQueue potionQueue = new PotionQueue();
@@ -41,6 +45,14 @@ public class Player extends MovingEntity {
     private Key currKey = null;
     private boolean playerWin = false;
     private int slayedEnemy = 0;
+=======
+    private List<Item> inventory;
+    private List<Enemy> battleQueue;
+    private PotionQueue potionQueue;
+    private Potion currPotion;
+    private Key currKey;
+    private boolean playerWin;
+>>>>>>> 6ccb4a5227bd5b4cacedc0a31e75bfda8a6574d8
 
     public Player(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
@@ -50,6 +62,16 @@ public class Player extends MovingEntity {
         this.wealth = 0; // initially has not collected any treasure
         this.setState(new PlayerDefaultState());
         state.playerStateChange(this);
+<<<<<<< HEAD
+=======
+        this.battleQueue = new ArrayList<Enemy>();
+        this.potionQueue = new PotionQueue();
+        this.currKey = null;
+        this.currPotion = null;
+        this.playerWin = false;
+        this.inventory = new ArrayList<Item>();
+        
+>>>>>>> 6ccb4a5227bd5b4cacedc0a31e75bfda8a6574d8
     }
 
 

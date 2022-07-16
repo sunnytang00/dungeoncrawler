@@ -24,7 +24,6 @@ public class DungeonGame {
         this.dungeonId = UUID.randomUUID().toString();
         this.goals = goals;
         this.inventories = inventories;
-        // this.battles = battles;
         this.buildables = buildables;
     }
 
@@ -60,16 +59,11 @@ public class DungeonGame {
         this.inventories = inventories;
     }
 
-    // public void setBattles(List<Battle> battles) {
-    //     System.out.println("battle in dungeon game: " + battles);
-    //     this.battles = battles;
-    // }
-    public void setBattles(Battle battle) {
-        System.out.println("original battle list: " + battles);
-        System.out.println("battle in dungeon game: " + battle);
-        battles.add(battle);
+    public void setBattles(List<Battle> battles) {
+        System.out.println("battle in dungeon game: " + battles);
+        this.battles = battles;
     }
-
+    
     public void setBuildables(List<String> buildables) {
         this.buildables = buildables;
     }
