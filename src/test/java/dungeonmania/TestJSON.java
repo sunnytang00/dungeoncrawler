@@ -27,6 +27,7 @@ public class TestJSON {
         
         List<String> types = new ArrayList<>();
         dResponse.getEntities().stream().forEach(s -> types.add(s.getType()));
+        dResponse.getEntities().stream().forEach(s -> System.out.println(s.getType()));
         assertListAreEqualIgnoringOrder(Arrays.asList("exit", "player"), types);
 
         List<Integer> posX = new ArrayList<>();

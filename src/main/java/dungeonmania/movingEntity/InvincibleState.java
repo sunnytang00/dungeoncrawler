@@ -8,7 +8,6 @@ public class InvincibleState implements PlayerState {
     public void playerStateChange(Player player) {
         player.setInvisible(false);
         player.setInvincible(true); 
-        player.setInteractable(true);
         player.setNonTraversibles(Arrays.asList("wall", "door"));
     }
 

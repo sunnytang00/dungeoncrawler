@@ -12,6 +12,7 @@ import dungeonmania.StaticEntities.*;
 import dungeonmania.entities.*;
 import dungeonmania.entities.buildableEntities.*;
 import dungeonmania.entities.collectableEntities.*;
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Battle;
 import dungeonmania.util.Direction;
@@ -33,12 +34,13 @@ public class Player extends MovingEntity {
     private Position prevPosition;
     private int wealth;
     private PlayerState state;
-    private List<Item> inventory;
-    private List<Enemy> battleQueue;
-    private PotionQueue potionQueue;
-    private Potion currPotion;
-    private Key currKey;
-    private boolean playerWin;
+    private List<Item> inventory = new ArrayList<Item>();
+    private List<Enemy> battleQueue = new ArrayList<Enemy>();
+    private PotionQueue potionQueue = new PotionQueue();
+    private Potion currPotion = null;
+    private Key currKey = null;
+    private boolean playerWin = false;
+    private int slayedEnemy = 0;
 
     public Player(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
@@ -48,13 +50,6 @@ public class Player extends MovingEntity {
         this.wealth = 0; // initially has not collected any treasure
         this.setState(new PlayerDefaultState());
         state.playerStateChange(this);
-        this.battleQueue = new ArrayList<Enemy>();
-        this.potionQueue = new PotionQueue();
-        this.currKey = null;
-        this.currPotion = null;
-        this.playerWin = false;
-        this.inventory = new ArrayList<Item>();
-        
     }
 
 
@@ -107,7 +102,12 @@ public class Player extends MovingEntity {
 
 
     public Key getCurrKey() {
-        return currKey;
+        for (Item item : inventory) {
+            if (item instanceof Key) {
+                return (Key) item;
+            }
+        }
+        return null;
     }
 
 
@@ -132,6 +132,14 @@ public class Player extends MovingEntity {
         return totalTreasure;
     }
 
+    public int getSlayedEnemy(){
+        return slayedEnemy;
+    }
+
+
+    public void setSlayedEnemy(int slayedEnemy) {
+        this.slayedEnemy = slayedEnemy;
+    }
 
     public boolean hasEnoughToBribe() {
         boolean enoughWealth = false;
@@ -173,25 +181,23 @@ public class Player extends MovingEntity {
     }
 
     public void move(DungeonGame game, DungeonMap map, Direction direction) {
+        System.out.println("entered move");
 
         boolean blocked = false;
 
         this.setDirection(direction);
         Position newPos = getPosition().translateBy(direction);
         List<Entity> encounters = map.getEntityFromPos(newPos);
-        // interact
+
+        // interact with non-moving entities 
         for (Entity encounter : encounters) {
-            if (!isInvisible()) {
-                interact(encounter, map);
+
+            if (!isInvisible() && !(encounter instanceof Enemy)) {
+                interactWithEntities(encounter, map);
             }
             if (getNonTraversibles().contains(encounter.getType())) {
                 blocked = true;
             }
-        }
-
-        if (battleQueue.size() > 0) {
-            List<Battle> battles = battleWithEnemies(battleQueue, map);
-            game.setBattles(battles);
         }
 
         if (!blocked) {
@@ -200,7 +206,8 @@ public class Player extends MovingEntity {
     }
 
 
-    public void interact(Entity entity, DungeonMap map) {
+    public void interactWithEntities(Entity entity, DungeonMap map) {
+        System.out.println("entered interact");
 
         // create interact method in each entity
         if (entity instanceof Boulder) {
@@ -213,76 +220,100 @@ public class Player extends MovingEntity {
         } else if (entity instanceof Door) {
             // check if door is already opened 
             // check if corresponding key is in inventory 
+            currKey = getCurrKey();
+            if (currKey != null) {
+                Door door = (Door) entity;
+                door.unlockDoor(currKey);
+                inventory.remove(currKey);
+            }
         } else if (entity instanceof Portal) {
         
-        } else if (entity instanceof Enemy) {
-            Enemy enemy = (Enemy) entity;
-            if (!enemy.becomeAlly()) {
-                // could not only bribe when encounter, could also bribe within certain radius
-                if (entity instanceof Mercenary && hasEnoughToBribe()) {
-                    // bribeMerc();
-                } else {
-                    battleQueue.add(enemy);
-                }
+        }
+    }
+
+    public void interactWithEnemies(Enemy enemy, DungeonMap map) {
+        if (!enemy.becomeAlly()) {
+            // could not only bribe when encounter, could also bribe within certain radius
+            if (enemy instanceof Mercenary && hasEnoughToBribe()) {
+                // bribeMerc();
+            } else {
+                System.out.println("battle queue");
+                battleQueue.add(enemy);
+                System.out.println("interact with enemy: " + battleQueue);
             }
         }
     }
 
-    public List<Battle> battleWithEnemies(List<Enemy> battleQueue, DungeonMap map) {
+    public void battleWithEnemies(DungeonMap map, DungeonGame game) {
+        if (battleQueue.size() <= 0) {
+            return;
+        }
+        System.out.println("battle queue has item");
         List<Battle> battles = new ArrayList<Battle>();
         double iniPlayerHealth = this.getHealth();
-        
+        Battle currBattle = null;
+        System.out.println("player initial health: " + iniPlayerHealth);
+
         for (Enemy enemy : battleQueue) {
-            List<Item> weaponryUsed = checkBattleBonuses(map);
-            boolean hasShield = false;
-            for (Item weapon : weaponryUsed) {
-                if (weapon instanceof Shield) {
-                    hasShield = true;
-                }
-            }
 
             List<Round> rounds = new ArrayList<Round>();
             double iniEnemyHealth = enemy.getHealth();
-            Battle currBattle = new Battle(enemy.getType(), rounds, iniPlayerHealth, iniEnemyHealth);
-            double deltaPlayerHealth = - enemy.getAttack()/10;
-            double deltaEnemyHealth = - getAttack()/5;
-            if (hasShield) {
-                deltaEnemyHealth *= 2;
-            }
-            double newHealth = getHealth() + deltaPlayerHealth;
-            double enemyHealth = enemy.getHealth() + deltaEnemyHealth;
-            setHealth(newHealth);
-            enemy.setHealth(enemyHealth);
-            if (isInvincible()) {
-                weaponryUsed.add(getCurrPotion());
-            }
-            Round currRound = new Round(deltaPlayerHealth, deltaEnemyHealth, weaponryUsed);
-            rounds.add(currRound);
-            currBattle.setRounds(rounds);
-            
-            for (Item weapon : weaponryUsed) {
-                Weapon w = (Weapon) weapon;
-                w.useWeapon();
-            }
+            currBattle = new Battle(enemy.getType(), rounds, iniPlayerHealth, iniEnemyHealth);
 
-            if (newHealth <= 0) {
-                // player dies
-                map.removeEntityFromMap(this);
-                return battles;
-            } else if (enemyHealth <= 0) {
-                // enemy dies
-                map.removeEntityFromMap(enemy);
-            }
-            
-            if (isInvincible()) {
-                setPlayerWin(true);
-                battles.add(currBattle);
+            while (this.getHealth() > 0 && enemy.getHealth() > 0) {
+                List<Item> weaponryUsed = checkBattleBonuses(map);
+                boolean hasShield = false;
+                for (Item weapon : weaponryUsed) {
+                    if (weapon instanceof Shield) {
+                        hasShield = true;
+                    }
+                }
+                double deltaPlayerHealth = - enemy.getAttack()/10;
+                double deltaEnemyHealth = - getAttack()/5;
+                if (hasShield) {
+                    deltaEnemyHealth *= 2;
+                }
+                double newHealth = getHealth() + deltaPlayerHealth;
+                double enemyHealth = enemy.getHealth() + deltaEnemyHealth;
+                setHealth(newHealth);
+                enemy.setHealth(enemyHealth);
+                if (isInvincible()) {
+                    weaponryUsed.add(getCurrPotion());
+                }
+                Round currRound = new Round(deltaPlayerHealth, deltaEnemyHealth, weaponryUsed);
+                rounds.add(currRound);
+                currBattle.setRounds(rounds);
+                
+                for (Item weapon : weaponryUsed) {
+                    Weapon w = (Weapon) weapon;
+                    w.useWeapon();
+                }
 
-                return battles;
+                if (newHealth <= 0) {
+                    // player dies
+                    map.removeEntityFromMap(this);
+                    game.addToBattles(currBattle);
+                    System.out.println("player dies: " + currBattle);
+                    return;
+                    // return battles;
+                } else if (enemyHealth <= 0) {
+                    // enemy dies
+                    map.removeEntityFromMap(enemy);
+                    // increment slayed enemy number
+                    setSlayedEnemy(slayedEnemy+1);
+                }
+                
+                if (isInvincible()) {
+                    setPlayerWin(true);
+                    battles.add(currBattle);
+                    game.addToBattles(currBattle);
+                    return;
+                }
             }
         }
-
-        return battles;
+        System.out.println("battle in method: " + currBattle);
+        game.addToBattles(currBattle);
+        setPlayerWin(true);
     }
 
     public List<Item> checkBattleBonuses(DungeonMap map) {
@@ -298,6 +329,7 @@ public class Player extends MovingEntity {
                 if (weapon.isUsable()) {
                     attackBonus += weapon.getDamageValue();
                     defenceBonus += weapon.getDefence();
+                    //System.out.println("Aha" + attackBonus + "oho" + defenceBonus);
                     weaponryUsed.add((Item)weapon);
                 }
             }

@@ -28,6 +28,11 @@ public abstract class Entity {
         this.colour = colour;
     }
 
+    public Entity(String type, Position position, boolean isInteractable) {
+        this(type, position);
+        this.isInteractable = isInteractable;
+    }
+
     public String getId() {
         return id;
     }

@@ -26,23 +26,26 @@ public class Bomb extends Item {
     public void explode(DungeonMap map) {
         List<Entity> mapEntities = map.getMapEntities();
         List<Entity> removable = new ArrayList<>();
-        int currentX = getPosition().getX();
-        int currentY = getPosition().getY();
+        int currX = getPosition().getX();
+        int currY = getPosition().getY();
         
         for (Entity entity : mapEntities) {
-            if (!entity.getType().equals("player")) {
+            if (!(entity instanceof Player)) {
                 int x = entity.getXCoordinate();
                 int y = entity.getYCoordinate();
-                if (Math.abs(currentX - x) <= 0 && Math.abs(currentY - y) <= 0 && !(entity instanceof Player)) {
+                System.out.println("OUTSIDE type: " + entity.getType() + " x: " + x + " y: " + y);
+                System.out.println(currX + DEFAULT_BOMB_RADIUS);
+                if ((currX - DEFAULT_BOMB_RADIUS) <= x && x <= (currX + DEFAULT_BOMB_RADIUS) 
+                     && (currY - DEFAULT_BOMB_RADIUS) <= y && y <= (currY + DEFAULT_BOMB_RADIUS)) {
+                    System.out.println("INSIDE type: " + entity.getType() + " x: " + x + " y: " + y);
+
                     removable.add(entity);
                 }
             }
         }
         // remove all the entities destroyed by bomb in the range
         // of the bomb attacking radius
-
         removeEntityDestroyed(map, removable);
-        
     }
 
     public void removeEntityDestroyed(DungeonMap map, List<Entity> entities) {
