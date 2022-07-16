@@ -27,14 +27,17 @@ public class PotionQueue {
         return potionQueue.size();
     }
 
-    public void updatePotionQueue() {
-        if (potionQueue == null) { return; }
+    public Potion updatePotionQueue() {
+        if (potionQueue == null || potionQueue.size() == 0) { 
+            return null; 
+        }
         
         Potion currentPotion = potionQueue.get(0);
         currentPotion.updateTicks();
         if (currentPotion.getTicks() == 0) {
             potionQueue.remove(currentPotion);
         }
+        return currentPotion;
     }
 
     public boolean isInvincible() {

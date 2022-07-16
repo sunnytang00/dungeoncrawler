@@ -17,12 +17,12 @@ public class Door extends StaticEntity {
 
     public void unlockDoor(Key key) {
         //if key id matches door id...
-        // System.out.println(key.getDoorKeyId());
+        // System.out.println("unlock" + key.getDoorKeyId());
+        // System.out.println("Pos" + getPosition());
         // System.out.println(keyID);
-        if (key.getDoorKeyId() == keyID) {
-            setTraversable(true);
-            setType("door_open");
-        }
+  
+        setTraversable(true);
+        setType("door_open");
         
     }
 

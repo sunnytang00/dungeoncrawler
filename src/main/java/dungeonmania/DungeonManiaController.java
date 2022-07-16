@@ -108,7 +108,7 @@ public class DungeonManiaController {
             }
         }
 
-        if (null == targetItem) {
+        if (targetItem == null) {
             throw new InvalidActionException("Not found the item with the given id(" + itemUsedId + ")");
         }
 
@@ -118,8 +118,9 @@ public class DungeonManiaController {
             throw new IllegalArgumentException();
         }
 
-        // firstly, remove the item from the player's inventory
+        // remove the item from the player's inventory
         inventory.remove(targetItem);
+        player.setInventory(inventory);
 
         if (targetItem instanceof Bomb) {
             Bomb bomb = (Bomb)targetItem;
@@ -130,19 +131,15 @@ public class DungeonManiaController {
 
         if (targetItem instanceof InvincibilityPotion) {
             InvincibilityPotion invincibilityPotion = (InvincibilityPotion)targetItem;
-            if (player.getCurrPotion().getId().equals(itemUsedId)) {
-                player.setInvincible(true);
-                invincibilityPotion.updateTicks();
-            }
+            player.consumePotion(invincibilityPotion);
         }
 
         if (targetItem instanceof InvisibilityPotion) {
             InvisibilityPotion invisibilityPotion = (InvisibilityPotion)targetItem;
-            if (player.getCurrPotion().getId().equals(itemUsedId)) {
-                player.setInvisible(true);
-                invisibilityPotion.updateTicks();
-            }
+            player.consumePotion(invisibilityPotion);
         }
+
+        player.playerPotionQueueUpdateTick();
 
         List<EntityResponse> entityResponses = map.getEntityResponses();
         // String goals = game.getGoalsAsString();
@@ -165,7 +162,7 @@ public class DungeonManiaController {
             }
         }
         map.addEntitiesToMap(zombiesToAdd);
-
+        map.BoulderSwitchOverlap();
         //return new DungeonResponse(dDame.getDungeonId(), map.getDungeonName(), entityResponses, itemResponses, null, null, goals);
         return getDungeonResponseModel();
     }
@@ -178,10 +175,14 @@ public class DungeonManiaController {
     public DungeonResponse tick(Direction movementDirection) {
         game.incrementTick();
         Player player = map.getPlayer();
+        // potion effect
+        player.playerPotionQueueUpdateTick();
         player.move(game, map, movementDirection);
         // System.out.println("playerhere" + player.getPosition());
         List<Enemy> enemies = new ArrayList<>();
         List<ZombieToast> zombiesToAdd = new ArrayList<>();
+
+        
         for (Entity entity : map.getMapEntities()) {
              if (entity instanceof Enemy) {
                 Enemy enemy = (Enemy) entity;
@@ -199,18 +200,27 @@ public class DungeonManiaController {
                 }
             }
 
- 
-
-
         }
+
         for (Enemy enemy : enemies) {
+<<<<<<< HEAD
             // System.out.println("Merccccc" + enemy.getMovingStrategy() + enemy.getPosition() + enemy.getType() + "player" + player.getPosition());
+=======
+            //System.out.println("Merccccc" + enemy.getMovingStrategy() + enemy.getPosition() + enemy.getType() + "player" + player.getPosition());
+>>>>>>> joanna_debug
             player.interactWithEnemies(enemy, map);
             player.battleWithEnemies(map, game);
         }
         map.addEntitiesToMap(zombiesToAdd);
         
+        Spider spiderToAdd = map.spawnSpider(game.getCurrentTick(), map);
+
+        if (spiderToAdd != null) { 
+            map.addEntityToMap(spiderToAdd);
+        }
+        map.BoulderSwitchOverlap();
         return getDungeonResponseModel();
+        
     }
 
 
@@ -224,13 +234,17 @@ public class DungeonManiaController {
         switch(buildable) {
             case "bow":
                 Bow bow = new Bow(buildable);
-                bow.build(player.getInventory(), player);
+                bow.build(player.getInventory(), player, map);
                 break;
 
             case "shield":
                 Shield shield = new Shield(buildable);
-                shield.build(player.getInventory(), player);
+                shield.build(player.getInventory(), player, map);
                 break;
+
+            default:
+                throw new IllegalArgumentException(buildable + " is not one of bow, shield");
+
         }
 
         return getDungeonResponseModel();
@@ -241,11 +255,32 @@ public class DungeonManiaController {
      * /game/interact
      */
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
-        // Player player = map.getPlayer();
-        // player.interactWithEnemies((Enemy) map.getEntityFromID(entityId), map);
+        Player player = map.getPlayer();
+        Entity interact = map.getEntityFromID(entityId);
+
+        if (interact == null) {
+            throw new InvalidActionException("Not found the item with the given id(" + entityId + ")");
+        }
+
+        if (!(interact instanceof ZombieToastSpawner)
+                && !(interact instanceof Mercenary)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (interact instanceof ZombieToastSpawner) {
+            player.interactWithSpawner((ZombieToastSpawner) interact, map);
+        }
+
+        if (interact instanceof Mercenary) {
+            Mercenary mercenary = (Mercenary) interact;
+            // mercenary has been bribed
+            if (mercenary.isBribed()) {
+                throw new IllegalArgumentException();
+            }
+            player.interactWithMercenary((Mercenary) interact, map);
+        }
         
-        // return getDungeonResponseModel();
-        return null;
+        return getDungeonResponseModel();
     }
 
     //HELPERS DOWN HERE

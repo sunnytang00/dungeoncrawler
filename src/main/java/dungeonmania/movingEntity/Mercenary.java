@@ -10,7 +10,6 @@ public class Mercenary extends BribableEnemy {
     
 
     private MercenaryState state = new MercViciousState();
-    private boolean inRad;
     private boolean isBribed;
 
 
@@ -67,8 +66,7 @@ public class Mercenary extends BribableEnemy {
     }
 
 
-    public void setInRadius(DungeonMap map) {
-
+    public boolean isInRad(DungeonMap map) {
         boolean inRadius = false;
 
         Player player = map.getPlayer();
@@ -78,12 +76,7 @@ public class Mercenary extends BribableEnemy {
             inRadius = true;
         }
 
-        this.inRad = inRadius;
-    }
-    
-
-    public boolean isInRad() {
-        return inRad;
+        return inRadius;
     }
     
 

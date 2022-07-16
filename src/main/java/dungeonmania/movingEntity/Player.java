@@ -26,7 +26,6 @@ public class Player extends MovingEntity {
     private boolean isInvisible;
     private boolean isInvincible;
     private Position prevPosition;
-    private int wealth;
     private PlayerState state;
     private List<Item> inventory = new ArrayList<Item>();
     private List<Enemy> battleQueue = new ArrayList<Enemy>();
@@ -42,7 +41,6 @@ public class Player extends MovingEntity {
         this.prevPosition = null;
         this.setHealth(JSONConfig.getConfig("player_health"));
         this.setAttack(JSONConfig.getConfig("player_attack"));
-        this.wealth = 0; // initially has not collected any treasure
         this.setState(new PlayerDefaultState());
         state.playerStateChange(this);
     }
@@ -148,7 +146,7 @@ public class Player extends MovingEntity {
 
     public boolean hasEnoughToBribe() {
         boolean enoughWealth = false;
-        if (this.wealth >= JSONConfig.getConfig("bribe_amount")) {
+        if (this.getWealth() >= JSONConfig.getConfig("bribe_amount")) {
             enoughWealth = true;
         }
         return enoughWealth;
@@ -192,16 +190,16 @@ public class Player extends MovingEntity {
         boolean blocked = false;
 
         this.setDirection(direction);
-        //System.out.println("Pos: " + getPosition() + "direction: " + direction);
+        // System.out.println("Pos: " + getPosition() + "direction: " + direction);
         Position newPos = getPosition().translateBy(direction);
-        //System.out.println("newPos: " + newPos);
+        // System.out.println("newPos: " + newPos);
         List<Entity> encounters = map.getEntityFromPos(newPos);
 
         // interact with non-moving entities 
         for (Entity encounter : encounters) {
 
             if (!isInvisible() && !(encounter instanceof Enemy)) {
-                interactWithEntities(encounter, map, direction);
+                blocked = interactWithEntities(encounter, map, direction);
             }
             if (getNonTraversibles().contains(encounter.getType())) {
                 blocked = true;
@@ -214,41 +212,42 @@ public class Player extends MovingEntity {
     }
 
 
-    public void interactWithEntities(Entity entity, DungeonMap map, Direction direction) {
-
+    public boolean interactWithEntities(Entity entity, DungeonMap map, Direction direction) {
+        boolean interfereByEntity = false;
         // create interact method in each entity
         if (entity instanceof Boulder) {
-            pushBoulder(map, direction);
+            interfereByEntity = pushBoulder(map, direction);
         } else if (entity instanceof Exit) {
-            // remove exit from goals 
-            // remove player from map entities 
+            // check if only goal left is exits
+            // if so exit, remove player from map, game wins
+
         } else if (entity instanceof Item) {
             collectToInventory((Item) entity, map);
         } else if (entity instanceof Door) {
             // check if door is already opened 
             // check if corresponding key is in inventory 
+            Door door = (Door) entity;
+            int doorKeyId = door.getKeyID();
             currKey = getCurrKey();
-            if (currKey != null) {
-                Door door = (Door) entity;
+            if (currKey != null && (currKey.getDoorKeyId() == doorKeyId)) {
+
                 door.unlockDoor(currKey);
                 inventory.remove(currKey);
             }
         } else if (entity instanceof Portal) {
-        
+            interfereByEntity = teleportThroughPortal(entity, map);
         }
+        return interfereByEntity;
     }
 
     public void interactWithEnemies(Enemy enemy, DungeonMap map) {
         if (enemy.getPosition().equals(this.getPosition()) && !enemy.becomeAlly()) {
-            // System.out.println("entered interact with enemy");
-            // could not only bribe when encounter, could also bribe within certain radius
-            if (enemy instanceof Mercenary && hasEnoughToBribe()) {
-                // bribeMerc();
-            } else {
-                // System.out.println("battle queue");
-                battleQueue.add(enemy);
-                // System.out.println("interact with enemy: " + battleQueue);
-            }
+            System.out.println("entered interact with enemy");
+            
+            System.out.println("battle queue");
+            battleQueue.add(enemy);
+            System.out.println("interact with enemy: " + battleQueue);
+
         }
     }
 
@@ -334,17 +333,13 @@ public class Player extends MovingEntity {
         double attackBonus = 0;
         double defenceBonus = 0;
         int numAlly = map.getNumOfAlly();
-        
-        for (Item item: inventory) {
-            if (item instanceof Weapon) {
-                Weapon weapon = (Weapon) item;
-                if (weapon.isUsable()) {
-                    attackBonus += weapon.getDamageValue();
-                    defenceBonus += weapon.getDefence();
-                    //System.out.println("Aha" + attackBonus + "oho" + defenceBonus);
-                    weaponryUsed.add((Item)weapon);
-                }
-            }
+        List<Weapon> usableWeapon = getUsableWeapon();
+        for (Weapon weapon: usableWeapon) {
+            
+            attackBonus += weapon.getDamageValue();
+            defenceBonus += weapon.getDefence();
+            //System.out.println("Aha" + attackBonus + "oho" + defenceBonus);
+            weaponryUsed.add(weapon);
         }
 
         if (numAlly != 0) {
@@ -360,62 +355,72 @@ public class Player extends MovingEntity {
 
     }
 
-    public void pushBoulder(DungeonMap map, Direction direction) {
+    public List<Weapon> getUsableWeapon() {
+        List<Weapon> usableWeapon = new ArrayList<Weapon>();
+        for (Item item: inventory) {
+            if (item instanceof Weapon) {
+                Weapon weapon = (Weapon) item;
+                if (weapon.isUsable()) {
+                    usableWeapon.add(weapon);
+                }
+            }
+        }
+        return usableWeapon;
+    }
+
+    public boolean pushBoulder(DungeonMap map, Direction direction) {
         
-        
+        boolean blockedBy = false;
         List<Entity> entitiesAtPosition = map.getEntityFromPos(getPosition().translateBy(direction));
         
         for (Entity entity : entitiesAtPosition) {
             if (entity instanceof Boulder) {
                 //Check if there is no entity in the direction that the builder is being pushed
-                if (map.checkIfEntityAdjacentIsEmpty(entity, direction)) {
+                if (map.checkIfEntityAdjacentIsPushable(entity, direction)) {
                     entity.setPosition(entity.getPosition().translateBy(direction));
+                } else {
+                    blockedBy = true;
                 }
                 
                 break;
             }
         }
+        return blockedBy;
     }
 
     public void collectToInventory(Item item, DungeonMap map) {
+        if ((item instanceof Key )&& hasKey()) {
+            return;
+        }
         inventory.add(item);
+        if (item instanceof Key) {
+            setCurrKey((Key) item);
+        }
         List<Entity> newMapEntities = map.getMapEntities();
         newMapEntities.remove(item);
         map.setMapEntities(newMapEntities);
     }
 
     // may need to debug later, update potion queue etc, turn currPotion to null whenever ticks over
-    public void consumePotion(String potionType) {
-        for (Item item : inventory) {
-            if (item.getType().equals(potionType)) {
-                potionQueue.addPotionToQueue((Potion) item);
-                if (getCurrPotion() == null && !isInvincible() && !isInvisible()) {
-                    inventory.remove(item);
-                    potionQueue.removePotionFromQueue((Potion) item);
-                    setCurrPotion((Potion)item);
-                    if (potionType.equals("invincibility_potion")) {
-                        setState(new InvincibleState());
-                    } else if (potionType.equals("invisibility_potion")){
-                        setState(new InvisibleState());
-                    }
-                    state.playerStateChange(this);
-                } 
-            }
-        }
-
+    public void consumePotion(Potion item) { 
+        potionQueue.addPotionToQueue(item);
     }
 
-    public void destorySpawner(){
-
-    }
-
-    public void bribeMerc(Mercenary merc) {
-        if (!merc.isBribed() && merc.isInRad() && this.hasEnoughToBribe()) {
-            merc.setState(new MercBribedState());
-        }
+    public void playerPotionQueueUpdateTick() {
         
-        consumeInventory("treasure", JSONConfig.getConfig("bribe_amount"));
+        Potion currPotion = potionQueue.updatePotionQueue();
+        if (currPotion != null) { 
+            if (currPotion instanceof InvincibilityPotion) {
+                setState(new InvincibleState());
+            } else if (currPotion instanceof InvisibilityPotion){
+                setState(new InvisibleState());
+            }
+        } else {
+            setState(new PlayerDefaultState());
+        }
+        state.playerStateChange(this);
     }
+
     
     public void consumeInventory(String type, int amount) {
         int count = 0;
@@ -431,13 +436,9 @@ public class Player extends MovingEntity {
         }
     }
 
-    public boolean isAlive() {
-
-        return true;
-    }
 
     public boolean hasKey() {
-        return inventory.stream().anyMatch(i -> i.getType() == "key");
+        return inventory.stream().anyMatch(i -> i.getType().equals("key"));
     }
 
     public List<ItemResponse> getInventoryResponses() {
@@ -512,5 +513,69 @@ public class Player extends MovingEntity {
         }
         return false;
     }
+
+    public boolean teleportThroughPortal(Entity entity, DungeonMap map) {
+        boolean teleportByPortal = false;
+        Portal portal = (Portal) entity;
+        portal.linkPortals(map.getMapEntities());
+        Position teleport = portal.getPairPosition();
+        if (teleport == null) { return teleportByPortal; }
+
+        List<Position> telePositions = teleport.getCardinallyAdjacentPositions();
+        Position followDir = teleport.translateBy(getDirection());
+        for (Position pos : telePositions) {
+            List<Entity> entitiesAtPos = map.getEntityFromPos(pos);
+            if (entitiesAtPos != null && (map.containsType(entitiesAtPos,"wall") || 
+                map.containsType(entitiesAtPos,"door"))) {
+                    telePositions.remove(pos);
+            }
+        }
+        if (telePositions != null) {
+            if (telePositions.contains(followDir)) {
+                this.setPosition(followDir);
+            } else {
+                this.setPosition(telePositions.get(0));
+            }
+            teleportByPortal = true;
+            Position teleportedP = this.getPosition();
+            
+            Entity newPortal = map.getPortalAtPos(teleportedP);
+            //System.out.println("portal" + newPortal.getColour() + newPortal.getPosition());
+            if (newPortal == null) { return teleportByPortal; }
+
+            return teleportThroughPortal(newPortal, map);
+        }
+        return teleportByPortal;
+    }
+
+
+    public void interactWithSpawner(ZombieToastSpawner spawner, DungeonMap map) throws InvalidActionException {
+        Position spawnerPos = spawner.getPosition();
+        List<Position> cdjPositions = spawnerPos.getCardinallyAdjacentPositions();
+        if (!cdjPositions.contains(getPosition())) {
+            throw new InvalidActionException("Player is not cardinally adjacent to the spawner");
+        } else if (getUsableWeapon() == null || getUsableWeapon().size() == 0) {
+            throw new InvalidActionException("the player does not have a weapon");
+        } else {
+            map.removeEntityFromMap(spawner);
+        }
+    }
+
+
+    public void interactWithMercenary(Mercenary merc, DungeonMap map) throws InvalidActionException {
+    
+        if (!merc.isInRad(map)) {
+            throw new InvalidActionException("Mercenary not in radius");
+        } else if (!this.hasEnoughToBribe()) {
+            throw new InvalidActionException("Player does not have enough treasure to bribe");
+        } else {
+            merc.setState(new MercBribedState());
+            merc.getState().currentState(merc);
+            consumeInventory("treasure", JSONConfig.getConfig("bribe_amount"));
+        }
+        
+    }
+
+
 
 }

@@ -42,6 +42,7 @@ public class CirclingSpawn implements MovingStrategy {
 
     @Override
     public void move(MovingEntity movingEntity, DungeonMap map) {
+
         Spider spider = (Spider) movingEntity;
         Position iniPos = spider.getInitialPosition();
         Position currPos = spider.getPosition();
@@ -55,14 +56,11 @@ public class CirclingSpawn implements MovingStrategy {
                 return;
             }
             spider.setPosition(firstMovePos);
+
         // follow circular path
         } else {
-            for (Position pos : adjPos) {
-                List<Entity> atAdj = map.getEntityFromPos(pos);
-                if (atAdj.size() != 0) {
-                    adjEntities.addAll(atAdj);
-                }
-            }
+
+            List<Position> bouldersPos = getAdjacentBoulderPositions(adjPos, map);
             // index of circular path position, from 0 to 7
             int circIndex = adjPos.indexOf(currPos);
             int newIndex = (circIndex + 1) % 8;
@@ -71,22 +69,26 @@ public class CirclingSpawn implements MovingStrategy {
             if (newAntiIndex == -1) {newAntiIndex = 7;}
             Position newAntiCircPos = adjPos.get(newAntiIndex);
             // if no boulder, follow simple clockwise circular path
-            if (!containsBoulder(adjEntities)) {
+            if (bouldersPos == null || bouldersPos.size() == 0) {
                 spider.setPosition(newCircPos);
             }
             // if encounters boulder, reverse direction
             else {
-                List<Position> bouldersPos = getAdjacentBoulderPositions(adjEntities);
-                if (spider.isClockwiseMove() && bouldersPos.contains(newCircPos)) {
+
+                if ((spider.isClockwiseMove() && bouldersPos.contains(newCircPos)) || 
+                    (!spider.isClockwiseMove() && !bouldersPos.contains(newAntiCircPos))) {
                     spider.setClockwiseMove(false);
                     spider.setPosition(newAntiCircPos);
-                    
-                } else if (!spider.isClockwiseMove() && bouldersPos.contains(newAntiCircPos)) {
+
+                } else if ((!spider.isClockwiseMove() && bouldersPos.contains(newAntiCircPos)) ||
+                            (spider.isClockwiseMove() && ! bouldersPos.contains(newCircPos))) {      
                     spider.setClockwiseMove(true);
                     spider.setPosition(newCircPos);
 
-                }
+                } 
+
             }
+            
             
         }
         
@@ -97,8 +99,14 @@ public class CirclingSpawn implements MovingStrategy {
         return found;    
     }
 
-    public List<Position> getAdjacentBoulderPositions(List<Entity> adjEntities){
-        List<Position> bouldersPosition = adjEntities.stream().filter(entity -> entity.getType().equals("boulder")).map(Entity::getPosition).collect(Collectors.toList());
+    public List<Position> getAdjacentBoulderPositions(List<Position> adjPos, DungeonMap map){
+        List<Position> bouldersPosition = new ArrayList<Position>();
+        for (Position pos : adjPos) {
+            List<Entity> atAdj = map.getEntityFromPos(pos);
+            if (atAdj != null && containsBoulder(atAdj)) {
+                bouldersPosition.add(pos);
+            }
+        }
         return bouldersPosition;
     }
     

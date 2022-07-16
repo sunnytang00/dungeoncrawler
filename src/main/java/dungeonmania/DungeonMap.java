@@ -1,6 +1,7 @@
 package dungeonmania;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import dungeonmania.movingEntity.*;
@@ -8,6 +9,7 @@ import dungeonmania.response.models.*;
 import dungeonmania.Entity;
 import dungeonmania.util.*;
 import dungeonmania.StaticEntities.*;
+
 
 import java.util.ArrayList;
 
@@ -52,6 +54,17 @@ public class DungeonMap {
         List<Entity> entitiesAtPos = this.getEntityFromPos(position);
         boolean anyMatch = entitiesAtPos.stream().anyMatch(entity -> entity.getType().equals(type));
         return anyMatch;
+    }
+
+    public Entity getPortalAtPos(Position position) {
+        List<Entity> entitiesAtPos = this.getEntityFromPos(position);
+        for (Entity entity : entitiesAtPos) {
+            if (entity instanceof Portal) {
+                
+                return entity;
+            }
+        }
+        return null;
     }
     
     public Player getPlayer() {
@@ -109,14 +122,14 @@ public class DungeonMap {
         mapEntities.remove(entity);
     }
 
-    public boolean checkIfEntityAdjacentIsEmpty(Entity entity, Direction direction) {
+    public boolean checkIfEntityAdjacentIsPushable(Entity entity, Direction direction) {
 
         List<Entity> entityList = getEntityFromPos(entity.getPosition().translateBy(direction));
 
-        if (entityList.isEmpty()) {
-            return true;
+        if (containsType(entityList, "boulder") || containsType(entityList, "wall")){
+            return false;
         }
-        return false;
+        return true;
     }
 
     public void addEntitiesToMap(List<ZombieToast> entities) {
@@ -129,6 +142,59 @@ public class DungeonMap {
 
     public int getRemainingConditions() {
         return remainingConditions;
+    }
+    
+    /**
+     * Method to spawn spider
+     * @param currentTick curent tick 
+     * @param spawnTick spider_spawn_rate, read in from the config file
+     */
+    public Spider spawnSpider(int currentTick, DungeonMap map) {
+        int spawnrate = JSONConfig.getConfig("spider_spawn_rate");
+        if (spawnrate == 0 ) { return null;}
+
+        Position playerPos = getPlayer().getPosition();
+        List<Position> possiblePos = playerPos.getPositionsWithInBox(7);
+        for (Position pos : possiblePos) {
+            List<Entity> atAdj = map.getEntityFromPos(pos);
+            if (atAdj != null && containsType(atAdj, "boulder")) {
+                possiblePos.remove(pos);
+            }
+        }
+
+        if (currentTick % spawnrate == 0 && possiblePos != null) {
+            return new Spider("spider", getRandomPosition(possiblePos), false);
+        }
+
+        return null;
+    }
+
+    public Position getRandomPosition(List<Position> list) {
+        Random rand = new Random();
+        return list.get(rand.nextInt(list.size()));
+    }
+
+    public boolean containsType(List<Entity> entities, String type) {
+        boolean found = entities.stream().anyMatch(entity -> entity.getType().equals(type));
+        return found;    
+    }
+
+    public void BoulderSwitchOverlap() {
+
+        for (Entity entity : mapEntities) {
+            if (entity instanceof FloorSwitch) {
+                FloorSwitch floorSwitch = (FloorSwitch) entity;
+                List<Entity> eList = getEntityFromPos(floorSwitch.getPosition());
+                for (Entity e : eList) {
+                    if (e instanceof Boulder) {
+                        floorSwitch.setTriggered(true);
+                        break;
+                    } else {
+                        floorSwitch.setTriggered(false);
+                    }
+                } 
+            }
+        }
     }
 }
 
