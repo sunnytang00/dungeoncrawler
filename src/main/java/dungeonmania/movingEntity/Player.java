@@ -387,6 +387,9 @@ public class Player extends MovingEntity {
     }
 
     public void collectToInventory(Item item, DungeonMap map) {
+        if (item instanceof Key && hasKey()) {
+            return;
+        }
         inventory.add(item);
         List<Entity> newMapEntities = map.getMapEntities();
         newMapEntities.remove(item);
@@ -430,7 +433,7 @@ public class Player extends MovingEntity {
 
 
     public boolean hasKey() {
-        return inventory.stream().anyMatch(i -> i.getType() == "key");
+        return inventory.stream().anyMatch(i -> i.getType().equals("key"));
     }
 
     public List<ItemResponse> getInventoryResponses() {
