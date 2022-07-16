@@ -12,11 +12,12 @@ import java.util.List;
 
 public class Bow extends Weapon implements ItemBuildable {
 
-    private static final int DEFAULT_BOW_DURABILITY = JSONConfig.getConfig("bow_durability");
 
     public Bow(String type) {
         super(type);
-        setDurability(DEFAULT_BOW_DURABILITY);
+        setDurability(JSONConfig.getConfig("bow_durability"));
+        setDamageValue(0);
+        setDefence(0);
     }
 
     @Override
