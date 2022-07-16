@@ -138,4 +138,19 @@ public final class Position {
         double d = Math.sqrt(Math.pow((this.getX() - pos.getX()), 2) + Math.pow((this.getY() - pos.getY()), 2));
         return d;
     }
+
+    public List<Position> getPositionsWithInBox(int boxRadius) {
+        List<Position> adjacentPositions = new ArrayList<>();
+        for (int i = 1; i <= boxRadius; i++) {
+            adjacentPositions.add(new Position(x-boxRadius, y-boxRadius));
+            adjacentPositions.add(new Position(x  , y-boxRadius));
+            adjacentPositions.add(new Position(x+boxRadius, y-boxRadius));
+            adjacentPositions.add(new Position(x+boxRadius, y));
+            adjacentPositions.add(new Position(x+boxRadius, y+boxRadius));
+            adjacentPositions.add(new Position(x  , y+boxRadius));
+            adjacentPositions.add(new Position(x-boxRadius, y+boxRadius));
+            adjacentPositions.add(new Position(x-boxRadius, y));
+        }
+        return adjacentPositions;
+    }
 }

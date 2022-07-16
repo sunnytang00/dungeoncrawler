@@ -3,6 +3,7 @@ package dungeonmania.movingEntity;
 import java.util.Arrays;
 
 import dungeonmania.DungeonMap;
+import dungeonmania.util.Direction;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
@@ -10,7 +11,6 @@ public class Spider extends Enemy {
 
 
     private boolean isClockwiseMove;
-    private int spawnRate;
     
     public Spider(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
@@ -18,7 +18,6 @@ public class Spider extends Enemy {
         this.setHealth(JSONConfig.getConfig("spider_health"));
         this.setAttack(JSONConfig.getConfig("spider_attack"));
         this.setNonTraversibles(Arrays.asList("boulder"));
-        this.spawnRate = JSONConfig.getConfig("spider_spawn_rate");
         this.isClockwiseMove = true; // initially true for spider
     }
     
@@ -32,10 +31,6 @@ public class Spider extends Enemy {
     }
     public void setClockwiseMove(boolean clockwise) {
         this.isClockwiseMove = clockwise;
-    }
-
-    public int getSpawnRate() {
-        return spawnRate;
     }
     
 }

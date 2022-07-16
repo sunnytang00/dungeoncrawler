@@ -201,7 +201,7 @@ public class Player extends MovingEntity {
         for (Entity encounter : encounters) {
 
             if (!isInvisible() && !(encounter instanceof Enemy)) {
-                interactWithEntities(encounter, map, direction);
+                blocked = interactWithEntities(encounter, map, direction);
             }
             if (getNonTraversibles().contains(encounter.getType())) {
                 blocked = true;
@@ -214,11 +214,11 @@ public class Player extends MovingEntity {
     }
 
 
-    public void interactWithEntities(Entity entity, DungeonMap map, Direction direction) {
-
+    public boolean interactWithEntities(Entity entity, DungeonMap map, Direction direction) {
+        boolean blockedByEntity = false;
         // create interact method in each entity
         if (entity instanceof Boulder) {
-            pushBoulder(map, direction);
+            blockedByEntity = pushBoulder(map, direction);
         } else if (entity instanceof Exit) {
             // remove exit from goals 
             // remove player from map entities 
@@ -236,6 +236,7 @@ public class Player extends MovingEntity {
         } else if (entity instanceof Portal) {
         
         }
+        return blockedByEntity;
     }
 
     public void interactWithEnemies(Enemy enemy, DungeonMap map) {
@@ -360,21 +361,22 @@ public class Player extends MovingEntity {
 
     }
 
-    public void pushBoulder(DungeonMap map, Direction direction) {
+    public boolean pushBoulder(DungeonMap map, Direction direction) {
         
-        
+        boolean blockedBy = false;
         List<Entity> entitiesAtPosition = map.getEntityFromPos(getPosition().translateBy(direction));
         
         for (Entity entity : entitiesAtPosition) {
             if (entity instanceof Boulder) {
                 //Check if there is no entity in the direction that the builder is being pushed
-                if (map.checkIfEntityAdjacentIsEmpty(entity, direction)) {
+                if (map.checkIfEntityAdjacentIsPushable(entity, direction)) {
                     entity.setPosition(entity.getPosition().translateBy(direction));
                 }
-                
+                blockedBy = true;
                 break;
             }
         }
+        return blockedBy;
     }
 
     public void collectToInventory(Item item, DungeonMap map) {

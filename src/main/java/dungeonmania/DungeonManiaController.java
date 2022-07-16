@@ -174,6 +174,8 @@ public class DungeonManiaController {
         System.out.println("playerhere" + player.getPosition());
         List<Enemy> enemies = new ArrayList<>();
         List<ZombieToast> zombiesToAdd = new ArrayList<>();
+
+        
         for (Entity entity : map.getMapEntities()) {
              if (entity instanceof Enemy) {
                 Enemy enemy = (Enemy) entity;
@@ -191,16 +193,20 @@ public class DungeonManiaController {
                 }
             }
 
- 
-
-
         }
+
         for (Enemy enemy : enemies) {
             System.out.println("Merccccc" + enemy.getMovingStrategy() + enemy.getPosition() + enemy.getType() + "player" + player.getPosition());
             player.interactWithEnemies(enemy, map);
             player.battleWithEnemies(map, game);
         }
         map.addEntitiesToMap(zombiesToAdd);
+        
+        Spider spiderToAdd = map.spawnSpider(game.getCurrentTick(), map);
+
+        if (spiderToAdd != null) { 
+            map.addEntityToMap(spiderToAdd);
+        }
         
         return getDungeonResponseModel();
     }

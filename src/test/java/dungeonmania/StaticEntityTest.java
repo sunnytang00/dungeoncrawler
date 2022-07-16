@@ -259,11 +259,11 @@ public class StaticEntityTest {
         move = dmc.tick(Direction.DOWN); //Tick 2
 
         assertEquals(1, countEntityOfType(move, "zombie_toast"));
-        // assertEquals(1, countEntityOfType(move, "spider"));
+        assertEquals(1, countEntityOfType(move, "spider"));
 
         move = dmc.tick(Direction.UP);
 
-        // assertEquals(1, countEntityOfType(move, "spider"));
+        assertEquals(1, countEntityOfType(move, "spider"));
 
         move = dmc.tick(Direction.DOWN);
 
