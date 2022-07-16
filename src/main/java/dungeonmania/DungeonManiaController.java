@@ -222,13 +222,17 @@ public class DungeonManiaController {
         switch(buildable) {
             case "bow":
                 Bow bow = new Bow(buildable);
-                bow.build(player.getInventory(), player);
+                bow.build(player.getInventory(), player, map);
                 break;
 
             case "shield":
                 Shield shield = new Shield(buildable);
-                shield.build(player.getInventory(), player);
+                shield.build(player.getInventory(), player, map);
                 break;
+                
+            default:
+                throw new IllegalArgumentException(buildable + " is not one of bow, shield");
+
         }
 
         return getDungeonResponseModel();
