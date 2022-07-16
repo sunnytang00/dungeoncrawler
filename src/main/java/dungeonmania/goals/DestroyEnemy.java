@@ -1,12 +1,7 @@
 package dungeonmania.goals;
 
 import dungeonmania.DungeonMap;
-import dungeonmania.Entity;
-import dungeonmania.movingEntity.Enemy;
-import dungeonmania.movingEntity.Player;
 import dungeonmania.util.JSONConfig;
-
-import java.util.List;
 
 public class DestroyEnemy extends LeafGoal {
 
@@ -24,7 +19,7 @@ public class DestroyEnemy extends LeafGoal {
             map.setRemainingConditions(-1);
             return true;
         }              
-        if (prevIsAchieved) { // if previously it is true but now it is false again
+        if (prevIsAchieved) {
             prevIsAchieved = false;
             map.setRemainingConditions(1);
         }
@@ -34,7 +29,7 @@ public class DestroyEnemy extends LeafGoal {
     @Override
     public String getGoalsAsString(DungeonMap map) {
         if (isAchieved(map)) { return ""; }
-        return ":enemies";
+        return ":enemies ";
     }
     
 }

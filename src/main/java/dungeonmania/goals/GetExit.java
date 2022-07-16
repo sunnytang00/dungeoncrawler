@@ -2,8 +2,6 @@ package dungeonmania.goals;
 
 import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
-import dungeonmania.StaticEntities.Exit;
-import dungeonmania.movingEntity.Player;
 import dungeonmania.util.Position;
 
 import java.util.List;

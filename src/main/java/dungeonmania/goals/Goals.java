@@ -13,6 +13,4 @@ public interface Goals {
     public boolean isAchieved(DungeonMap map);
 
     public String getGoalsAsString(DungeonMap map);
-
-    // public  processGoals();    
 }

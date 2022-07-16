@@ -17,11 +17,11 @@ public class CompositeOr extends CompositeGoal{
 
     @Override
     public String getGoalsAsString(DungeonMap map) {
-        if (isAchieved(map)) {return ""; }
+        if (isAchieved(map)) { return ""; }
 
         String subgoal1 = getSubgoal1().getGoalsAsString(map);
         String subgoal2 = getSubgoal2().getGoalsAsString(map);
-        String str = "(" + subgoal1 + "OR" + subgoal2 + ")";
+        String str = "(" + subgoal1 + " OR " + subgoal2 + ")";
         return str;
     }
 }

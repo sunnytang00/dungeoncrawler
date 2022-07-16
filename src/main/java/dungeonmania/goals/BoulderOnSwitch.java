@@ -2,9 +2,7 @@ package dungeonmania.goals;
 
 import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
-import dungeonmania.StaticEntities.Boulder;
 import dungeonmania.StaticEntities.FloorSwitch;
-import dungeonmania.movingEntity.Player;
 
 import java.util.List;
 
@@ -34,7 +32,7 @@ public class BoulderOnSwitch extends LeafGoal {
     @Override
     public String getGoalsAsString(DungeonMap map) {
         if (isAchieved(map)) { return ""; }
-        return ":boulders";
+        return ":boulders ";
     }
     
 }
