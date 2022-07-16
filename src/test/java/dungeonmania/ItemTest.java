@@ -22,6 +22,7 @@ import static dungeonmania.TestUtils.getPlayer;
 import static dungeonmania.TestUtils.getEntities;
 import static dungeonmania.TestUtils.countEntityOfType;
 import static dungeonmania.TestUtils.getInventory;
+import static dungeonmania.TestHelpers.assertListAreEqualIgnoringOrder;
 
 
 public class ItemTest {
@@ -115,6 +116,10 @@ public class ItemTest {
         actualDungeonRes = dmc.tick(Direction.RIGHT);
         actualPlayer = getPlayer(actualDungeonRes).get();
 
+        List<String> buildables = new ArrayList<>();
+        buildables.add("shield");
+        assertListAreEqualIgnoringOrder(buildables, actualDungeonRes.getBuildables());
+
         // assert after movement
         assertEquals(expectedPlayer, actualPlayer);
 
@@ -163,13 +168,50 @@ public class ItemTest {
 
         actualDungeonRes = dmc.tick(Direction.RIGHT);
 
-        // assert after movement
+        List<String> buildables = new ArrayList<>();
+        buildables.add("bow");
+        assertListAreEqualIgnoringOrder(buildables, actualDungeonRes.getBuildables());
 
         actualDungeonRes = dmc.build("bow");
         ItemResponse bow = new ItemResponse("1", "bow");
         assertEquals(bow.getType(), actualDungeonRes.getInventory().get(0).getType());
 
+
+        //Check getBuildables does not return a bow as we don't have the materials
+        actualDungeonRes = dmc.getDungeonResponseModel();
+        buildables.remove(0);
+        assertListAreEqualIgnoringOrder(buildables, actualDungeonRes.getBuildables());
+
     }
 
+    @Test
+    public void TestBuildBoth() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse initialResponse = dmc.newGame("testBuildBowShield", "c_battleTests_basicMercenaryMercenaryDies");
+
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+        for (int i = 0; i < 6; i++) {//move right 6 times, 0 1 2 3 4 5
+            move = dmc.tick(Direction.RIGHT);
+        }
+
+        List<String> buildables = new ArrayList<>();
+        buildables.add("bow");
+        buildables.add("shield");
+        assertListAreEqualIgnoringOrder(buildables, move.getBuildables());
+        
+        move = dmc.build("bow");
+        buildables.remove(0);
+        assertListAreEqualIgnoringOrder(buildables, move.getBuildables());
+
+        move = dmc.build("shield");
+        buildables.remove(0);
+        assertListAreEqualIgnoringOrder(buildables, move.getBuildables());
+
+    }
+
+
 }
+
 
