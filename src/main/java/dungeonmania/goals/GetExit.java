@@ -16,18 +16,18 @@ public class GetExit extends LeafGoal {
     @Override
     public boolean isAchieve() {
         boolean flag = false;
-//        List<Entity> entities = player.getEntities();
-//        Position playerPosition = player.getPosition();
-//        for (Entity entity : entities) {
-//            if (entity instanceof Exit) {
-//                Exit exit = (Exit)entity;
-//                Position position = exit.getPosition();
-//                if (position.getX() == playerPosition.getX() && position.getY() == playerPosition.getY()) {
-//                    flag = true;
-//                    break;
-//                }
-//            }
-//        }
+        List<Entity> entities = player.getEntities();
+        Position playerPosition = player.getPosition();
+        for (Entity entity : entities) {
+            if (entity instanceof Exit) {
+                Exit exit = (Exit)entity;
+                Position position = exit.getPosition();
+                if (position.getX() == playerPosition.getX() && position.getY() == playerPosition.getY()) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
         return flag;
     }
 }

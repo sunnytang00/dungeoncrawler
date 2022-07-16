@@ -15,13 +15,13 @@ public class DestroyEnemy extends LeafGoal {
     @Override
     public boolean isAchieve() {
         boolean flag = true;
-//        List<Entity> entities = player.getInventory().get;
-//        for (Entity entity : entities) {
-//            if (entity instanceof Enemy) {
-//                flag = false;
-//                break;
-//            }
-//        }
+        List<Entity> entities = player.getInventory().get;
+        for (Entity entity : entities) {
+            if (entity instanceof Enemy) {
+                flag = false;
+                break;
+            }
+        }
         return flag;
     }
 }
