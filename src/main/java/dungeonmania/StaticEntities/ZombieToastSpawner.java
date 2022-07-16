@@ -21,7 +21,7 @@ public class ZombieToastSpawner extends StaticEntity {
      */
     public ZombieToast spawnZombie(int currentTick, DungeonMap map) {
 
-        if ((currentTick + 1) % JSONConfig.getConfig("zombie_spawn_rate") == 0) {
+        if (currentTick % JSONConfig.getConfig("zombie_spawn_rate") == 0) {
             //spawn zombie to zombie spwaner position 
             //ZombieToast newZToast = new ZombieToast("zombie_toast", this.getPosition().translateBy(Direction.UP), true);
             //map.addEntityToMap(newZToast);
