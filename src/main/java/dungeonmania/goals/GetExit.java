@@ -21,8 +21,10 @@ public class GetExit extends LeafGoal {
         }
         Position playerPosition = map.getPlayer().getPosition();
 
-        Position exitPosition = map.getEntitiesFromType(map.getMapEntities(), "exit")
-                                   .get(0).getPosition();
+        List<Entity> hasExit = map.getEntitiesFromType(map.getMapEntities(), "exit");
+        if (hasExit.size() == 0) { return false; }
+        
+        Position exitPosition = hasExit.get(0).getPosition();                           
         if (playerPosition.equals(exitPosition)) {
             map.setRemainingConditions(-1);
             return true;

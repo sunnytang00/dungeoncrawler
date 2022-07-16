@@ -10,6 +10,8 @@ import java.util.List;
 
 public class BoulderOnSwitch extends LeafGoal {
 
+    private boolean prevIsAchieved = false;
+
     public BoulderOnSwitch(DungeonMap map) {
         map.setRemainingConditions(1);
     }
@@ -18,10 +20,12 @@ public class BoulderOnSwitch extends LeafGoal {
     public boolean isAchieved(DungeonMap map) {
         List<Entity> switches = map.getEntitiesFromType(map.getMapEntities(), "switch");
         if (switches.stream().allMatch(s -> ((FloorSwitch) s).isTriggered())) {
+            prevIsAchieved = true;
             map.setRemainingConditions(-1);
             return true;
         }
-        if (isAchieved(map)) { // if previously it is true but now it is false again
+        if (prevIsAchieved) { // if previously it is true but now it is false again
+            prevIsAchieved = false;
             map.setRemainingConditions(1);
         }
         return false; 

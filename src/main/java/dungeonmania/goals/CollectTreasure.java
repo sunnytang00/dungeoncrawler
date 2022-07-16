@@ -10,6 +10,8 @@ import java.util.List;
 
 public class CollectTreasure extends LeafGoal {
 
+    private boolean prevIsAchieved = false;
+
     public CollectTreasure(DungeonMap map) {
         map.setRemainingConditions(1);
     }
@@ -20,10 +22,12 @@ public class CollectTreasure extends LeafGoal {
 
         int numOfTreasure = map.getPlayer().getWealth();     
         if (numOfTreasure >= JSONConfig.getConfig("treasure_goal")) {
+            prevIsAchieved = true;
             map.setRemainingConditions(-1);
             return true;
         }              
-        if (isAchieved(map)) { // if previously it is true but now it is false again
+        if (prevIsAchieved) { // if previously it is true but now it is false again
+            prevIsAchieved = false;
             map.setRemainingConditions(1);
         }
         return false;

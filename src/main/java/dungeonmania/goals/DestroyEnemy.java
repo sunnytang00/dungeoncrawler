@@ -10,6 +10,8 @@ import java.util.List;
 
 public class DestroyEnemy extends LeafGoal {
 
+    private boolean prevIsAchieved = false;
+
     public DestroyEnemy(DungeonMap map) {
         map.setRemainingConditions(1);
     }
@@ -18,10 +20,12 @@ public class DestroyEnemy extends LeafGoal {
     public boolean isAchieved(DungeonMap map) {
         int numOfEnemies = map.getPlayer().getSlayedEnemy();     
         if (numOfEnemies >= JSONConfig.getConfig("enemy_goal")) {
+            prevIsAchieved = true;
             map.setRemainingConditions(-1);
             return true;
         }              
-        if (isAchieved(map)) { // if previously it is true but now it is false again
+        if (prevIsAchieved) { // if previously it is true but now it is false again
+            prevIsAchieved = false;
             map.setRemainingConditions(1);
         }
         return false;
