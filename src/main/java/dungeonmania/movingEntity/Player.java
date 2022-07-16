@@ -543,7 +543,7 @@ public class Player extends MovingEntity {
             Position teleportedP = this.getPosition();
             
             Entity newPortal = map.getTypeEntityAtPos("portal", teleportedP);
-            System.out.println(newPortal);
+            System.out.println("here" + newPortal);
             //System.out.println("portal" + newPortal.getColour() + newPortal.getPosition());
             if (newPortal == null) { return teleportByPortal; }
 
