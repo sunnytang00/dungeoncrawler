@@ -102,7 +102,7 @@ public class DungeonManiaController {
             }
         }
 
-        if (null == targetItem) {
+        if (targetItem == null) {
             throw new InvalidActionException("Not found the item with the given id(" + itemUsedId + ")");
         }
 
@@ -112,7 +112,7 @@ public class DungeonManiaController {
             throw new IllegalArgumentException();
         }
 
-        // firstly, remove the item from the player's inventory
+        // remove the item from the player's inventory
         inventory.remove(targetItem);
 
         if (targetItem instanceof Bomb) {
@@ -124,19 +124,15 @@ public class DungeonManiaController {
 
         if (targetItem instanceof InvincibilityPotion) {
             InvincibilityPotion invincibilityPotion = (InvincibilityPotion)targetItem;
-            if (player.getCurrPotion().getId().equals(itemUsedId)) {
-                player.setInvincible(true);
-                invincibilityPotion.updateTicks();
-            }
+            player.consumePotion(invincibilityPotion);
         }
 
         if (targetItem instanceof InvisibilityPotion) {
             InvisibilityPotion invisibilityPotion = (InvisibilityPotion)targetItem;
-            if (player.getCurrPotion().getId().equals(itemUsedId)) {
-                player.setInvisible(true);
-                invisibilityPotion.updateTicks();
-            }
+            player.consumePotion(invisibilityPotion);
         }
+
+        player.playerPotionQueueUpdateTick();
 
         List<EntityResponse> entityResponses = map.getEntityResponses();
         String goals = game.getGoals();
@@ -170,6 +166,8 @@ public class DungeonManiaController {
     public DungeonResponse tick(Direction movementDirection) {
         game.incrementTick();
         Player player = map.getPlayer();
+        // potion effect
+        player.playerPotionQueueUpdateTick();
         player.move(game, map, movementDirection);
         // System.out.println("playerhere" + player.getPosition());
         List<Enemy> enemies = new ArrayList<>();

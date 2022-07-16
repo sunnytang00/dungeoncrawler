@@ -26,7 +26,6 @@ public class Player extends MovingEntity {
     private boolean isInvisible;
     private boolean isInvincible;
     private Position prevPosition;
-    private int wealth;
     private PlayerState state;
     private List<Item> inventory = new ArrayList<Item>();
     private List<Enemy> battleQueue = new ArrayList<Enemy>();
@@ -42,7 +41,6 @@ public class Player extends MovingEntity {
         this.prevPosition = null;
         this.setHealth(JSONConfig.getConfig("player_health"));
         this.setAttack(JSONConfig.getConfig("player_attack"));
-        this.wealth = 0; // initially has not collected any treasure
         this.setState(new PlayerDefaultState());
         state.playerStateChange(this);
     }
@@ -396,24 +394,23 @@ public class Player extends MovingEntity {
     }
 
     // may need to debug later, update potion queue etc, turn currPotion to null whenever ticks over
-    public void consumePotion(String potionType) {
-        for (Item item : inventory) {
-            if (item.getType().equals(potionType)) {
-                potionQueue.addPotionToQueue((Potion) item);
-                if (getCurrPotion() == null && !isInvincible() && !isInvisible()) {
-                    inventory.remove(item);
-                    potionQueue.removePotionFromQueue((Potion) item);
-                    setCurrPotion((Potion)item);
-                    if (potionType.equals("invincibility_potion")) {
-                        setState(new InvincibleState());
-                    } else if (potionType.equals("invisibility_potion")){
-                        setState(new InvisibleState());
-                    }
-                    state.playerStateChange(this);
-                } 
-            }
-        }
+    public void consumePotion(Potion item) { 
+        potionQueue.addPotionToQueue(item);
+    }
 
+    public void playerPotionQueueUpdateTick() {
+        
+        Potion currPotion = potionQueue.updatePotionQueue();
+        if (currPotion != null) { 
+            if (currPotion instanceof InvincibilityPotion) {
+                setState(new InvincibleState());
+            } else if (currPotion instanceof InvisibilityPotion){
+                setState(new InvisibleState());
+            }
+        } else {
+            setState(new PlayerDefaultState());
+        }
+        state.playerStateChange(this);
     }
 
     
