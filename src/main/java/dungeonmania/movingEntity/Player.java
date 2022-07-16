@@ -215,10 +215,10 @@ public class Player extends MovingEntity {
 
 
     public boolean interactWithEntities(Entity entity, DungeonMap map, Direction direction) {
-        boolean blockedByEntity = false;
+        boolean interfereByEntity = false;
         // create interact method in each entity
         if (entity instanceof Boulder) {
-            blockedByEntity = pushBoulder(map, direction);
+            interfereByEntity = pushBoulder(map, direction);
         } else if (entity instanceof Exit) {
             // remove exit from goals 
             // remove player from map entities 
@@ -234,9 +234,9 @@ public class Player extends MovingEntity {
                 inventory.remove(currKey);
             }
         } else if (entity instanceof Portal) {
-        
+            interfereByEntity = teleportThroughPortal(entity, map);
         }
-        return blockedByEntity;
+        return interfereByEntity;
     }
 
     public void interactWithEnemies(Enemy enemy, DungeonMap map) {
@@ -371,8 +371,10 @@ public class Player extends MovingEntity {
                 //Check if there is no entity in the direction that the builder is being pushed
                 if (map.checkIfEntityAdjacentIsPushable(entity, direction)) {
                     entity.setPosition(entity.getPosition().translateBy(direction));
+                } else {
+                    blockedBy = true;
                 }
-                blockedBy = true;
+                
                 break;
             }
         }
@@ -513,6 +515,41 @@ public class Player extends MovingEntity {
                 
         }
         return false;
+    }
+
+    public boolean teleportThroughPortal(Entity entity, DungeonMap map) {
+        boolean teleportByPortal = false;
+        Portal portal = (Portal) entity;
+        portal.linkPortals(map.getMapEntities());
+        Position teleport = portal.getPairPosition();
+        if (teleport == null) { return teleportByPortal; }
+
+        List<Position> telePositions = teleport.getCardinallyAdjacentPositions();
+        Position followDir = teleport.translateBy(getDirection());
+        for (Position pos : telePositions) {
+            List<Entity> entitiesAtPos = map.getEntityFromPos(pos);
+            if (entitiesAtPos != null && (map.containsType(entitiesAtPos,"wall") || 
+                map.containsType(entitiesAtPos,"door"))) {
+                    telePositions.remove(pos);
+            }
+        }
+        if (telePositions != null) {
+            if (telePositions.contains(followDir)) {
+                this.setPosition(followDir);
+            } else {
+                this.setPosition(telePositions.get(0));
+            }
+            teleportByPortal = true;
+            Position teleportedP = this.getPosition();
+            
+            Entity newPortal = map.getTypeEntityAtPos("portal", teleportedP);
+            System.out.println(newPortal);
+            //System.out.println("portal" + newPortal.getColour() + newPortal.getPosition());
+            if (newPortal == null) { return teleportByPortal; }
+
+            return teleportThroughPortal(newPortal, map);
+        }
+        return teleportByPortal;
     }
 
 }

@@ -53,6 +53,16 @@ public class DungeonMap {
         boolean anyMatch = entitiesAtPos.stream().anyMatch(entity -> entity.getType().equals(type));
         return anyMatch;
     }
+
+    public Entity getTypeEntityAtPos(String type, Position position) {
+        List<Entity> entitiesAtPos = this.getEntityFromPos(position);
+        for (Entity entity : entitiesAtPos) {
+            if (entity.getType().equals(type)) {
+                return entity;
+            }
+        }
+        return null;
+    }
     
     public Player getPlayer() {
         Player player = (Player) mapEntities.stream()
