@@ -23,12 +23,6 @@ import dungeonmania.util.Round;
 
 public class Player extends MovingEntity {
 
-    private static final int DEFAULT_BRIBE_AMOUNT = JSONConfig.getConfig("bribe_amount");
-    private static final int DEFAULT_PLAYER_HEALTH = JSONConfig.getConfig("player_health");
-    private static final int DEFAULT_PLAYER_ATTACK = JSONConfig.getConfig("player_attack");
-    private static final double DEFAULT_ALLY_DEFENCE = JSONConfig.getConfig("ally_defence");
-    private static final double DEFAULT_ALLY_ATTACK = JSONConfig.getConfig("ally_attack");
-
     private boolean isInvisible;
     private boolean isInvincible;
     private Position prevPosition;
@@ -46,8 +40,8 @@ public class Player extends MovingEntity {
     public Player(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
         this.prevPosition = null;
-        this.setHealth(DEFAULT_PLAYER_HEALTH);
-        this.setAttack(DEFAULT_PLAYER_ATTACK);
+        this.setHealth(JSONConfig.getConfig("player_health"));
+        this.setAttack(JSONConfig.getConfig("player_attack"));
         this.wealth = 0; // initially has not collected any treasure
         this.setState(new PlayerDefaultState());
         state.playerStateChange(this);
@@ -154,7 +148,7 @@ public class Player extends MovingEntity {
 
     public boolean hasEnoughToBribe() {
         boolean enoughWealth = false;
-        if (this.wealth >= DEFAULT_BRIBE_AMOUNT) {
+        if (this.wealth >= JSONConfig.getConfig("bribe_amount")) {
             enoughWealth = true;
         }
         return enoughWealth;
@@ -355,11 +349,11 @@ public class Player extends MovingEntity {
 
         if (numAlly != 0) {
 
-            attackBonus += numAlly * DEFAULT_ALLY_ATTACK;
-            defenceBonus += numAlly * DEFAULT_ALLY_DEFENCE;
+            attackBonus += numAlly * JSONConfig.getConfig("ally_attack");
+            defenceBonus += numAlly * JSONConfig.getConfig("ally_defence");
         }
 
-        this.setAttack(DEFAULT_PLAYER_ATTACK + attackBonus);
+        this.setAttack(getAttack() + attackBonus);
         this.setDefence(defenceBonus);
 
         return weaponryUsed;
@@ -407,7 +401,7 @@ public class Player extends MovingEntity {
             merc.setState(new MercBribedState());
         }
         
-        consumeInventory("treasure", DEFAULT_BRIBE_AMOUNT);
+        consumeInventory("treasure", JSONConfig.getConfig("bribe_amount"));
     }
     
     public void consumeInventory(String type, int amount) {

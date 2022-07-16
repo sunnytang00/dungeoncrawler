@@ -177,8 +177,6 @@ public class ExampleTests {
          */
         DungeonResponse initialResponse = controller.newGame("d_battleTest_basicMercenary", configFile);
         int mercenaryCount = countEntityOfType(initialResponse, "mercenary");
-        
-
         assertEquals(1, countEntityOfType(initialResponse, "player"));
         assertEquals(1, mercenaryCount);
         return controller.tick(Direction.RIGHT);

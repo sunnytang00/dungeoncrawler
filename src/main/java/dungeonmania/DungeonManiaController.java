@@ -62,6 +62,7 @@ public class DungeonManiaController {
         
         List<Entity> entities = jMap.getInitialMapEntities();
         map = new DungeonMap(entities, dungeonName);
+        System.out.println("Configissue" + map.getPlayer().getHealth());
         
         List<EntityResponse> entityResponses = map.getEntityResponses();
         game = new DungeonGame(jMap.getGoals(), null, null, null);
