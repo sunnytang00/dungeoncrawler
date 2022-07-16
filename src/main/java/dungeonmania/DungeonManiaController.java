@@ -114,6 +114,7 @@ public class DungeonManiaController {
 
         // remove the item from the player's inventory
         inventory.remove(targetItem);
+        player.setInventory(inventory);
 
         if (targetItem instanceof Bomb) {
             Bomb bomb = (Bomb)targetItem;
@@ -194,7 +195,7 @@ public class DungeonManiaController {
         }
 
         for (Enemy enemy : enemies) {
-            System.out.println("Merccccc" + enemy.getMovingStrategy() + enemy.getPosition() + enemy.getType() + "player" + player.getPosition());
+            //System.out.println("Merccccc" + enemy.getMovingStrategy() + enemy.getPosition() + enemy.getType() + "player" + player.getPosition());
             player.interactWithEnemies(enemy, map);
             player.battleWithEnemies(map, game);
         }

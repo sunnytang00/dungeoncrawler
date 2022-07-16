@@ -184,15 +184,14 @@ public class Player extends MovingEntity {
     }
 
     public void move(DungeonGame game, DungeonMap map, Direction direction) {
-        System.out.println("entered move");
 
 
         boolean blocked = false;
 
         this.setDirection(direction);
-        //System.out.println("Pos: " + getPosition() + "direction: " + direction);
+        // System.out.println("Pos: " + getPosition() + "direction: " + direction);
         Position newPos = getPosition().translateBy(direction);
-        //System.out.println("newPos: " + newPos);
+        // System.out.println("newPos: " + newPos);
         List<Entity> encounters = map.getEntityFromPos(newPos);
 
         // interact with non-moving entities 
@@ -226,9 +225,11 @@ public class Player extends MovingEntity {
         } else if (entity instanceof Door) {
             // check if door is already opened 
             // check if corresponding key is in inventory 
+            Door door = (Door) entity;
+            int doorKeyId = door.getKeyID();
             currKey = getCurrKey();
-            if (currKey != null) {
-                Door door = (Door) entity;
+            if (currKey != null && (currKey.getDoorKeyId() == doorKeyId)) {
+
                 door.unlockDoor(currKey);
                 inventory.remove(currKey);
             }
@@ -387,10 +388,13 @@ public class Player extends MovingEntity {
     }
 
     public void collectToInventory(Item item, DungeonMap map) {
-        if (item instanceof Key && hasKey()) {
+        if ((item instanceof Key )&& hasKey()) {
             return;
         }
         inventory.add(item);
+        if (item instanceof Key) {
+            setCurrKey((Key) item);
+        }
         List<Entity> newMapEntities = map.getMapEntities();
         newMapEntities.remove(item);
         map.setMapEntities(newMapEntities);

@@ -1,0 +1,37 @@
+{
+    "entities": [
+        {
+            "type" : "player",
+            "x" : 1,
+            "y" : 1
+        },{
+            "type" : "wall",
+            "x" : 6,
+            "y" : 6
+        }, {
+            "type" : "spider",
+            "x" : 5,
+            "y" : 5
+        }, {
+            "type": "exit",
+            "x": 5,
+            "y": 4
+        }, {
+            "type": "switch",
+            "x": 6,
+            "y": 4
+        }, {
+            "type": "portal",
+            "x": 6,
+            "y": 5,
+            "colour": "BLUE"
+
+        }, {
+            "type": "door",
+            "x": 6,
+            "y": 6,
+            "key" : 1
+        }
+    ],
+    "goal-condition": {"goal": "exit"}
+}
