@@ -188,6 +188,7 @@ public class Player extends MovingEntity {
     public void move(DungeonGame game, DungeonMap map, Direction direction) {
         System.out.println("entered move");
 
+
         boolean blocked = false;
 
         this.setDirection(direction);
@@ -200,7 +201,7 @@ public class Player extends MovingEntity {
         for (Entity encounter : encounters) {
 
             if (!isInvisible() && !(encounter instanceof Enemy)) {
-                interactWithEntities(encounter, map);
+                interactWithEntities(encounter, map, direction);
             }
             if (getNonTraversibles().contains(encounter.getType())) {
                 blocked = true;
@@ -213,12 +214,11 @@ public class Player extends MovingEntity {
     }
 
 
-    public void interactWithEntities(Entity entity, DungeonMap map) {
-        System.out.println("entered interact");
+    public void interactWithEntities(Entity entity, DungeonMap map, Direction direction) {
 
         // create interact method in each entity
         if (entity instanceof Boulder) {
-            pushBoulder(entity, map);
+            pushBoulder(map, direction);
         } else if (entity instanceof Exit) {
             // remove exit from goals 
             // remove player from map entities 
@@ -360,8 +360,21 @@ public class Player extends MovingEntity {
 
     }
 
-    public void pushBoulder(Entity entity, DungeonMap map){
+    public void pushBoulder(DungeonMap map, Direction direction) {
         
+        
+        List<Entity> entitiesAtPosition = map.getEntityFromPos(getPosition().translateBy(direction));
+        
+        for (Entity entity : entitiesAtPosition) {
+            if (entity instanceof Boulder) {
+                //Check if there is no entity in the direction that the builder is being pushed
+                if (map.checkIfEntityAdjacentIsEmpty(entity, direction)) {
+                    entity.setPosition(entity.getPosition().translateBy(direction));
+                }
+                
+                break;
+            }
+        }
     }
 
     public void collectToInventory(Item item, DungeonMap map) {

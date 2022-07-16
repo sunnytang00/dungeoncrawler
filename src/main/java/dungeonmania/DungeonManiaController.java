@@ -6,6 +6,7 @@ import dungeonmania.util.*;
 import dungeonmania.entities.buildableEntities.*;
 import dungeonmania.entities.collectableEntities.*;
 import dungeonmania.movingEntity.*;
+import dungeonmania.StaticEntities.ZombieToastSpawner;
 import dungeonmania.entities.*;
 
 import java.io.FileReader;
@@ -62,7 +63,6 @@ public class DungeonManiaController {
         
         List<Entity> entities = jMap.getInitialMapEntities();
         map = new DungeonMap(entities, dungeonName);
-        System.out.println("Configissue" + map.getPlayer().getHealth());
         
         List<EntityResponse> entityResponses = map.getEntityResponses();
         game = new DungeonGame(jMap.getGoals(), null, null, null);
@@ -77,20 +77,24 @@ public class DungeonManiaController {
 
         Player player = map.getPlayer();
         List<BattleResponse> battles = map.getBattleResponses(game.getBattles());
+        System.out.println(map.getPlayer());
         return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), player.getInventoryResponses(), battles , player.getBuildables(), game.getGoals());
     }
 
     /**
      * /game/tick/item
      */
-    
     public DungeonResponse tick(String itemUsedId) throws IllegalArgumentException, InvalidActionException {
         if (null == itemUsedId || "".equals(itemUsedId)) {
             throw new InvalidActionException("Not found the item with the given id(" + itemUsedId + ")");
         }
+
+        game.incrementTick();
+        
         Player player = map.getPlayer();
         List<Item> inventory = player.getInventory();
         Item targetItem = null;
+        List<ZombieToast> zombiesToAdd = new ArrayList<>();
         for (Item item : inventory) {
             if (itemUsedId.equals(item.getId())) {
                 targetItem = item;
@@ -144,9 +148,18 @@ public class DungeonManiaController {
                 Enemy enemy = (Enemy) entity;
                 enemy.getMovingStrategy().move(enemy, map);
             }
+            if (entity instanceof ZombieToastSpawner) {
+                ZombieToastSpawner ZTSpawner = (ZombieToastSpawner) entity;
+                ZombieToast zombie = ZTSpawner.spawnZombie(game.getCurrentTick(), map);
+                if (zombie != null) {
+                    zombiesToAdd.add(zombie);
+                }
+            }
         }
+        map.addEntitiesToMap(zombiesToAdd);
 
-        return new DungeonResponse(dDame.getDungeonId(), map.getDungeonName(), entityResponses, itemResponses, null, null, goals);
+        //return new DungeonResponse(dDame.getDungeonId(), map.getDungeonName(), entityResponses, itemResponses, null, null, goals);
+        return getDungeonResponseModel();
     }
 
 
