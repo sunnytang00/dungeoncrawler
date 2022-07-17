@@ -1,6 +1,7 @@
 package dungeonmania.StaticEntities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dungeonmania.Entity;
 import dungeonmania.StaticEntity;
@@ -21,11 +22,11 @@ public class Portal extends StaticEntity {
     /**
      * Method to link portals
      * Only call this after all entities have been read in and created
-     * @param entityList
+     * @param list
      */
-    public void linkPortals(ArrayList<Entity> entityList) {
+    public void linkPortals(List<Entity> list) {
         
-        for (Entity entity : entityList) {
+        for (Entity entity : list) {
 
             if (entity instanceof Portal) {
 
@@ -37,23 +38,14 @@ public class Portal extends StaticEntity {
         }
     }
 
+    public void teleport(Entity entity, Direction direction, ArrayList<Entity> entitiesList) {
+        Position newPosition = getPairPosition().translateBy(direction);
+        //Check if the portal pair exists and that the new position can be teleported to
+        if ((this.pair != null) && (Helper.CheckIfTraversable(newPosition, entitiesList) != false)) {
+            entity.setPosition(newPosition);
+        }
+    }
 
-    // /**
-    //  * Precondition: Entity must be an entity that can pass through portals
-    //  * Postcondition: Entity that is passed in will end up at the paired portal
-    //  * @param entity
-    //  * @param direction
-    //  */
-    // public void teleport(Entity entity, Direction direction, ArrayList<Entity> entitiesList) {
-
-    //     Position newPosition = getPairPosition().translateBy(direction);
-
-    //     //Check if the portal pair exists and that the new position can be teleported to
-    //     if ((this.pair != null) && (Helper.CheckIfTraversable(newPosition, entitiesList) != false)) {
-    //         entity.setPosition(newPosition);
-    //     }
-
-    // }
 
     public Position getPairPosition() {
         return pair.getPosition();
