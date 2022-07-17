@@ -1,27 +1,34 @@
 package dungeonmania.goals;
 
-import dungeonmania.Entity;
-import dungeonmania.entities.collectableEntities.Treasure;
-import dungeonmania.movingEntity.Player;
-
-import java.util.List;
+import dungeonmania.DungeonMap;
+import dungeonmania.util.JSONConfig;
 
 public class CollectTreasure extends LeafGoal {
 
-    public CollectTreasure(Player player) {
-        super(player);
+    private boolean prevIsAchieved = false;
+
+    public CollectTreasure(DungeonMap map) {
+        map.setRemainingConditions(1);
     }
 
     @Override
-    public boolean isAchieve() {
-        boolean flag = true;
-//        List<Entity> entities = player.getEntities();
-//        for (Entity entity : entities) {
-//            if (entity instanceof Treasure) {
-//                flag = false;
-//                break;
-//            }
-//        }
-        return flag;
+    public boolean isAchieved(DungeonMap map) {
+        int numOfTreasure = map.getPlayer().getWealth();     
+        if (numOfTreasure >= JSONConfig.getConfig("treasure_goal")) {
+            prevIsAchieved = true;
+            map.setRemainingConditions(-1);
+            return true;
+        }              
+        if (prevIsAchieved) {
+            prevIsAchieved = false;
+            map.setRemainingConditions(1);
+        }
+        return false;
+    }
+
+    @Override
+    public String getGoalsAsString(DungeonMap map) {
+        if (isAchieved(map)) { return ""; }
+        return ":treasure ";
     }
 }

@@ -40,7 +40,6 @@ public class ItemTest {
         EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(0, 1), false);
 
         // move player downward
-        //System.out.println(initPlayer.getPosition());
         DungeonResponse actualDungeonRes = dmc.tick(Direction.DOWN);
         EntityResponse actualPlayer = getPlayer(actualDungeonRes).get();
 

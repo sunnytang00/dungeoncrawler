@@ -51,16 +51,15 @@ public class DungeonGame {
         this.dungeonId = dungeonId;
     }
 
-    public void setGoals(String goals) {
-        this.goals = goals;
-    }
+    // public void setGoals(String goals) {
+    //     this.goals = goals;
+    // }
 
     public void setInventories(List<Item> inventories) {
         this.inventories = inventories;
     }
 
     public void setBattles(List<Battle> battles) {
-        System.out.println("battle in dungeon game: " + battles);
         this.battles = battles;
     }
 

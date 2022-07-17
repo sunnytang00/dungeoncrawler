@@ -15,15 +15,9 @@ public class Door extends StaticEntity {
         this.keyID = keyID;
     }
 
-    public void unlockDoor(Key key) {
-        //if key id matches door id...
-        // System.out.println("unlock" + key.getDoorKeyId());
-        // System.out.println("Pos" + getPosition());
-        // System.out.println(keyID);
-  
+    public void unlockDoor(Key key) {  
         setTraversable(true);
         setType("door_open");
-        
     }
 
     public int getKeyID() {

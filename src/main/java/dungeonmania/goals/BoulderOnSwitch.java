@@ -1,30 +1,38 @@
 package dungeonmania.goals;
 
+import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
-import dungeonmania.StaticEntities.Boulder;
-import dungeonmania.movingEntity.Player;
+import dungeonmania.StaticEntities.FloorSwitch;
 
 import java.util.List;
 
 public class BoulderOnSwitch extends LeafGoal {
 
-    public BoulderOnSwitch(Player player) {
-        super(player);
+    private boolean prevIsAchieved = false;
+
+    public BoulderOnSwitch(DungeonMap map) {
+        map.setRemainingConditions(1);
     }
 
     @Override
-    public boolean isAchieve() {
-        boolean flag = true;
-//        List<Entity> entities = player.getEntities();
-//        for (Entity entity : entities) {
-//            if (entity instanceof Boulder) {
-//                Boulder boulder = (Boulder)entity;
-//                if (!boulder.isOnSwitch()) {
-//                    flag = false;
-//                    break;
-//                }
-//            }
-//        }
-        return flag;
+    public boolean isAchieved(DungeonMap map) {
+        List<Entity> switches = map.getEntitiesFromType(map.getMapEntities(), "switch");
+        if (switches.stream().allMatch(s -> ((FloorSwitch) s).isTriggered())) {
+            prevIsAchieved = true;
+            map.setRemainingConditions(-1);
+            return true;
+        }
+        if (prevIsAchieved) { // if previously it is true but now it is false again
+            prevIsAchieved = false;
+            map.setRemainingConditions(1);
+        }
+        return false; 
     }
+
+    @Override
+    public String getGoalsAsString(DungeonMap map) {
+        if (isAchieved(map)) { return ""; }
+        return ":boulders ";
+    }
+    
 }

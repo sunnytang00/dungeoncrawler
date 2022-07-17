@@ -29,6 +29,7 @@ public class DungeonMap {
     // assume mapEntities contain all current entities on the map
     private List<Entity> mapEntities = new ArrayList<Entity>();
     private String dungeonName;
+    private int remainingConditions;
 
     public DungeonMap(List<Entity> mapEntities, String dungeonName) {
         this.mapEntities = mapEntities;
@@ -74,8 +75,14 @@ public class DungeonMap {
         return player;
     }
 
+    public List<Entity> getEntitiesFromType(List<Entity> list, String type) {
+        return list.stream()
+                   .filter(entity -> entity.getType().equals(type))
+                   .collect(Collectors.toList ());
+    }
+
     public Entity getEntityFromID(String id) {
-        Entity entity = (Player) mapEntities.stream()
+        Entity entity = mapEntities.stream()
                 .filter(e -> e.getId().equals(id))
                 .findAny()
                 .orElse(null);
@@ -129,6 +136,14 @@ public class DungeonMap {
         mapEntities.addAll(entities);
     }
 
+    public void setRemainingConditions(int num) {
+        remainingConditions += num;
+    }
+
+    public int getRemainingConditions() {
+        return remainingConditions;
+    }
+    
     /**
      * Method to spawn spider
      * @param currentTick curent tick 

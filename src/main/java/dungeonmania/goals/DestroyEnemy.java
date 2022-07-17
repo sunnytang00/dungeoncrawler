@@ -1,27 +1,35 @@
 package dungeonmania.goals;
 
-import dungeonmania.Entity;
-import dungeonmania.movingEntity.Enemy;
-import dungeonmania.movingEntity.Player;
-
-import java.util.List;
+import dungeonmania.DungeonMap;
+import dungeonmania.util.JSONConfig;
 
 public class DestroyEnemy extends LeafGoal {
 
-    public DestroyEnemy(Player player) {
-        super(player);
+    private boolean prevIsAchieved = false;
+
+    public DestroyEnemy(DungeonMap map) {
+        map.setRemainingConditions(1);
     }
 
     @Override
-    public boolean isAchieve() {
-        boolean flag = true;
-//        List<Entity> entities = player.getInventory().get;
-//        for (Entity entity : entities) {
-//            if (entity instanceof Enemy) {
-//                flag = false;
-//                break;
-//            }
-//        }
-        return flag;
+    public boolean isAchieved(DungeonMap map) {
+        int numOfEnemies = map.getPlayer().getSlayedEnemy();     
+        if (numOfEnemies >= JSONConfig.getConfig("enemy_goal")) {
+            prevIsAchieved = true;
+            map.setRemainingConditions(-1);
+            return true;
+        }              
+        if (prevIsAchieved) {
+            prevIsAchieved = false;
+            map.setRemainingConditions(1);
+        }
+        return false;
     }
+
+    @Override
+    public String getGoalsAsString(DungeonMap map) {
+        if (isAchieved(map)) { return ""; }
+        return ":enemies ";
+    }
+    
 }

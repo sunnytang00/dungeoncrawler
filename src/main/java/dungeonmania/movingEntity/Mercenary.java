@@ -48,7 +48,6 @@ public class Mercenary extends BribableEnemy {
 
 
     public void move(MovingEntity movingEntity, DungeonMap map) {
-        System.out.println("HI");
         if (!isBribed()) {
             if (map.getPlayer().isInvincible()) {
                 setMovingStrategy(new RunAway());
