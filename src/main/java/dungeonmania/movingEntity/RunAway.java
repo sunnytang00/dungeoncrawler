@@ -31,7 +31,7 @@ public class RunAway implements MovingStrategy{
             for (Position pos : adjPos) {
                 if (pos.getDistanceBetween(playerPos) > currPos.getDistanceBetween(playerPos)) {
                     List<Entity> atAdj = map.getEntityFromPos(pos);
-                    if (atAdj.size() == 0 || !movingEntity.blockedBy(atAdj)) {
+                    if (atAdj == null || atAdj.size() == 0 || !movingEntity.blockedBy(atAdj)) {
                         moveablePos.add(pos);
                     }     
                 }

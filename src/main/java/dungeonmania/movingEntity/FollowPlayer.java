@@ -37,13 +37,15 @@ public class FollowPlayer implements MovingStrategy {
 
         List<Position> adjPos = currPos.getCardinallyAdjacentPositions();
         List<Position> moveablePos = new ArrayList<Position>();
-        for (Position pos : adjPos) {
-            // always follow player but do not go into player position
-            if (pos.getDistanceBetween(playerPrevPos) < currPos.getDistanceBetween(playerPrevPos)) {
-                List<Entity> atAdj = map.getEntityFromPos(pos);
-                if (atAdj.size() == 0 || !movingEntity.blockedBy(atAdj)) {
-                    moveablePos.add(pos);
-                }    
+        if (adjPos != null && adjPos.size() > 0) {
+            for (Position pos : adjPos) {
+                // always follow player but do not go into player position
+                if (pos.getDistanceBetween(playerPrevPos) < currPos.getDistanceBetween(playerPrevPos)) {
+                    List<Entity> atAdj = map.getEntityFromPos(pos);
+                    if (atAdj == null || atAdj.size() == 0 || !movingEntity.blockedBy(atAdj)) {
+                        moveablePos.add(pos);
+                    }    
+                }
             }
         }
         if (moveablePos.size() == 0) {
