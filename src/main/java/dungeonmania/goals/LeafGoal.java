@@ -1,7 +1,9 @@
 package dungeonmania.goals;
 
 
-import dungeonmania.movingEntity.Player;
+import dungeonmania.DungeonMap;
+
+import java.util.List;
 
 public abstract class LeafGoal implements Goals {
     /**
@@ -9,13 +11,13 @@ public abstract class LeafGoal implements Goals {
      */
     protected String goal;
 
-    protected Player player;
+    protected DungeonMap map;
 
-    public LeafGoal(Player player) {
-        this.player = player;
+    public LeafGoal(DungeonMap map) {
+        this.map = map;
     }
 
-    protected String getGoal() {
+    public String getGoal() {
         return goal;
     }
 
@@ -23,5 +25,8 @@ public abstract class LeafGoal implements Goals {
         this.goal = goal;
     }
 
+    public List<Goals> getSubGoals() {
+        return null;
+    }
 }
 

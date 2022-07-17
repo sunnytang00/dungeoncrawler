@@ -1,5 +1,7 @@
 package dungeonmania.goals;
 
+import java.util.List;
+
 /**
  * The goal interface
  */
@@ -9,4 +11,13 @@ public interface Goals {
      * @return
      */
     boolean isAchieve();
+
+    /**
+     * return the goal name
+     * @return
+     */
+    String getGoal();
+
+    List<Goals> getSubGoals();
 }
+
