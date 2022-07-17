@@ -81,6 +81,9 @@ public class DungeonManiaController {
 
         Player player = map.getPlayer();
         List<BattleResponse> battles = map.getBattleResponses(game.getBattles());
+        if (player == null) {
+            return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), null, battles , null, goals.getGoalsAsString(map));
+        }
         // return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), player.getInventoryResponses(), battles , player.getBuildables(), game.getGoalsAsString());
         return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), player.getInventoryResponses(), battles , player.getBuildables(), goals.getGoalsAsString(map));
     
@@ -146,11 +149,12 @@ public class DungeonManiaController {
         DungeonGame dDame = new DungeonGame(goals.getGoalsAsString(map), inventory, null, null);
 
         List<ItemResponse> itemResponses = Helper.convertFromItem(inventory);
-
+        List<Enemy> enemies = new ArrayList<>();
         for (Entity entity : map.getMapEntities()) {
             if (entity instanceof Enemy) {
                 Enemy enemy = (Enemy) entity;
-                enemy.getMovingStrategy().move(enemy, map);
+                enemies.add(enemy);
+                enemy.move(enemy, map);
             }
             if (entity instanceof ZombieToastSpawner) {
                 ZombieToastSpawner ZTSpawner = (ZombieToastSpawner) entity;
@@ -160,7 +164,17 @@ public class DungeonManiaController {
                 }
             }
         }
+
+        for (Enemy enemy : enemies) {
+            player.interactWithEnemies(enemy, map);
+            player.battleWithEnemies(map, game);
+        }
         map.addEntitiesToMap(zombiesToAdd);
+        Spider spiderToAdd = map.spawnSpider(game.getCurrentTick(), map);
+
+        if (spiderToAdd != null) { 
+            map.addEntityToMap(spiderToAdd);
+        }
         map.BoulderSwitchOverlap();
         //return new DungeonResponse(dDame.getDungeonId(), map.getDungeonName(), entityResponses, itemResponses, null, null, goals);
         return getDungeonResponseModel();
@@ -176,6 +190,7 @@ public class DungeonManiaController {
         Player player = map.getPlayer();
         // potion effect
         player.playerPotionQueueUpdateTick();
+        
         player.move(game, map, movementDirection);
         List<Enemy> enemies = new ArrayList<>();
         List<ZombieToast> zombiesToAdd = new ArrayList<>();
@@ -185,7 +200,7 @@ public class DungeonManiaController {
              if (entity instanceof Enemy) {
                 Enemy enemy = (Enemy) entity;
                 enemies.add(enemy);
-                enemy.getMovingStrategy().move(enemy, map);
+                enemy.move(enemy, map);
             }
 
  
@@ -271,6 +286,7 @@ public class DungeonManiaController {
                 throw new IllegalArgumentException();
             }
             player.interactWithMercenary((Mercenary) interact, map);
+            
         }
         
         return getDungeonResponseModel();

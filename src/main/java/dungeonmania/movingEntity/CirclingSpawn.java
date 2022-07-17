@@ -41,7 +41,7 @@ public class CirclingSpawn implements MovingStrategy {
 
 
     @Override
-    public void move(MovingEntity movingEntity, DungeonMap map) {
+    public void move(Enemy movingEntity, DungeonMap map) {
 
         Spider spider = (Spider) movingEntity;
         Position iniPos = spider.getInitialPosition();
@@ -77,11 +77,17 @@ public class CirclingSpawn implements MovingStrategy {
 
                 if ((spider.isClockwiseMove() && bouldersPos.contains(newCircPos)) || 
                     (!spider.isClockwiseMove() && !bouldersPos.contains(newAntiCircPos))) {
+                    if (bouldersPos.contains(newAntiCircPos)) {
+                        return;
+                    }
                     spider.setClockwiseMove(false);
                     spider.setPosition(newAntiCircPos);
 
                 } else if ((!spider.isClockwiseMove() && bouldersPos.contains(newAntiCircPos)) ||
-                            (spider.isClockwiseMove() && ! bouldersPos.contains(newCircPos))) {      
+                            (spider.isClockwiseMove() && ! bouldersPos.contains(newCircPos))) {
+                    if (bouldersPos.contains(newCircPos)) {
+                        return;
+                    }
                     spider.setClockwiseMove(true);
                     spider.setPosition(newCircPos);
 

@@ -38,11 +38,11 @@ public abstract class MovingEntity extends Entity  {
     
     public boolean blockedBy(List<Entity> atAdj) {
         for (Entity entity : atAdj) {
-            if (nontraversibles.contains(entity.getType())) {
-                return false;
+            if (getNonTraversibles().contains(entity.getType())) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     public double getHealth() {
