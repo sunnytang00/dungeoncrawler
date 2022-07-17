@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.reflections.vfs.Vfs.Dir;
 
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
@@ -105,20 +106,85 @@ public class GoalsTest {
     public void testExitLast() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_complexGoalsTest_AndOr", "c_complexGoalsTest_andAll");
 
-        // TODO
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
 
-        // DungeonResponse res = dmc.newGame("d_movementTest_testMovementDown", "c_simpleGoalTest_noGoalConditions");
+        for (int i = 0; i < 2; ++i) {
+            res = dmc.tick(Direction.DOWN);
+            assertTrue(getGoals(res).contains(":exit"));
+            assertTrue(getGoals(res).contains(":boulders"));
+            assertTrue(getGoals(res).contains(":enemies"));
+        }
+        
+        for (int i = 0; i < 2; ++i) {
+            res = dmc.tick(Direction.RIGHT);
+            assertTrue(getGoals(res).contains(":exit"));
+            assertTrue(getGoals(res).contains(":boulders"));
+            assertTrue(getGoals(res).contains(":enemies"));
+        }
 
-        // assertTrue(getGoals(res).contains(":exit"));
+        // player at exit but does not meet exit condition
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
 
-        // // move player downward - goal still exist
-        // res = dmc.tick(Direction.DOWN);
-        // assertTrue(getGoals(res).contains(":exit"));
+        // treate exit as an empty box if condition not met 
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
+        res = dmc.tick(Direction.LEFT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
 
-        // // move player downward again - goal achieved
-        // res = dmc.tick(Direction.DOWN);
-        // assertTrue(getGoals(res).equals(""));
-        // assertFalse(getGoals(res).contains(":exit"));
     }
+
+    @Test
+    @DisplayName("Test treasure goal unachieved")
+    public void testTreasureUnachieved() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_goals_treasureGoalUnachieved", "c_complexGoalsTest_andAll");
+
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
+
+        for (int i = 0; i < 2; ++i) {
+            res = dmc.tick(Direction.DOWN);
+            assertTrue(getGoals(res).contains(":exit"));
+            assertTrue(getGoals(res).contains(":boulders"));
+            assertTrue(getGoals(res).contains(":enemies"));
+        }
+        
+        for (int i = 0; i < 2; ++i) {
+            res = dmc.tick(Direction.RIGHT);
+            assertTrue(getGoals(res).contains(":exit"));
+            assertTrue(getGoals(res).contains(":boulders"));
+            assertTrue(getGoals(res).contains(":enemies"));
+        }
+
+        // player at exit but does not meet exit condition
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
+
+        // treate exit as an empty box if condition not met 
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
+        res = dmc.tick(Direction.LEFT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
+
+    }
+
 }
