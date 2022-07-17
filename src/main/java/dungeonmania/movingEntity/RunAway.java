@@ -18,7 +18,8 @@ public class RunAway implements MovingStrategy{
     // if no movable positions, enemy simply remain still
 
     @Override
-    public void move(MovingEntity movingEntity, DungeonMap map) {
+    public void move(Enemy movingEntity, DungeonMap map) {
+        
         // change to observer pattern later?
         Player player = map.getPlayer();
         // if player invisible, move randomly
@@ -26,15 +27,18 @@ public class RunAway implements MovingStrategy{
         Position currPos = movingEntity.getPosition();
         List<Position> adjPos = currPos.getCardinallyAdjacentPositions();
         List<Position> moveablePos = new ArrayList<Position>();
-        for (Position pos : adjPos) {
-            if (pos.getDistanceBetween(playerPos) > currPos.getDistanceBetween(playerPos)) {
-                List<Entity> atAdj = map.getEntityFromPos(pos);
-                if (atAdj.size() == 0 || !movingEntity.blockedBy(atAdj)) {
-                    moveablePos.add(pos);
-                }     
+        if (adjPos != null && adjPos.size() > 0) {
+            for (Position pos : adjPos) {
+                if (pos.getDistanceBetween(playerPos) > currPos.getDistanceBetween(playerPos)) {
+                    List<Entity> atAdj = map.getEntityFromPos(pos);
+                    if (atAdj == null || atAdj.size() == 0 || !movingEntity.blockedBy(atAdj)) {
+                        moveablePos.add(pos);
+
+                    }     
+                }
             }
         }
-        if (moveablePos.size() == 0) {
+        if (moveablePos == null || moveablePos.size() == 0) {
             return;
         }
         movingEntity.setPosition(getRandomPosition(moveablePos));

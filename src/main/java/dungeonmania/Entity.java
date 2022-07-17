@@ -37,10 +37,6 @@ public abstract class Entity {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getType() {
         return type;
     }
@@ -63,14 +59,6 @@ public abstract class Entity {
 
     public void setPosition(Position position) {
         this.position = position;
-    }
-
-    public boolean isInteractable() {
-        return isInteractable;
-    }
-
-    public void setInteractable(boolean isInteractable) {
-        this.isInteractable = isInteractable;
     }
 
     public EntityResponse getEntityResponse() {

@@ -13,7 +13,8 @@ public class DestroyEnemy extends LeafGoal {
 
     @Override
     public boolean isAchieved(DungeonMap map) {
-        int numOfEnemies = map.getPlayer().getSlayedEnemy();     
+        int numOfEnemies = map.getPlayer().getSlayedEnemy();  
+
         if (numOfEnemies >= JSONConfig.getConfig("enemy_goal")) {
             prevIsAchieved = true;
             map.setRemainingConditions(-1);

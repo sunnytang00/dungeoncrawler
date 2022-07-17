@@ -13,7 +13,7 @@ public class CollectTreasure extends LeafGoal {
 
     @Override
     public boolean isAchieved(DungeonMap map) {
-        int numOfTreasure = map.getPlayer().getWealth();     
+        int numOfTreasure = map.getPlayer().getWealth();
         if (numOfTreasure >= JSONConfig.getConfig("treasure_goal")) {
             prevIsAchieved = true;
             map.setRemainingConditions(-1);

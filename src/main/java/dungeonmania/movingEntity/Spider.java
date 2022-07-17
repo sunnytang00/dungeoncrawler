@@ -21,8 +21,8 @@ public class Spider extends Enemy {
         this.isClockwiseMove = true; // initially true for spider
     }
     
-    
-    public void move(MovingEntity movingEntity, DungeonMap map) {
+    @Override
+    public void move(Enemy movingEntity, DungeonMap map) {
         getMovingStrategy().move(this, map);  
     }
 

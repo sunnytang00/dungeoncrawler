@@ -14,12 +14,6 @@ public abstract class BribableEnemy extends Enemy {
     public int getBribeRadius() {
         // return bribeRadius;
         return JSONConfig.getConfig("bribe_radius");
-    }
-
-    // public void setBribeRadius(int bribeRadius) {
-    //     this.bribeRadius = bribeRadius;
-    // }
-
-    
+    }  
     
 }

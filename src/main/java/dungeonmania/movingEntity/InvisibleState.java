@@ -3,8 +3,6 @@ package dungeonmania.movingEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-import dungeonmania.Entity;
-
 public class InvisibleState implements PlayerState {
 
     @Override

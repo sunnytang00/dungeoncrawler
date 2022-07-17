@@ -16,32 +16,44 @@ public class MoveTowardsPlayer implements MovingStrategy {
 
     // https://edstem.org/au/courses/8675/discussion/931224 moves closer in either x or y direction
     @Override
-    public void move(MovingEntity movingEntity, DungeonMap map) {
-        
+    public void move(Enemy movingEntity, DungeonMap map) {
         // change to observer pattern later?
         Player player = map.getPlayer();
         // if player invisible, move randomly
         Position playerPos = player.getPosition();
         Position currPos = movingEntity.getPosition();
+
         // has reached player
         if (playerPos.equals(currPos)) {
             return;
         }
         List<Position> adjPos = currPos.getCardinallyAdjacentPositions();
         List<Position> moveablePos = new ArrayList<Position>();
-        for (Position pos : adjPos) {
-            if (pos.getDistanceBetween(playerPos) < currPos.getDistanceBetween(playerPos)) {
-
-                List<Entity> atAdj = map.getEntityFromPos(pos);
-                if (atAdj != null || !movingEntity.blockedBy(atAdj)) {
-                    moveablePos.add(pos);
-                }    
+        List<Position> moveablePasswall = new ArrayList<Position>();
+        if (adjPos != null && adjPos.size() > 0) {
+            for (Position pos : adjPos) {
+                if (pos.getDistanceBetween(playerPos) < currPos.getDistanceBetween(playerPos)) {
+                    List<Entity> atAdj = map.getEntityFromPos(pos);
+                    if (atAdj == null || atAdj.size() == 0|| !movingEntity.blockedBy(atAdj)) {
+                        moveablePos.add(pos);
+                    } 
+                } else {
+                    // find the empty spot not blocked by wall
+                    List<Entity> atAdj = map.getEntityFromPos(pos);
+                    if (atAdj == null || atAdj.size() == 0|| !movingEntity.blockedBy(atAdj)) {
+                        moveablePasswall.add(pos);
+                    } 
+                }
             }
         }
-        if (moveablePos.size() == 0) {
-            return;
+        if (moveablePos != null && moveablePos.size() > 0) {
+            movingEntity.setPosition(getRandomPosition(moveablePos));
+
+        } else if (moveablePasswall != null && moveablePasswall.size() > 0) {
+            // find spot to pass around walls
+            movingEntity.setPosition(getRandomPosition(moveablePasswall));
         }
-        movingEntity.setPosition(getRandomPosition(moveablePos));
+
         
     }
 
