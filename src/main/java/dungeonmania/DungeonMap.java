@@ -139,11 +139,14 @@ public class DungeonMap {
         if (spawnrate == 0 ) { return null;}
 
         Position playerPos = getPlayer().getPosition();
-        List<Position> possiblePos = playerPos.getPositionsWithInBox(7);
-        for (Position pos : possiblePos) {
-            List<Entity> atAdj = map.getEntityFromPos(pos);
-            if (atAdj != null && containsType(atAdj, "boulder")) {
-                possiblePos.remove(pos);
+        List<Position> adjPos = playerPos.getPositionsWithInBox(7);
+        List<Position> possiblePos = new ArrayList<Position>();
+        if (adjPos != null && adjPos.size() != 0) {
+            for (Position pos : adjPos) {
+                List<Entity> atAdj = map.getEntityFromPos(pos);
+                if (atAdj == null || !containsType(atAdj, "boulder")) {
+                    possiblePos.add(pos);
+                }
             }
         }
 

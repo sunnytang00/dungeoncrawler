@@ -1,5 +1,6 @@
 package dungeonmania.StaticEntities;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -28,16 +29,19 @@ public class ZombieToastSpawner extends StaticEntity {
         if (spawnrate == 0 ) { return null;}
 
         List<Position> cardinallyAdj = this.getPosition().getCardinallyAdjacentPositions();
-        for (Position pos : cardinallyAdj) {
-            List<Entity> atAdj = map.getEntityFromPos(pos);
-            if (atAdj != null && containsWall(atAdj)) {
-                cardinallyAdj.remove(pos);
+        List<Position> possibleSpawns = new ArrayList<Position>();
+        if (cardinallyAdj != null && cardinallyAdj.size() != 0) {
+            for (Position pos : cardinallyAdj) {
+                List<Entity> atAdj = map.getEntityFromPos(pos);
+                if (atAdj == null || !containsWall(atAdj)) {
+                    possibleSpawns.add(pos);
+                }
             }
         }
 
-        if ((currentTick % spawnrate == 0) && cardinallyAdj != null) {
+        if ((currentTick % spawnrate == 0) && possibleSpawns != null) {
             
-            return new ZombieToast("zombie_toast", getRandomPosition(cardinallyAdj), true);
+            return new ZombieToast("zombie_toast", getRandomPosition(possibleSpawns), true);
         }
 
         return null;
