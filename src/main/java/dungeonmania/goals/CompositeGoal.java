@@ -2,27 +2,28 @@ package dungeonmania.goals;
 
 import dungeonmania.DungeonMap;
 
-import java.util.List;
+public abstract class CompositeGoal implements Goals {
 
-public class CompositeGoal implements Goals {
+    private Goals subgoal1;
+    private Goals subgoal2;
 
-    private DungeonMap map;
-    private List<Goals> goals;
+    public CompositeGoal(Goals subgoal1, Goals subgoal2) {
+        this.subgoal1 = subgoal1;
+        this.subgoal2 = subgoal2;
+    }
 
-    public CompositeGoal(DungeonMap map) {
-        this.map = map;
+    public Goals getSubgoal1() {
+        return subgoal1;
+    }
+
+    public Goals getSubgoal2() {
+        return subgoal2;
     }
 
     @Override
-    public boolean isAchieve() {
-        return false;
-    }
+    public abstract boolean isAchieved(DungeonMap map);
 
-    public DungeonMap getMap() {
-        return map;
-    }
+    @Override
+    public abstract String getGoalsAsString(DungeonMap map);
 
-    public void setMap(DungeonMap map) {
-        this.map = map;
-    }
 }

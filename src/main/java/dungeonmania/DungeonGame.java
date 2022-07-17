@@ -1,5 +1,6 @@
 package dungeonmania;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,7 +16,7 @@ public class DungeonGame {
     private String dungeonId;
     private String goals;
     private List<Item> inventories;
-    private List<Battle> battles;
+    private List<Battle> battles = new ArrayList<Battle>();
     private List<String> buildables;
 
 
@@ -23,7 +24,6 @@ public class DungeonGame {
         this.dungeonId = UUID.randomUUID().toString();
         this.goals = goals;
         this.inventories = inventories;
-        this.battles = battles;
         this.buildables = buildables;
     }
 
@@ -51,9 +51,9 @@ public class DungeonGame {
         this.dungeonId = dungeonId;
     }
 
-    public void setGoals(String goals) {
-        this.goals = goals;
-    }
+    // public void setGoals(String goals) {
+    //     this.goals = goals;
+    // }
 
     public void setInventories(List<Item> inventories) {
         this.inventories = inventories;
@@ -63,6 +63,10 @@ public class DungeonGame {
         this.battles = battles;
     }
 
+    public void addToBattles(Battle battle) {
+        battles.add(battle);
+    }
+    
     public void setBuildables(List<String> buildables) {
         this.buildables = buildables;
     }

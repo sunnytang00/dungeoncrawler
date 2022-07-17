@@ -19,11 +19,13 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 import static dungeonmania.TestUtils.getEntities;
 import static dungeonmania.TestUtils.countEntityOfType;
+import static dungeonmania.TestUtils.getPlayer;
+import static dungeonmania.TestUtils.*;
 
 public class StaticEntityTest {
 
-    //These tests will need to call the controller class and get the dungeonresponse from there, when we have implemented the jsonreader for dungeon.
-    //Purely sanity tests for the time being
+    // These tests will need to call the controller class and get the dungeonresponse from there, when we have implemented the jsonreader for dungeon.
+    // Purely sanity tests for the time being
 
     @Test
     public void SimpleWallTest() {
@@ -144,6 +146,129 @@ public class StaticEntityTest {
         assertEquals(countEntityOfType(intialResponse, "exit"), 1);
         assertEquals(countEntityOfType(intialResponse, "bomb"), 1);
         
+    }
+
+    @Test
+    public void testPushBoulder() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        //PLAYER    BOULDER
+
+        DungeonResponse intialResponse = dmc.newGame("d_testPushBoulder", "c_battleTests_basicMercenaryMercenaryDies");
+
+        assertEquals(countEntityOfType(intialResponse, "player"), 1);
+        assertEquals(countEntityOfType(intialResponse, "exit"), 1);
+        assertEquals(countEntityOfType(intialResponse, "boulder"), 1);
+
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+
+
+        EntityResponse expectedBoulder = new EntityResponse("1", "boulder", new Position (3,1), false);
+        EntityResponse expectedPlayer = new EntityResponse("2", "player", new Position (2,1), false);
+
+        //          PLAYER  BOULDER
+
+        EntityResponse actualBoulder = getEntities(move, "boulder").get(0);
+
+        assertEquals(expectedBoulder.getPosition(), actualBoulder.getPosition());
+        assertEquals(expectedPlayer.getPosition(), getPlayer(move).get().getPosition());
+
+
+    }
+
+    @Test
+    public void testCannotPushBoulder() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        //PLAYER    BOULDER     BOULDER
+
+        DungeonResponse intialResponse = dmc.newGame("d_testTwoBoulderBlocked", "c_battleTests_basicMercenaryMercenaryDies");
+
+        assertEquals(countEntityOfType(intialResponse, "player"), 1);
+        assertEquals(countEntityOfType(intialResponse, "exit"), 1);
+        assertEquals(countEntityOfType(intialResponse, "boulder"), 2);
+
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+
+
+        EntityResponse expectedBoulder = new EntityResponse("1", "boulder", new Position (2,1), false);
+        EntityResponse expectedPlayer = new EntityResponse("2", "player", new Position (1,1), false);
+
+        //PLAYER    BOULDER     BOULDER
+
+        EntityResponse actualBoulder = getEntities(move, "boulder").get(0);
+
+        assertEquals(expectedBoulder.getPosition(), actualBoulder.getPosition());
+        assertEquals(expectedPlayer.getPosition(), getPlayer(move).get().getPosition());
+
+
+    }
+
+    @Test
+    public void testSwitchTriggers() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse intialResponse = dmc.newGame("d_testSwitch", "c_battleTests_basicMercenaryMercenaryDies");
+         
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+
+        assertEquals("", getGoals(move));
+
+    }
+
+    // @Test
+    // public void testPlayerPortal() {
+
+    // }
+
+    // @Test
+    // public void testDestroySpawner() {
+
+    // }
+
+    @Test
+    public void playerCannotMovePastWall() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse intialResponse = dmc.newGame("d_testSwitch", "c_battleTests_basicMercenaryMercenaryDies");
+         
+        DungeonResponse move = dmc.tick(Direction.UP);
+
+        EntityResponse expectedPlayer = new EntityResponse("2", "player", new Position (1,1), false);
+        
+        assertEquals(expectedPlayer.getPosition(), getPlayer(move).get().getPosition());
+
+    }
+
+    @Test
+    public void testSpawnerBehaviour() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse intialResponse = dmc.newGame("zombieSpiderSpawn", "c_testSpawning");
+
+        DungeonResponse move = dmc.tick(Direction.UP); //Tick 1
+
+        assertEquals(0, countEntityOfType(move, "zombie_toast"));
+        assertEquals(0, countEntityOfType(move, "spider"));
+
+        move = dmc.tick(Direction.DOWN); //Tick 2
+
+        assertEquals(1, countEntityOfType(move, "zombie_toast"));
+        assertEquals(1, countEntityOfType(move, "spider"));
+
+        move = dmc.tick(Direction.UP);
+
+        assertEquals(1, countEntityOfType(move, "spider"));
+
+        move = dmc.tick(Direction.DOWN);
+
+        assertEquals(2, countEntityOfType(move, "zombie_toast"));
+
     }
 
 
