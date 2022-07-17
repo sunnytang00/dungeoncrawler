@@ -158,7 +158,16 @@ public class DungeonManiaController {
                     zombiesToAdd.add(zombie);
                 }
             }
+            if (entity instanceof ZombieToastSpawner) {
+                ZombieToastSpawner ZTSpawner = (ZombieToastSpawner) entity;
+                ZombieToast zombie = ZTSpawner.spawnZombie(game.getCurrentTick(), map);
+                if (zombie != null) {
+                    zombiesToAdd.add(zombie);
+                }
+            }
         }
+        map.addEntitiesToMap(zombiesToAdd);
+        Spider spiderToAdd = map.spawnSpider(game.getCurrentTick(), map);
 
         for (Enemy enemy : enemies) {
             player.interactWithEnemies(enemy, map);
@@ -178,6 +187,7 @@ public class DungeonManiaController {
     /**
      * /game/tick/movement
      */
+
     public DungeonResponse tick(Direction movementDirection) {
         game.incrementTick();
         Player player = map.getPlayer();
@@ -189,7 +199,7 @@ public class DungeonManiaController {
         List<ZombieToast> zombiesToAdd = new ArrayList<>();
 
         for (Entity entity : map.getMapEntities()) {
-            if (entity instanceof Enemy) {
+             if (entity instanceof Enemy) {
                 Enemy enemy = (Enemy) entity;
                 enemies.add(enemy);
                 enemy.move(enemy, map);
@@ -219,6 +229,10 @@ public class DungeonManiaController {
         }
         map.BoulderSwitchOverlap();
 
+        if (spiderToAdd != null) { 
+            map.addEntityToMap(spiderToAdd);
+        }
+        map.BoulderSwitchOverlap();
         return getDungeonResponseModel();
 
     }

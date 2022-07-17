@@ -3,6 +3,7 @@ package dungeonmania.movingEntity;
 import java.util.Arrays;
 
 import dungeonmania.DungeonMap;
+import dungeonmania.util.Direction;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 

@@ -207,6 +207,7 @@ public class Player extends MovingEntity {
             battleQueue.add(enemy);
             
         }
+        return interfereByEntity;
     }
 
     public void battleWithEnemies(DungeonMap map, DungeonGame game) {

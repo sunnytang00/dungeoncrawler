@@ -1,8 +1,10 @@
 package dungeonmania.movingEntity;
 
 import java.util.Arrays;
+import java.util.List;
 
 import dungeonmania.DungeonMap;
+import dungeonmania.Entity;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 

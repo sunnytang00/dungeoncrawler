@@ -8,6 +8,7 @@ import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
 import dungeonmania.StaticEntity;
 import dungeonmania.movingEntity.ZombieToast;
+import dungeonmania.util.Direction;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
