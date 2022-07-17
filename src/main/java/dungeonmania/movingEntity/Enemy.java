@@ -1,5 +1,6 @@
 package dungeonmania.movingEntity;
 
+import dungeonmania.DungeonMap;
 import dungeonmania.util.Position;
 
 public abstract class Enemy extends MovingEntity {
@@ -21,5 +22,10 @@ public abstract class Enemy extends MovingEntity {
     public boolean becomeAlly() {
         return false;
     }
+
+    public void move(Enemy enemy, DungeonMap map) {
+    }
+
+    
     
 }

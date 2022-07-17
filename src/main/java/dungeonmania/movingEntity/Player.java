@@ -1,7 +1,6 @@
 package dungeonmania.movingEntity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,36 +24,21 @@ public class Player extends MovingEntity {
 
     private boolean isInvisible;
     private boolean isInvincible;
-    private Position prevPosition;
     private PlayerState state;
     private List<Item> inventory = new ArrayList<Item>();
     private List<Enemy> battleQueue = new ArrayList<Enemy>();
     private PotionQueue potionQueue = new PotionQueue();
     private Potion currPotion = null;
     private Key currKey = null;
-    private boolean playerWin = false;
-    private boolean playerDied = false;
     private int slayedEnemy = 0;
 
     public Player(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
-        this.prevPosition = null;
         this.setHealth(JSONConfig.getConfig("player_health"));
         this.setAttack(JSONConfig.getConfig("player_attack"));
         this.setState(new PlayerDefaultState());
         state.playerStateChange(this);
     }
-
-    
-    public boolean isPlayerDied() {
-        return playerDied;
-    }
-
-
-    public void setPlayerDied(boolean playerDied) {
-        this.playerDied = playerDied;
-    }
-
 
     public boolean isInvisible() {
         return isInvisible;
@@ -73,10 +57,6 @@ public class Player extends MovingEntity {
     }
 
     public Position getPrevPosition() {
-        return prevPosition;
-    }
-
-    public void setPrevPosition() {
         Direction newD = null;
         // can we use equals for comparing direction
         if (getDirection().equals(Direction.UP)) {
@@ -88,7 +68,7 @@ public class Player extends MovingEntity {
         } else if (getDirection().equals(Direction.RIGHT)) {
             newD = Direction.LEFT;
         }
-        this.prevPosition = getPosition().translateBy(newD);
+        return getPosition().translateBy(newD);
 
     }
 
@@ -117,17 +97,6 @@ public class Player extends MovingEntity {
     public void setCurrKey(Key currKey) {
         this.currKey = currKey;
     }
-
-
-    public boolean isPlayerWin() {
-        return playerWin;
-    }
-
-
-    public void setPlayerWin(boolean playerWin) {
-        this.playerWin = playerWin;
-    }
-
 
     public int getWealth() {
         int totalTreasure = (int) inventory.stream().filter(i -> i instanceof Treasure).count();
@@ -214,10 +183,6 @@ public class Player extends MovingEntity {
         // create interact method in each entity
         if (entity instanceof Boulder) {
             interfereByEntity = pushBoulder(map, direction);
-        } else if (entity instanceof Exit) {
-            // check if only goal left is exits
-            // if so exit, remove player from map, game wins
-
         } else if (entity instanceof Item) {
             collectToInventory((Item) entity, map);
         } else if (entity instanceof Door) {
@@ -240,13 +205,16 @@ public class Player extends MovingEntity {
     public void interactWithEnemies(Enemy enemy, DungeonMap map) {
         if (enemy.getPosition().equals(this.getPosition()) && !enemy.becomeAlly()) {
             battleQueue.add(enemy);
+            
         }
+        return interfereByEntity;
     }
 
     public void battleWithEnemies(DungeonMap map, DungeonGame game) {
         if (battleQueue.size() <= 0) {
             return;
         }
+        
         List<Battle> battles = new ArrayList<Battle>();
         double iniPlayerHealth = this.getHealth();
         Battle currBattle = null;
@@ -293,7 +261,8 @@ public class Player extends MovingEntity {
 
                 if (newHealth <= 0) {
                     game.addToBattles(currBattle);
-                    setPlayerDied(true);
+                    // map.removeEntityFromMap(this);
+                    map.removePlayerFromMap(false);
                     return;
                     // return battles;
                 } else if (enemyHealth <= 0) {
@@ -304,7 +273,7 @@ public class Player extends MovingEntity {
                 }
                 
                 if (isInvincible()) {
-                    setPlayerWin(true);
+                    // map.setGameWin(true);
                     battles.add(currBattle);
                     game.addToBattles(currBattle);
                     return;
@@ -312,7 +281,7 @@ public class Player extends MovingEntity {
             }
         }
         game.addToBattles(currBattle);
-        setPlayerWin(true);
+        // map.setGameWin(true);
     }
 
     public List<Item> checkBattleBonuses(DungeonMap map) {
@@ -420,6 +389,7 @@ public class Player extends MovingEntity {
             
             }
             inventory.remove(delete);
+            count++;
         }
     }
 
@@ -509,19 +479,22 @@ public class Player extends MovingEntity {
         if (teleport == null) { return teleportByPortal; }
 
         List<Position> telePositions = teleport.getCardinallyAdjacentPositions();
+        List<Position> possiblePos = new ArrayList<Position>();
         Position followDir = teleport.translateBy(getDirection());
-        for (Position pos : telePositions) {
-            List<Entity> entitiesAtPos = map.getEntityFromPos(pos);
-            if (entitiesAtPos != null && (map.containsType(entitiesAtPos,"wall") || 
-                map.containsType(entitiesAtPos,"door"))) {
-                    telePositions.remove(pos);
+        if (telePositions != null && telePositions.size() > 0) {
+            for (Position pos : telePositions) {
+                List<Entity> entitiesAtPos = map.getEntityFromPos(pos);
+                if (entitiesAtPos == null || (!map.containsType(entitiesAtPos,"wall") &&
+                    !map.containsType(entitiesAtPos,"door"))) {
+                        possiblePos.add(pos);
+                }
             }
         }
-        if (telePositions != null) {
-            if (telePositions.contains(followDir)) {
+        if (possiblePos != null && possiblePos.size() != 0) {
+            if (possiblePos.contains(followDir)) {
                 this.setPosition(followDir);
             } else {
-                this.setPosition(telePositions.get(0));
+                this.setPosition(possiblePos.get(0));
             }
             teleportByPortal = true;
             Position teleportedP = this.getPosition();

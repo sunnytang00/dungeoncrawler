@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import dungeonmania.DungeonMap;
-import dungeonmania.Entity;
-import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
 public class Mercenary extends BribableEnemy {
@@ -21,7 +19,7 @@ public class Mercenary extends BribableEnemy {
         setMovingStrategy(new MoveTowardsPlayer());
         setState(new MercViciousState());
         getState().currentState(this);
-        this.setNonTraversibles(Arrays.asList("boulder", "wall", "door"));
+        this.setNonTraversibles(Arrays.asList("wall", "door"));
     }
     
 
@@ -46,8 +44,8 @@ public class Mercenary extends BribableEnemy {
         this.isBribed = isBribed;
     }
 
-
-    public void move(MovingEntity movingEntity, DungeonMap map) {
+    @Override
+    public void move(Enemy movingEntity, DungeonMap map) {
         if (!isBribed()) {
             if (map.getPlayer().isInvincible()) {
                 setMovingStrategy(new RunAway());

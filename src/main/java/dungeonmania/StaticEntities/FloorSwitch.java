@@ -23,7 +23,6 @@ public class FloorSwitch extends StaticEntity {
 
     public void setTriggered(boolean state) {
         this.isTriggered = state;
-
     }
     
 }

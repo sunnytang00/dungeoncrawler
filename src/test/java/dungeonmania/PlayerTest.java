@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static dungeonmania.TestUtils.getPlayer;
@@ -19,6 +20,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
@@ -331,6 +333,100 @@ public class PlayerTest {
         assertEquals(expectedPlayer, actualPlayer);
     }
 
+
+
+    @Test
+    @DisplayName("Test player not in radius for destroy spawner")
+    public void testplayerDestroySpawnerFail() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+        // bribe radius and amount are 1
+        DungeonResponse intialResponse = dmc.newGame("d_testDestroySpawner", "simple");
+
+        DungeonResponse move = dmc.tick(Direction.DOWN);
+        assertEquals(1, getInventory(move, "sword").size());
+        move = dmc.tick(Direction.DOWN);
+        move = dmc.tick(Direction.DOWN);
+        move = dmc.tick(Direction.DOWN);
+        move = dmc.tick(Direction.DOWN);
+        move = dmc.tick(Direction.DOWN);
+        String sId = getEntities(move, "zombie_toast_spawner").get(0).getId();
+        assertThrows(InvalidActionException.class, () -> dmc.interact(sId));
+
+    }
+
+    @Test
+    @DisplayName("Test player not have sword for destroy spawner")
+    public void testplayerDestroySpawnerFailWithoutWeapon() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+        // bribe radius and amount are 1
+        DungeonResponse intialResponse = dmc.newGame("d_testDestroySpawner", "simple");
+
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.DOWN);
+        move = dmc.tick(Direction.DOWN);
+
+        assertEquals(0, getInventory(move, "sword").size());
+        String sId = getEntities(move, "zombie_toast_spawner").get(0).getId();
+        assertThrows(InvalidActionException.class, () -> dmc.interact(sId));
+
+
+    }
+
+    @Test
+    @DisplayName("Test player success destroy spawner")
+    public void testplayerDestroySpawnerSuccess() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+        // bribe radius and amount are 1
+        DungeonResponse intialResponse = dmc.newGame("d_testDestroySpawner", "simple");
+
+        DungeonResponse move = dmc.tick(Direction.DOWN);
+
+        assertEquals(1, getInventory(move, "sword").size());
+        String sId = getEntities(move, "zombie_toast_spawner").get(0).getId();
+        assertDoesNotThrow(() -> dmc.interact(sId));
+
+    }
+    
+    @Test
+    @DisplayName("Test player build exception")
+    public void testplayerbuildableInvalid() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+        // bribe radius and amount are 1
+        DungeonResponse intialResponse = dmc.newGame("d_testDestroySpawner", "simple");
+
+        DungeonResponse move = dmc.tick(Direction.DOWN);
+
+        assertEquals(1, getInventory(move, "sword").size());
+        String sId = getEntities(move, "zombie_toast_spawner").get(0).getId();
+        assertThrows(IllegalArgumentException.class, () -> dmc.build(sId));
+
+    }
+
+    @Test
+    @DisplayName("Test player build exception")
+    public void testplayerbuildableItemNotEnough() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse initialResponse = dmc.newGame("build_shield", "c_battleTests_basicMercenaryMercenaryDies");
+
+        EntityResponse initPlayer = getPlayer(initialResponse).get();
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(2, 1), false);
+
+        // move player downward
+        DungeonResponse actualDungeonRes = dmc.tick(Direction.RIGHT);
+        EntityResponse actualPlayer = getPlayer(actualDungeonRes).get();
+
+    
+        assertThrows(InvalidActionException.class, () -> dmc.build("shield"));
+
+    }
 
 }
 

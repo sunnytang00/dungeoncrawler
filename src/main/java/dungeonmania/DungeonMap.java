@@ -6,30 +6,18 @@ import java.util.stream.Collectors;
 
 import dungeonmania.movingEntity.*;
 import dungeonmania.response.models.*;
-import dungeonmania.Entity;
 import dungeonmania.util.*;
 import dungeonmania.StaticEntities.*;
 
 
 import java.util.ArrayList;
 
-import org.eclipse.jetty.websocket.api.InvalidWebSocketException;
-import org.json.JSONArray;
-import org.json.JSONML;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-import netscape.javascript.JSObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-
 public class DungeonMap {
     // assume mapEntities contain all current entities on the map
     private List<Entity> mapEntities = new ArrayList<Entity>();
     private String dungeonName;
-    private int remainingConditions;
+    private int remainingConditions; 
+    private boolean gameWin = false;
 
     public DungeonMap(List<Entity> mapEntities, String dungeonName) {
         this.mapEntities = mapEntities;
@@ -122,6 +110,20 @@ public class DungeonMap {
         mapEntities.remove(entity);
     }
 
+    /**
+     * 
+     * @param wins
+     *        true if player wins the game, false if player loses the game
+     */
+    public void removePlayerFromMap(boolean wins) {
+        mapEntities.remove(getPlayer());
+        gameWin = wins;
+    }
+
+    public boolean gameResult() {
+        return gameWin;
+    }
+
     public boolean checkIfEntityAdjacentIsPushable(Entity entity, Direction direction) {
 
         List<Entity> entityList = getEntityFromPos(entity.getPosition().translateBy(direction));
@@ -165,7 +167,7 @@ public class DungeonMap {
             }
         }
 
-        if (currentTick % spawnrate == 0 && possiblePos != null) {
+        if (currentTick % spawnrate == 0 && possiblePos != null && possiblePos.size() > 0) {
             return new Spider("spider", getRandomPosition(possiblePos), false);
         }
 
@@ -199,5 +201,6 @@ public class DungeonMap {
             }
         }
     }
+
 }
 
