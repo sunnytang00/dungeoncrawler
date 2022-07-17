@@ -23,7 +23,6 @@ public class MoveTowardsPlayer implements MovingStrategy {
         Position playerPos = player.getPosition();
         Position currPos = movingEntity.getPosition();
 
-        // System.out.println("Merc" + currPos + "Player" + playerPos);
         // has reached player
         if (playerPos.equals(currPos)) {
             return;
@@ -37,14 +36,12 @@ public class MoveTowardsPlayer implements MovingStrategy {
                     List<Entity> atAdj = map.getEntityFromPos(pos);
                     if (atAdj == null || atAdj.size() == 0|| !movingEntity.blockedBy(atAdj)) {
                         moveablePos.add(pos);
-                        //System.out.println("pos" + pos + "block" + movingEntity.blockedBy(atAdj) + "atadj" + atAdj);
                     } 
                 } else {
                     // find the empty spot not blocked by wall
                     List<Entity> atAdj = map.getEntityFromPos(pos);
                     if (atAdj == null || atAdj.size() == 0|| !movingEntity.blockedBy(atAdj)) {
                         moveablePasswall.add(pos);
-                        //System.out.println("pos" + pos + "block" + movingEntity.blockedBy(atAdj) + "atadj" + atAdj);
                     } 
                 }
             }

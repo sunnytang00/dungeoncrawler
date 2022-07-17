@@ -91,7 +91,6 @@ public class ZombieTest {
         Position pos = getEntities(move, "zombie_toast").get(0).getPosition();
         Position pos2 = getEntities(move, "zombie_toast_spawner").get(0).getPosition();
         Position expectedPos = pos2.translateBy(Direction.LEFT);
-        System.out.println("expected" + expectedPos.getX() + "x" + expectedPos.getY() + "Y");
         // assert after movement
         assertEquals(expectedPos.getX(), pos.getX());
         assertEquals(expectedPos.getY(), pos.getY());
@@ -120,7 +119,6 @@ public class ZombieTest {
         Position pos = getEntities(move, "zombie_toast").get(0).getPosition();
         Position pos2 = getEntities(move, "zombie_toast_spawner").get(0).getPosition();
         Position expectedPos = pos2.translateBy(Direction.LEFT);
-        System.out.println("expected" + expectedPos.getX() + "x" + expectedPos.getY() + "Y");
         // assert after movement
         assertEquals(expectedPos.getX(), pos.getX());
         assertEquals(expectedPos.getY(), pos.getY());
@@ -149,7 +147,6 @@ public class ZombieTest {
         Position pos = getEntities(move, "zombie_toast").get(0).getPosition();
         Position pos2 = getEntities(move, "zombie_toast_spawner").get(0).getPosition();
         Position expectedPos = pos2.translateBy(Direction.LEFT);
-        System.out.println("expected" + expectedPos.getX() + "x" + expectedPos.getY() + "Y");
         // assert after movement
         assertEquals(expectedPos.getX(), pos.getX());
         assertEquals(expectedPos.getY(), pos.getY());
@@ -178,7 +175,6 @@ public class ZombieTest {
         Position pos = getEntities(move, "zombie_toast").get(0).getPosition();
         Position pos2 = getEntities(move, "zombie_toast_spawner").get(0).getPosition();
         Position expectedPos = pos2.translateBy(Direction.LEFT);
-        System.out.println("expected" + expectedPos.getX() + "x" + expectedPos.getY() + "Y");
         // assert after movement
         assertEquals(expectedPos.getX(), pos.getX());
         assertEquals(expectedPos.getY(), pos.getY());

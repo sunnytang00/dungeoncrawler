@@ -11,18 +11,9 @@ import dungeonmania.movingEntity.*;
 import dungeonmania.StaticEntities.ZombieToastSpawner;
 import dungeonmania.entities.*;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import org.json.JSONArray;
 
 public class DungeonManiaController {
 
@@ -90,11 +81,6 @@ public class DungeonManiaController {
             return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), null,
                     battles, null, goals.getGoalsAsString(map));
         }
-
-        System.out.println("hello" + battles + player.isInvincible());
-        // return new DungeonResponse(game.getDungeonId(), map.getDungeonName(),
-        // map.getEntityResponses(), player.getInventoryResponses(), battles ,
-        // player.getBuildables(), game.getGoalsAsString());
         return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(),
                 player.getInventoryResponses(), battles, player.getBuildables(), goals.getGoalsAsString(map));
 
@@ -154,12 +140,10 @@ public class DungeonManiaController {
 
         player.playerPotionQueueUpdateTick();
 
-        List<EntityResponse> entityResponses = map.getEntityResponses();
-        // String goals = game.getGoalsAsString();
-        // DungeonGame dDame = new DungeonGame(goals, inventory, null, null);
-        DungeonGame dDame = new DungeonGame(goals.getGoalsAsString(map), inventory, null, null);
+        // List<EntityResponse> entityResponses = map.getEntityResponses();
+        // DungeonGame dDame = new DungeonGame(goals.getGoalsAsString(map), inventory, null, null);
 
-        List<ItemResponse> itemResponses = Helper.convertFromItem(inventory);
+        // List<ItemResponse> itemResponses = Helper.convertFromItem(inventory);
         List<Enemy> enemies = new ArrayList<>();
         for (Entity entity : map.getMapEntities()) {
             if (entity instanceof Enemy) {
@@ -188,15 +172,12 @@ public class DungeonManiaController {
             map.addEntityToMap(spiderToAdd);
         }
         map.BoulderSwitchOverlap();
-        // return new DungeonResponse(dDame.getDungeonId(), map.getDungeonName(),
-        // entityResponses, itemResponses, null, null, goals);
         return getDungeonResponseModel();
     }
 
     /**
      * /game/tick/movement
      */
-
     public DungeonResponse tick(Direction movementDirection) {
         game.incrementTick();
         Player player = map.getPlayer();

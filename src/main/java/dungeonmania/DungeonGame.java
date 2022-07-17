@@ -5,16 +5,12 @@ import java.util.List;
 import java.util.UUID;
 
 import dungeonmania.entities.Item;
-import dungeonmania.response.models.BattleResponse;
-import dungeonmania.response.models.EntityResponse;
-import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Battle;
 
 public class DungeonGame {
 
     private int currentTick = 0;
     private String dungeonId;
-    private String goals;
     private List<Item> inventories;
     private List<Battle> battles = new ArrayList<Battle>();
     private List<String> buildables;
@@ -22,7 +18,6 @@ public class DungeonGame {
 
     public DungeonGame(String goals, List<Item> inventories, List<Battle> battles, List<String> buildables) {
         this.dungeonId = UUID.randomUUID().toString();
-        this.goals = goals;
         this.inventories = inventories;
         this.buildables = buildables;
     }

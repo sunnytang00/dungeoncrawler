@@ -25,7 +25,6 @@ public class RandomSpawn implements MovingStrategy {
         if (adjPos != null && adjPos.size() > 0) {
             for (Position pos : adjPos) {
                 List<Entity> atAdj = map.getEntityFromPos(pos);
-                // System.out.println("Randomspawn" + pos + " " + atAdj + " " + movingEntity.blockedBy(atAdj));
                 if (atAdj == null || atAdj.size() == 0 || !movingEntity.blockedBy(atAdj)) {
                     moveablePos.add(pos);
                     

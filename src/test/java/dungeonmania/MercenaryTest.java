@@ -136,8 +136,6 @@ public class MercenaryTest {
         assertEquals(playerPos.getY(), 1);
         assertTrue(disPrev > currDis);
 
-        //System.out.println("Merc" + mercPos + "Player" + playerPos);
-
         disPrev = mercPos.getDistanceBetween(playerPos);
 
         move = dmc.tick(Direction.RIGHT);
@@ -151,9 +149,6 @@ public class MercenaryTest {
         playerPos = getEntities(move, "player").get(0).getPosition();
         mercPos = getEntities(move, "mercenary").get(0).getPosition();
         currDis = mercPos.getDistanceBetween(playerPos);
-        
-
-        System.out.println("Merc" + mercPos + "Player" + playerPos);
 
         disPrev = mercPos.getDistanceBetween(playerPos);
 
@@ -162,8 +157,6 @@ public class MercenaryTest {
         mercPos = getEntities(move, "mercenary").get(0).getPosition();
         currDis = mercPos.getDistanceBetween(playerPos);
         assertTrue(disPrev > currDis);
-
-        System.out.println("Merc" + mercPos + "Player" + playerPos);
         
         boolean reached = false;
         for(int i = 0; i < 4; i++) {
@@ -312,7 +305,6 @@ public class MercenaryTest {
         Position mercP = getEntities(move, "mercenary").get(0).getPosition();
         Position playerP = getEntities(move, "player").get(0).getPosition();
         if (mercP.getDistanceBetween(playerP) == 1) {
-            // System.out.println("P" + mercP + " " + playerP);
             assertEquals(0, getInventory(move, "treasure").size());
             String mercId = getEntities(move, "mercenary").get(0).getId();
             assertThrows(InvalidActionException.class, () -> dmc.interact(mercId));
@@ -340,7 +332,6 @@ public class MercenaryTest {
             assertEquals(3, getInventory(move, "treasure").size());
             String mercId = getEntities(move, "mercenary").get(0).getId();
             assertDoesNotThrow(() -> dmc.interact(mercId));
-            // System.out.println("P" + mercP + " " + playerP);
             
         }
 

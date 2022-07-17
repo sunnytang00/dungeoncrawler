@@ -16,25 +16,24 @@ import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.*;
 
 public class GoalsTest {
-    // @Test
-    // @DisplayName("Simple goal testing only exist with no conditions")
-    // public void simpleGoalTestWithNoConditions() {
-    //     DungeonManiaController dmc;
-    //     dmc = new DungeonManiaController();
-    //     DungeonResponse res = dmc.newGame("d_movementTest_testMovementDown", "c_simpleGoalTest_noGoalConditions");
+    @Test
+    @DisplayName("Simple goal testing only exist with no conditions")
+    public void simpleGoalTestWithNoConditions() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_movementTest_testMovementDown", "c_simpleGoalTest_noGoalConditions");
 
-    //     assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":exit"));
 
-    //     // move player downward - goal still exist
-    //     res = dmc.tick(Direction.DOWN);
-    //     assertTrue(getGoals(res).contains(":exit"));
+        // move player downward - goal still exist
+        res = dmc.tick(Direction.DOWN);
+        assertTrue(getGoals(res).contains(":exit"));
 
-    //     // move player downward again - goal achieved
-    //     res = dmc.tick(Direction.DOWN);
-    //     System.out.println("goals" + getGoals(res));
-    //     assertTrue(getGoals(res).equals(""));
-    //     assertFalse(getGoals(res).contains(":exit"));
-    // }
+        // move player downward again - goal achieved
+        res = dmc.tick(Direction.DOWN);
+        assertTrue(getGoals(res).equals(""));
+        assertFalse(getGoals(res).contains(":exit"));
+    }
 
     @Test
     @DisplayName("Complex goal with AND and OR where goals become unachieved")
@@ -46,11 +45,6 @@ public class GoalsTest {
         assertTrue(getGoals(res).contains(":exit"));
         assertTrue(getGoals(res).contains(":boulders"));
         assertTrue(getGoals(res).contains(":enemies"));
-
-        // System.out.println("=======================================");
-        // System.out.println("Player: " + getEntities(res, "player").get(0).getPosition());
-        // System.out.println("Boulder: " + getEntities(res, "boulder").get(0).getPosition());
-        // System.out.println("Merc: " + getEntities(res, "mercenary").get(0).getPosition());
 
         // move boulder onto switch
         res = dmc.tick(Direction.RIGHT);
@@ -174,47 +168,6 @@ public class GoalsTest {
         assertFalse(getGoals(res).contains(":enemies"));
         assertTrue(getGoals(res).equals(""));
     }
-
-    // @Test
-    // @DisplayName("Test treasure goal unachieved")
-    // public void testTreasureUnachieved() {
-    //     DungeonManiaController dmc;
-    //     dmc = new DungeonManiaController();
-    //     DungeonResponse res = dmc.newGame("d_testTreasureGoalUnachieved", "c_complexGoalsTest_andAll");
-
-    //     assertTrue(getGoals(res).contains(":exit"));
-    //     assertTrue(getGoals(res).contains(":treasure"));
-
-    //     // player collect treasure
-    //     res = dmc.tick(Direction.RIGHT);
-    //     System.out.println("Player: " + getEntities(res, "player").get(0).getPosition());
-    //     System.out.println("Merc: " + getEntities(res, "mercenary").get(0).getPosition());
-    //     assertTrue(getGoals(res).contains(":exit"));
-    //     assertFalse(getGoals(res).contains(":treasure"));
-
-    //     // player use treasure to bribe mercenary - treasure unachieved
-    //     res = dmc.tick(Direction.RIGHT);
-    //     System.out.println("Player: " + getEntities(res, "player").get(0).getPosition());
-    //     System.out.println("Merc: " + getEntities(res, "mercenary").get(0).getPosition());
-    //     assertTrue(getGoals(res).contains(":exit"));
-    //     assertTrue(getGoals(res).contains(":treasure"));
-
-    //     // player collect treasure again
-    //     res = dmc.tick(Direction.RIGHT);
-    //     System.out.println("Player: " + getEntities(res, "player").get(0).getPosition());
-    //     System.out.println("Merc: " + getEntities(res, "mercenary").get(0).getPosition());
-    //     assertTrue(getGoals(res).contains(":exit"));
-    //     assertFalse(getGoals(res).contains(":treasure"));
-
-    //     // player exit successfully
-    //     res = dmc.tick(Direction.RIGHT);
-    //     System.out.println("Player: " + getEntities(res, "player").get(0).getPosition());
-    //     System.out.println("Merc: " + getEntities(res, "mercenary").get(0).getPosition());
-    //     assertTrue(getGoals(res).equals(""));
-    //     assertFalse(getGoals(res).contains(":exit"));
-    //     assertFalse(getGoals(res).contains(":treasure"));
-
-    // }
 
     @Test
     @DisplayName("Test merc can be bribed")

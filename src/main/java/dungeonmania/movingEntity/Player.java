@@ -1,7 +1,6 @@
 package dungeonmania.movingEntity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -184,16 +183,7 @@ public class Player extends MovingEntity {
         // create interact method in each entity
         if (entity instanceof Boulder) {
             interfereByEntity = pushBoulder(map, direction);
-        }
-        //  else if (entity instanceof Exit) {
-        //     // check if only goal left is exits
-        //     // if so exit, remove player from map, game wins
-        //     if (map.getRemainingConditions() == 1) {
-        //         map.setGameWin(true);
-        //         map.removePlayerFromMap(true);
-        //     }
-        // }
-        else if (entity instanceof Item) {
+        } else if (entity instanceof Item) {
             collectToInventory((Item) entity, map);
         } else if (entity instanceof Door) {
             // check if door is already opened 
@@ -284,7 +274,7 @@ public class Player extends MovingEntity {
                 }
                 
                 if (isInvincible()) {
-                    map.setGameWin(true);
+                    // map.setGameWin(true);
                     battles.add(currBattle);
                     game.addToBattles(currBattle);
                     return;
@@ -292,7 +282,7 @@ public class Player extends MovingEntity {
             }
         }
         game.addToBattles(currBattle);
-        map.setGameWin(true);
+        // map.setGameWin(true);
     }
 
     public List<Item> checkBattleBonuses(DungeonMap map) {

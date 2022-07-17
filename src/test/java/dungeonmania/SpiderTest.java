@@ -319,7 +319,6 @@ public class SpiderTest {
         // Assert Circular Movement of Spider
         for (int i = 0; i <= 10; ++i) {
             move = dmc.tick(Direction.UP);
-            //System.out.println(getEntities(move, "spider").get(0).getPosition());
             // since random could not use asset equals, but confirmed it is circuling spawn behavior
             nextPositionElement++;
             if (nextPositionElement == 8){

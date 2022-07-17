@@ -6,24 +6,11 @@ import java.util.stream.Collectors;
 
 import dungeonmania.movingEntity.*;
 import dungeonmania.response.models.*;
-import dungeonmania.Entity;
 import dungeonmania.util.*;
 import dungeonmania.StaticEntities.*;
 
 
 import java.util.ArrayList;
-
-import org.eclipse.jetty.websocket.api.InvalidWebSocketException;
-import org.json.JSONArray;
-import org.json.JSONML;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-import netscape.javascript.JSObject;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 public class DungeonMap {
     // assume mapEntities contain all current entities on the map
@@ -39,15 +26,6 @@ public class DungeonMap {
 
     public List<Entity> getMapEntities() {
         return mapEntities;
-    }
-
-    
-    public boolean isGameWin() {
-        return gameWin;
-    }
-
-    public void setGameWin(boolean gameWin) {
-        this.gameWin = gameWin;
     }
 
     public void setMapEntities(List<Entity> mapEntities) {
