@@ -19,7 +19,7 @@ public class RunAway implements MovingStrategy{
 
     @Override
     public void move(Enemy movingEntity, DungeonMap map) {
-
+        
         // change to observer pattern later?
         Player player = map.getPlayer();
         // if player invisible, move randomly
@@ -33,6 +33,7 @@ public class RunAway implements MovingStrategy{
                     List<Entity> atAdj = map.getEntityFromPos(pos);
                     if (atAdj == null || atAdj.size() == 0 || !movingEntity.blockedBy(atAdj)) {
                         moveablePos.add(pos);
+
                     }     
                 }
             }

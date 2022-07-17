@@ -25,7 +25,6 @@ public class Player extends MovingEntity {
 
     private boolean isInvisible;
     private boolean isInvincible;
-    private Position prevPosition;
     private PlayerState state;
     private List<Item> inventory = new ArrayList<Item>();
     private List<Enemy> battleQueue = new ArrayList<Enemy>();
@@ -38,7 +37,6 @@ public class Player extends MovingEntity {
 
     public Player(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
-        this.prevPosition = null;
         this.setHealth(JSONConfig.getConfig("player_health"));
         this.setAttack(JSONConfig.getConfig("player_attack"));
         this.setState(new PlayerDefaultState());
@@ -73,10 +71,6 @@ public class Player extends MovingEntity {
     }
 
     public Position getPrevPosition() {
-        return prevPosition;
-    }
-
-    public void setPrevPosition() {
         Direction newD = null;
         // can we use equals for comparing direction
         if (getDirection().equals(Direction.UP)) {
@@ -88,7 +82,7 @@ public class Player extends MovingEntity {
         } else if (getDirection().equals(Direction.RIGHT)) {
             newD = Direction.LEFT;
         }
-        this.prevPosition = getPosition().translateBy(newD);
+        return getPosition().translateBy(newD);
 
     }
 
@@ -420,6 +414,7 @@ public class Player extends MovingEntity {
             
             }
             inventory.remove(delete);
+            count++;
         }
     }
 

@@ -146,11 +146,12 @@ public class DungeonManiaController {
         DungeonGame dDame = new DungeonGame(goals.getGoalsAsString(map), inventory, null, null);
 
         List<ItemResponse> itemResponses = Helper.convertFromItem(inventory);
-
+        List<Enemy> enemies = new ArrayList<>();
         for (Entity entity : map.getMapEntities()) {
             if (entity instanceof Enemy) {
                 Enemy enemy = (Enemy) entity;
-                enemy.getMovingStrategy().move(enemy, map);
+                enemies.add(enemy);
+                enemy.move(enemy, map);
             }
             if (entity instanceof ZombieToastSpawner) {
                 ZombieToastSpawner ZTSpawner = (ZombieToastSpawner) entity;
@@ -159,6 +160,11 @@ public class DungeonManiaController {
                     zombiesToAdd.add(zombie);
                 }
             }
+        }
+
+        for (Enemy enemy : enemies) {
+            player.interactWithEnemies(enemy, map);
+            player.battleWithEnemies(map, game);
         }
         map.addEntitiesToMap(zombiesToAdd);
         Spider spiderToAdd = map.spawnSpider(game.getCurrentTick(), map);
@@ -181,7 +187,7 @@ public class DungeonManiaController {
         Player player = map.getPlayer();
         // potion effect
         player.playerPotionQueueUpdateTick();
-        // System.out.println("Invincible" + player.getState());
+        
         player.move(game, map, movementDirection);
         List<Enemy> enemies = new ArrayList<>();
         List<ZombieToast> zombiesToAdd = new ArrayList<>();
@@ -277,6 +283,7 @@ public class DungeonManiaController {
                 throw new IllegalArgumentException();
             }
             player.interactWithMercenary((Mercenary) interact, map);
+            
         }
         
         return getDungeonResponseModel();
