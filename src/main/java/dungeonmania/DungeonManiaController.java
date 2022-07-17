@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 
-
 public class DungeonManiaController {
 
     private DungeonMap map;
@@ -59,19 +58,23 @@ public class DungeonManiaController {
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
 
         JSONConfig.setConfig(configName);
-        // get initial entities from json dungeon map, create a dungeon map instance of the game and store all initial entities
+        // get initial entities from json dungeon map, create a dungeon map instance of
+        // the game and store all initial entities
         InputStream is = FileLoader.class.getResourceAsStream("/dungeons/" + dungeonName + ".json");
-        if (is == null) { throw new IllegalArgumentException(); }
+        if (is == null) {
+            throw new IllegalArgumentException();
+        }
         JSONMap jMap = new JSONMap(is);
-        
+
         List<Entity> entities = jMap.getInitialMapEntities();
         map = new DungeonMap(entities, dungeonName);
         goals = jMap.getComposedGoals(jMap.getGoals(), map);
-                
+
         List<EntityResponse> entityResponses = map.getEntityResponses();
         game = new DungeonGame(goals.getGoalsAsString(map), null, null, null);
-        
-        return new DungeonResponse(game.getDungeonId(), dungeonName, entityResponses, null, null, null, goals.getGoalsAsString(map));
+
+        return new DungeonResponse(game.getDungeonId(), dungeonName, entityResponses, null, null, null,
+                goals.getGoalsAsString(map));
     }
 
     /**
@@ -80,13 +83,21 @@ public class DungeonManiaController {
     public DungeonResponse getDungeonResponseModel() {
 
         Player player = map.getPlayer();
+        
         List<BattleResponse> battles = map.getBattleResponses(game.getBattles());
         if (player == null) {
-            return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), null, battles , null, goals.getGoalsAsString(map));
+            
+            return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), null,
+                    battles, null, goals.getGoalsAsString(map));
         }
-        // return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), player.getInventoryResponses(), battles , player.getBuildables(), game.getGoalsAsString());
-        return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), player.getInventoryResponses(), battles , player.getBuildables(), goals.getGoalsAsString(map));
-    
+
+        System.out.println("hello" + battles + player.isInvincible());
+        // return new DungeonResponse(game.getDungeonId(), map.getDungeonName(),
+        // map.getEntityResponses(), player.getInventoryResponses(), battles ,
+        // player.getBuildables(), game.getGoalsAsString());
+        return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(),
+                player.getInventoryResponses(), battles, player.getBuildables(), goals.getGoalsAsString(map));
+
     }
 
     /**
@@ -98,7 +109,7 @@ public class DungeonManiaController {
         }
 
         game.incrementTick();
-        
+
         Player player = map.getPlayer();
         List<Item> inventory = player.getInventory();
         Item targetItem = null;
@@ -125,19 +136,19 @@ public class DungeonManiaController {
         player.setInventory(inventory);
 
         if (targetItem instanceof Bomb) {
-            Bomb bomb = (Bomb)targetItem;
+            Bomb bomb = (Bomb) targetItem;
             Position newPosition = player.getPosition();
             bomb.setPosition(newPosition);
             bomb.explode(map);
         }
 
         if (targetItem instanceof InvincibilityPotion) {
-            InvincibilityPotion invincibilityPotion = (InvincibilityPotion)targetItem;
+            InvincibilityPotion invincibilityPotion = (InvincibilityPotion) targetItem;
             player.consumePotion(invincibilityPotion);
         }
 
         if (targetItem instanceof InvisibilityPotion) {
-            InvisibilityPotion invisibilityPotion = (InvisibilityPotion)targetItem;
+            InvisibilityPotion invisibilityPotion = (InvisibilityPotion) targetItem;
             player.consumePotion(invisibilityPotion);
         }
 
@@ -169,17 +180,18 @@ public class DungeonManiaController {
             player.interactWithEnemies(enemy, map);
             player.battleWithEnemies(map, game);
         }
+
         map.addEntitiesToMap(zombiesToAdd);
         Spider spiderToAdd = map.spawnSpider(game.getCurrentTick(), map);
 
-        if (spiderToAdd != null) { 
+        if (spiderToAdd != null) {
             map.addEntityToMap(spiderToAdd);
         }
         map.BoulderSwitchOverlap();
-        //return new DungeonResponse(dDame.getDungeonId(), map.getDungeonName(), entityResponses, itemResponses, null, null, goals);
+        // return new DungeonResponse(dDame.getDungeonId(), map.getDungeonName(),
+        // entityResponses, itemResponses, null, null, goals);
         return getDungeonResponseModel();
     }
-
 
     /**
      * /game/tick/movement
@@ -190,20 +202,17 @@ public class DungeonManiaController {
         Player player = map.getPlayer();
         // potion effect
         player.playerPotionQueueUpdateTick();
-        
+
         player.move(game, map, movementDirection);
         List<Enemy> enemies = new ArrayList<>();
         List<ZombieToast> zombiesToAdd = new ArrayList<>();
 
-        
         for (Entity entity : map.getMapEntities()) {
-             if (entity instanceof Enemy) {
+            if (entity instanceof Enemy) {
                 Enemy enemy = (Enemy) entity;
                 enemies.add(enemy);
                 enemy.move(enemy, map);
             }
-
- 
 
             if (entity instanceof ZombieToastSpawner) {
                 ZombieToastSpawner ZTSpawner = (ZombieToastSpawner) entity;
@@ -218,28 +227,29 @@ public class DungeonManiaController {
         for (Enemy enemy : enemies) {
             player.interactWithEnemies(enemy, map);
             player.battleWithEnemies(map, game);
+
         }
         map.addEntitiesToMap(zombiesToAdd);
-        
+
         Spider spiderToAdd = map.spawnSpider(game.getCurrentTick(), map);
 
-        if (spiderToAdd != null) { 
+        if (spiderToAdd != null) {
             map.addEntityToMap(spiderToAdd);
         }
         map.BoulderSwitchOverlap();
-        return getDungeonResponseModel();
-        
-    }
 
+        return getDungeonResponseModel();
+
+    }
 
     /**
      * /game/build
      */
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
-    
+
         Player player = map.getPlayer();
 
-        switch(buildable) {
+        switch (buildable) {
             case "bow":
                 Bow bow = new Bow(buildable);
                 bow.build(player.getInventory(), player, map);
@@ -286,12 +296,12 @@ public class DungeonManiaController {
                 throw new IllegalArgumentException();
             }
             player.interactWithMercenary((Mercenary) interact, map);
-            
+
         }
-        
+
         return getDungeonResponseModel();
     }
 
-    //HELPERS DOWN HERE
+    // HELPERS DOWN HERE
 
 }
