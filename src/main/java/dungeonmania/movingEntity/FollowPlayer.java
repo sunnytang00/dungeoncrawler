@@ -21,7 +21,7 @@ public class FollowPlayer implements MovingStrategy {
 
     // https://edstem.org/au/courses/8675/discussion/931224 moves closer in either x or y direction
     @Override
-    public void move(MovingEntity movingEntity, DungeonMap map) {
+    public void move(Enemy movingEntity, DungeonMap map) {
         
         // reach player if hasn't, once it reaches the Play
         // simply follows the Player around, occupying the square the player was previously in.

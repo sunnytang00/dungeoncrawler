@@ -181,6 +181,7 @@ public class DungeonManiaController {
         Player player = map.getPlayer();
         // potion effect
         player.playerPotionQueueUpdateTick();
+        // System.out.println("Invincible" + player.getState());
         player.move(game, map, movementDirection);
         List<Enemy> enemies = new ArrayList<>();
         List<ZombieToast> zombiesToAdd = new ArrayList<>();
@@ -190,7 +191,7 @@ public class DungeonManiaController {
              if (entity instanceof Enemy) {
                 Enemy enemy = (Enemy) entity;
                 enemies.add(enemy);
-                enemy.getMovingStrategy().move(enemy, map);
+                enemy.move(enemy, map);
             }
 
  

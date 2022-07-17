@@ -17,15 +17,17 @@ public class RandomSpawn implements MovingStrategy {
     // provided another entity doesn't stop them (e.g. a wall) -
     // except portals have no effect on them.
     @Override
-    public void move(MovingEntity movingEntity, DungeonMap map) {
+    public void move(Enemy movingEntity, DungeonMap map) {
         Position currPos = movingEntity.getPosition();
         
         List<Position> adjPos = currPos.getCardinallyAdjacentPositions();
         List<Position> moveablePos = new ArrayList<Position>();
         for (Position pos : adjPos) {
             List<Entity> atAdj = map.getEntityFromPos(pos);
+            //System.out.println("Zombie" + pos + " " + atAdj + " " + movingEntity.blockedBy(atAdj));
             if (atAdj == null || !movingEntity.blockedBy(atAdj)) {
                 moveablePos.add(pos);
+                
             }      
         }
         if (moveablePos != null && moveablePos.size() > 0) {

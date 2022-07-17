@@ -39,7 +39,7 @@ public class ZombieToastSpawner extends StaticEntity {
             }
         }
 
-        if ((currentTick % spawnrate == 0) && possibleSpawns != null) {
+        if ((currentTick % spawnrate == 0) && possibleSpawns != null && possibleSpawns.size() > 0) {
             
             return new ZombieToast("zombie_toast", getRandomPosition(possibleSpawns), true);
         }

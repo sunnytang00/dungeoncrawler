@@ -41,7 +41,7 @@ public class CirclingSpawn implements MovingStrategy {
 
 
     @Override
-    public void move(MovingEntity movingEntity, DungeonMap map) {
+    public void move(Enemy movingEntity, DungeonMap map) {
 
         Spider spider = (Spider) movingEntity;
         Position iniPos = spider.getInitialPosition();

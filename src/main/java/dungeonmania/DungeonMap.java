@@ -165,7 +165,7 @@ public class DungeonMap {
             }
         }
 
-        if (currentTick % spawnrate == 0 && possiblePos != null) {
+        if (currentTick % spawnrate == 0 && possiblePos != null && possiblePos.size() > 0) {
             return new Spider("spider", getRandomPosition(possiblePos), false);
         }
 

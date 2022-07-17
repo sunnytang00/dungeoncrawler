@@ -16,7 +16,7 @@ public class MoveTowardsPlayer implements MovingStrategy {
 
     // https://edstem.org/au/courses/8675/discussion/931224 moves closer in either x or y direction
     @Override
-    public void move(MovingEntity movingEntity, DungeonMap map) {
+    public void move(Enemy movingEntity, DungeonMap map) {
         
         // change to observer pattern later?
         Player player = map.getPlayer();

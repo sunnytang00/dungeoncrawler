@@ -509,19 +509,22 @@ public class Player extends MovingEntity {
         if (teleport == null) { return teleportByPortal; }
 
         List<Position> telePositions = teleport.getCardinallyAdjacentPositions();
+        List<Position> possiblePos = new ArrayList<Position>();
         Position followDir = teleport.translateBy(getDirection());
-        for (Position pos : telePositions) {
-            List<Entity> entitiesAtPos = map.getEntityFromPos(pos);
-            if (entitiesAtPos != null && (map.containsType(entitiesAtPos,"wall") || 
-                map.containsType(entitiesAtPos,"door"))) {
-                    telePositions.remove(pos);
+        if (telePositions != null && telePositions.size() > 0) {
+            for (Position pos : telePositions) {
+                List<Entity> entitiesAtPos = map.getEntityFromPos(pos);
+                if (entitiesAtPos == null || (!map.containsType(entitiesAtPos,"wall") &&
+                    !map.containsType(entitiesAtPos,"door"))) {
+                        possiblePos.add(pos);
+                }
             }
         }
-        if (telePositions != null) {
-            if (telePositions.contains(followDir)) {
+        if (possiblePos != null && possiblePos.size() != 0) {
+            if (possiblePos.contains(followDir)) {
                 this.setPosition(followDir);
             } else {
-                this.setPosition(telePositions.get(0));
+                this.setPosition(possiblePos.get(0));
             }
             teleportByPortal = true;
             Position teleportedP = this.getPosition();
