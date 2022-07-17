@@ -31,8 +31,6 @@ public class Player extends MovingEntity {
     private PotionQueue potionQueue = new PotionQueue();
     private Potion currPotion = null;
     private Key currKey = null;
-    private boolean playerWin = false;
-    private boolean playerDied = false;
     private int slayedEnemy = 0;
 
     public Player(String type, Position position, boolean isInteractable) {
@@ -42,17 +40,6 @@ public class Player extends MovingEntity {
         this.setState(new PlayerDefaultState());
         state.playerStateChange(this);
     }
-
-    
-    public boolean isPlayerDied() {
-        return playerDied;
-    }
-
-
-    public void setPlayerDied(boolean playerDied) {
-        this.playerDied = playerDied;
-    }
-
 
     public boolean isInvisible() {
         return isInvisible;
@@ -111,17 +98,6 @@ public class Player extends MovingEntity {
     public void setCurrKey(Key currKey) {
         this.currKey = currKey;
     }
-
-
-    public boolean isPlayerWin() {
-        return playerWin;
-    }
-
-
-    public void setPlayerWin(boolean playerWin) {
-        this.playerWin = playerWin;
-    }
-
 
     public int getWealth() {
         int totalTreasure = (int) inventory.stream().filter(i -> i instanceof Treasure).count();
@@ -211,6 +187,10 @@ public class Player extends MovingEntity {
         } else if (entity instanceof Exit) {
             // check if only goal left is exits
             // if so exit, remove player from map, game wins
+            if (map.getRemainingConditions() == 1) {
+                map.setGameWin(true);
+                map.removeEntityFromMap(this);
+            }
 
         } else if (entity instanceof Item) {
             collectToInventory((Item) entity, map);
@@ -287,7 +267,7 @@ public class Player extends MovingEntity {
 
                 if (newHealth <= 0) {
                     game.addToBattles(currBattle);
-                    setPlayerDied(true);
+                    map.removeEntityFromMap(this);
                     return;
                     // return battles;
                 } else if (enemyHealth <= 0) {
@@ -298,7 +278,7 @@ public class Player extends MovingEntity {
                 }
                 
                 if (isInvincible()) {
-                    setPlayerWin(true);
+                    map.setGameWin(true);
                     battles.add(currBattle);
                     game.addToBattles(currBattle);
                     return;
@@ -306,7 +286,7 @@ public class Player extends MovingEntity {
             }
         }
         game.addToBattles(currBattle);
-        setPlayerWin(true);
+        map.setGameWin(true);
     }
 
     public List<Item> checkBattleBonuses(DungeonMap map) {

@@ -43,6 +43,7 @@ public class GoalsTest {
 
         // move player downward again - goal achieved
         res = dmc.tick(Direction.DOWN);
+        System.out.println("goals" + getGoals(res));
         assertTrue(getGoals(res).equals(""));
         assertFalse(getGoals(res).contains(":exit"));
     }

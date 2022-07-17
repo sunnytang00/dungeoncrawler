@@ -30,6 +30,7 @@ public class DungeonMap {
     private List<Entity> mapEntities = new ArrayList<Entity>();
     private String dungeonName;
     private int remainingConditions;
+    private boolean gameWin = false;
 
     public DungeonMap(List<Entity> mapEntities, String dungeonName) {
         this.mapEntities = mapEntities;
@@ -38,6 +39,15 @@ public class DungeonMap {
 
     public List<Entity> getMapEntities() {
         return mapEntities;
+    }
+
+    
+    public boolean isGameWin() {
+        return gameWin;
+    }
+
+    public void setGameWin(boolean gameWin) {
+        this.gameWin = gameWin;
     }
 
     public void setMapEntities(List<Entity> mapEntities) {
@@ -199,5 +209,6 @@ public class DungeonMap {
             }
         }
     }
+
 }
 
