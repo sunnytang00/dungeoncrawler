@@ -137,26 +137,26 @@ public class BattleTest {
     }
 
 
-    private void assertBattleCalculations3(String enemyType, BattleResponse battle, boolean enemyDies, String configFilePath) {
-        List<RoundResponse> rounds = battle.getRounds();
-        double playerHealth = Double.parseDouble(getValueFromConfigFile("player_health", configFilePath));
-        double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType + "_health", configFilePath));
-        double playerAttack = Double.parseDouble(getValueFromConfigFile("player_attack", configFilePath));
-        double enemyAttack = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
+    // private void assertBattleCalculations3(String enemyType, BattleResponse battle, boolean enemyDies, String configFilePath) {
+    //     List<RoundResponse> rounds = battle.getRounds();
+    //     double playerHealth = Double.parseDouble(getValueFromConfigFile("player_health", configFilePath));
+    //     double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType + "_health", configFilePath));
+    //     double playerAttack = Double.parseDouble(getValueFromConfigFile("player_attack", configFilePath));
+    //     double enemyAttack = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
 
-        for (RoundResponse round : rounds) {
-            assertEquals(-(enemyAttack / 10), round.getDeltaCharacterHealth(), 0.001);
-            assertEquals(-(playerAttack / 5), round.getDeltaEnemyHealth(), 0.001);
-            enemyHealth += round.getDeltaEnemyHealth();
-            playerHealth += round.getDeltaCharacterHealth();
-        }
+    //     for (RoundResponse round : rounds) {
+    //         assertEquals(-(enemyAttack / 10), round.getDeltaCharacterHealth(), 0.001);
+    //         assertEquals(-(playerAttack / 5), round.getDeltaEnemyHealth(), 0.001);
+    //         enemyHealth += round.getDeltaEnemyHealth();
+    //         playerHealth += round.getDeltaCharacterHealth();
+    //     }
 
-        if (enemyDies) {
-            assertTrue(enemyHealth <= 0);
-        } else {
-            assertTrue(playerHealth <= 0);
-        }
-    }
+    //     if (enemyDies) {
+    //         assertTrue(enemyHealth <= 0);
+    //     } else {
+    //         assertTrue(playerHealth <= 0);
+    //     }
+    // }
 
 
 
@@ -172,7 +172,6 @@ public class BattleTest {
         
         Position spi = getEntities(move, "spider").get(0).getPosition();
         ItemResponse res = getInventory(move, "invincibility_potion").get(0);
-        System.out.println(res.getId());
         DungeonResponse consume = dmc.tick(res.getId());
         assertEquals(0, getInventory(consume, "invincibility_potion").size());
         assertEquals(0, getEntities(consume, "invincibility_potion").size());

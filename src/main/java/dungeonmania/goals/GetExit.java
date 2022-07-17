@@ -14,13 +14,6 @@ public class GetExit extends LeafGoal {
 
     @Override
     public boolean isAchieved(DungeonMap map) {
-        // if (map.getRemainingConditions() > 1) { 
-        //     return false; 
-        // }
-        // if (map.getPlayer() == null && !map.gameResult()) {
-        //     return false;
-        // }
-
         if (map.getRemainingConditions() > 1 || map.getPlayer() == null) { 
             return false; 
         }

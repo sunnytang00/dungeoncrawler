@@ -203,7 +203,6 @@ public class Player extends MovingEntity {
     }
 
     public void interactWithEnemies(Enemy enemy, DungeonMap map) {
-        // System.out.println("enemies" + enemy.getPosition() + this.getPosition());
         if (enemy.getPosition().equals(this.getPosition()) && !enemy.becomeAlly()) {
             battleQueue.add(enemy);
             
@@ -211,7 +210,6 @@ public class Player extends MovingEntity {
     }
 
     public void battleWithEnemies(DungeonMap map, DungeonGame game) {
-        // System.out.println("battleWithEnemies" + battleQueue);
         if (battleQueue.size() <= 0) {
             return;
         }

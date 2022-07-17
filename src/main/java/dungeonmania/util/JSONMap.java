@@ -7,16 +7,12 @@ import dungeonmania.movingEntity.*;
 import dungeonmania.entities.collectableEntities.*;
 import dungeonmania.goals.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-import netscape.javascript.JSObject;
 import java.io.InputStream;
 
 public class JSONMap {

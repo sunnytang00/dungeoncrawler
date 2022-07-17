@@ -18,16 +18,6 @@ public class Round {
         this.weaponryUsed = weaponryUsed;
     }
 
-    public double getDeltaCharacterHealth(){
-        return deltaPlayerHealth;
-    }
-    
-    public double getDeltaEnemyHealth(){
-        return deltaEnemyHealth;
-    }
-
-    public List<Item> getWeaponryUsed() { return weaponryUsed; }
-
     public List<ItemResponse> getItemResponses(List<Item> items) {
         return items.stream().map(Item::getItemResponse).collect(Collectors.toList());
     }
