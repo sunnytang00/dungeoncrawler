@@ -31,10 +31,6 @@ public class DungeonGame {
         return dungeonId;
     }
 
-    public String getGoals() {
-        return goals;
-    }
-
     public List<Item> getInventory() {
         return inventories;
     }
@@ -50,10 +46,6 @@ public class DungeonGame {
     public void setDungeonId(String dungeonId) {
         this.dungeonId = dungeonId;
     }
-
-    // public void setGoals(String goals) {
-    //     this.goals = goals;
-    // }
 
     public void setInventories(List<Item> inventories) {
         this.inventories = inventories;

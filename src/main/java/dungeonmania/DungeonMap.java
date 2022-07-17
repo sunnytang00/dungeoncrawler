@@ -29,7 +29,7 @@ public class DungeonMap {
     // assume mapEntities contain all current entities on the map
     private List<Entity> mapEntities = new ArrayList<Entity>();
     private String dungeonName;
-    private int remainingConditions;
+    private int remainingConditions; 
     private boolean gameWin = false;
 
     public DungeonMap(List<Entity> mapEntities, String dungeonName) {
@@ -130,6 +130,20 @@ public class DungeonMap {
 
     public void removeEntityFromMap(Entity entity) {
         mapEntities.remove(entity);
+    }
+
+    /**
+     * 
+     * @param wins
+     *        true if player wins the game, false if player loses the game
+     */
+    public void removePlayerFromMap(boolean wins) {
+        mapEntities.remove(getPlayer());
+        gameWin = wins;
+    }
+
+    public boolean gameResult() {
+        return gameWin;
     }
 
     public boolean checkIfEntityAdjacentIsPushable(Entity entity, Direction direction) {

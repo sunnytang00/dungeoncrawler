@@ -184,15 +184,16 @@ public class Player extends MovingEntity {
         // create interact method in each entity
         if (entity instanceof Boulder) {
             interfereByEntity = pushBoulder(map, direction);
-        } else if (entity instanceof Exit) {
-            // check if only goal left is exits
-            // if so exit, remove player from map, game wins
-            if (map.getRemainingConditions() == 1) {
-                map.setGameWin(true);
-                map.removeEntityFromMap(this);
-            }
-
-        } else if (entity instanceof Item) {
+        }
+        //  else if (entity instanceof Exit) {
+        //     // check if only goal left is exits
+        //     // if so exit, remove player from map, game wins
+        //     if (map.getRemainingConditions() == 1) {
+        //         map.setGameWin(true);
+        //         map.removePlayerFromMap(true);
+        //     }
+        // }
+        else if (entity instanceof Item) {
             collectToInventory((Item) entity, map);
         } else if (entity instanceof Door) {
             // check if door is already opened 
@@ -267,7 +268,8 @@ public class Player extends MovingEntity {
 
                 if (newHealth <= 0) {
                     game.addToBattles(currBattle);
-                    map.removeEntityFromMap(this);
+                    // map.removeEntityFromMap(this);
+                    map.removePlayerFromMap(false);
                     return;
                     // return battles;
                 } else if (enemyHealth <= 0) {

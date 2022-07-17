@@ -22,6 +22,7 @@ public class CompositeAnd extends CompositeGoal{
         String subgoal1 = getSubgoal1().getGoalsAsString(map);
         String subgoal2 = getSubgoal2().getGoalsAsString(map);
         String str = "(" + subgoal1 + " AND " + subgoal2 + ")";
+
         return str;
     }
 }
