@@ -160,27 +160,27 @@ public class BattleTest {
 
 
 
-    // @Test
-    // @DisplayName("Test battle when player in invincible state")
-    // public void testBattleInvincible() throws IllegalArgumentException, InvalidActionException  {
+    @Test
+    @DisplayName("Test battle when player in invincible state")
+    public void testBattleInvincible() throws IllegalArgumentException, InvalidActionException  {
 
-    //     DungeonManiaController dmc = new DungeonManiaController();
+        DungeonManiaController dmc = new DungeonManiaController();
 
-    //     DungeonResponse intialResponse = dmc.newGame("d_battleTest_invincibleEffect", "no_spider_spawning");
+        DungeonResponse intialResponse = dmc.newGame("d_battleTest_invincibleEffect", "no_spider_spawning");
 
-    //     DungeonResponse move = dmc.tick(Direction.RIGHT);
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
         
-    //     Position spi = getEntities(move, "spider").get(0).getPosition();
-    //     ItemResponse res = getInventory(move, "invincibility_potion").get(0);
-    //     System.out.println(res.getId());
-    //     DungeonResponse consume = dmc.tick(res.getId());
-    //     assertEquals(0, getInventory(consume, "invincibility_potion").size());
-    //     assertEquals(0, getEntities(consume, "invincibility_potion").size());
+        Position spi = getEntities(move, "spider").get(0).getPosition();
+        ItemResponse res = getInventory(move, "invincibility_potion").get(0);
+        System.out.println(res.getId());
+        DungeonResponse consume = dmc.tick(res.getId());
+        assertEquals(0, getInventory(consume, "invincibility_potion").size());
+        assertEquals(0, getEntities(consume, "invincibility_potion").size());
 
-    //     assertEquals(0, countEntityOfType(consume, "spider"));
+        assertEquals(1, countEntityOfType(consume, "spider"));
        
         
-    // }
+    }
 
 
 
