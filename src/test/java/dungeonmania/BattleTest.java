@@ -136,6 +136,94 @@ public class BattleTest {
        assertBattleCalculations2("spider", battle, true, "c_battleTests_basicSpiderSpiderDies copy");
     }
 
+    @Test
+    @DisplayName("Test battle when player in invincible state")
+    public void testBattleInvincible() throws IllegalArgumentException, InvalidActionException  {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse intialResponse = dmc.newGame("d_mercTest_invincibleEffect", "c_testSpawning");
+
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+        ItemResponse res = getInventory(move, "invincibility_potion").get(0);
+        DungeonResponse consume = dmc.tick(res.getId());
+
+        assertEquals(0, getInventory(consume, "invincibility_potion").size());
+        assertEquals(0, getEntities(consume, "invincibility_potion").size());
+
+        assertEquals(1, countEntityOfType(consume, "mercenary"));
+
+        move = dmc.tick(Direction.DOWN);
+        Position prevPos = getEntities(move, "mercenary").get(0).getPosition();
+        Position prevPlayer = getEntities(move, "player").get(0).getPosition();
+        // Assert Movement of zombie away from player
+
+            
+        move = dmc.tick(Direction.RIGHT);
+        Position playerPosition = getEntities(move, "player").get(0).getPosition();
+        Position pos = getEntities(move, "mercenary").get(0).getPosition();
+        double diff = pos.getDistanceBetween(prevPlayer) - prevPos.getDistanceBetween(prevPlayer);
+        assertTrue(diff >= 0);
+
+        prevPos = pos;
+        prevPlayer = playerPosition;
+
+        move = dmc.tick(Direction.RIGHT);
+        playerPosition = getEntities(move, "player").get(0).getPosition();
+        pos = getEntities(move, "mercenary").get(0).getPosition();
+        diff = pos.getDistanceBetween(prevPlayer) - prevPos.getDistanceBetween(prevPlayer);
+        assertTrue(diff >= 0);
+
+        prevPos = pos;
+        prevPlayer = playerPosition;
+
+        move = dmc.tick(Direction.RIGHT);
+        playerPosition = getEntities(move, "player").get(0).getPosition();
+        pos = getEntities(move, "mercenary").get(0).getPosition();
+        diff = pos.getDistanceBetween(prevPlayer) - prevPos.getDistanceBetween(prevPlayer);
+        assertTrue(diff >= 0);
+
+        move = dmc.tick(Direction.UP);
+        playerPosition = getEntities(move, "player").get(0).getPosition();
+        pos = getEntities(move, "mercenary").get(0).getPosition();
+        diff = pos.getDistanceBetween(prevPlayer) - prevPos.getDistanceBetween(prevPlayer);
+        assertTrue(diff >= 0);
+    }
+
+    @Test
+    @DisplayName("Test not battle with merc when player in invisible state")
+    public void testBattleInvisible() throws IllegalArgumentException, InvalidActionException  {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse intialResponse = dmc.newGame("d_mercTest_invincibleEffect", "simple");
+
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+        ItemResponse res = getInventory(move, "invincibility_potion").get(0);
+        DungeonResponse consume = dmc.tick(res.getId());
+
+        assertEquals(0, getInventory(consume, "invincibility_potion").size());
+        assertEquals(0, getEntities(consume, "invincibility_potion").size());
+
+        assertEquals(1, countEntityOfType(consume, "mercenary"));
+
+        move = dmc.tick(Direction.RIGHT);
+        Position mercPrev = getEntities(move, "mercenary").get(0).getPosition();
+        res = getInventory(move, "invisibility_potion").get(0);
+        consume = dmc.tick(res.getId());
+
+        assertEquals(0, getInventory(consume, "invincibility_potion").size());
+        assertEquals(0, getEntities(consume, "invincibility_potion").size());
+
+        Position playerP = getEntities(consume, "player").get(0).getPosition();
+        Position mercP = getEntities(consume, "mercenary").get(0).getPosition();
+
+        List<Position> positions = mercPrev.getCardinallyAdjacentPositions();
+        assertTrue(positions.contains(mercP));
+
+        
+    }
+
 
     
 }
