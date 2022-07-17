@@ -27,10 +27,6 @@ public abstract class Item extends Entity {
         super(type, position);
     }
 
-    public int getUsedTimes() {
-        return usedTimes;
-    }
-
     public void setUsedTimes(int usedTimes) {
         this.usedTimes = usedTimes;
     }
@@ -40,9 +36,9 @@ public abstract class Item extends Entity {
      * to the used times
      * @return
      */
-    public boolean canBeStillUsed() {
-        return usedTimes > 0;
-    }
+    // public boolean canBeStillUsed() {
+    //     return usedTimes > 0;
+    // }
 
     public ItemResponse getItemResponse() {
         return new ItemResponse(getId(), getType());
