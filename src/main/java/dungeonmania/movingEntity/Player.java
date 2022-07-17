@@ -213,15 +213,19 @@ public class Player extends MovingEntity {
     }
 
     public void interactWithEnemies(Enemy enemy, DungeonMap map) {
+        // System.out.println("enemies" + enemy.getPosition() + this.getPosition());
         if (enemy.getPosition().equals(this.getPosition()) && !enemy.becomeAlly()) {
             battleQueue.add(enemy);
+            
         }
     }
 
     public void battleWithEnemies(DungeonMap map, DungeonGame game) {
+        // System.out.println("battleWithEnemies" + battleQueue);
         if (battleQueue.size() <= 0) {
             return;
         }
+        
         List<Battle> battles = new ArrayList<Battle>();
         double iniPlayerHealth = this.getHealth();
         Battle currBattle = null;

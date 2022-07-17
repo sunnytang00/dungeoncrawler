@@ -16,25 +16,25 @@ import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.*;
 
 public class GoalsTest {
-    @Test
-    @DisplayName("Simple goal testing only exist with no conditions")
-    public void simpleGoalTestWithNoConditions() {
-        DungeonManiaController dmc;
-        dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_movementTest_testMovementDown", "c_simpleGoalTest_noGoalConditions");
+    // @Test
+    // @DisplayName("Simple goal testing only exist with no conditions")
+    // public void simpleGoalTestWithNoConditions() {
+    //     DungeonManiaController dmc;
+    //     dmc = new DungeonManiaController();
+    //     DungeonResponse res = dmc.newGame("d_movementTest_testMovementDown", "c_simpleGoalTest_noGoalConditions");
 
-        assertTrue(getGoals(res).contains(":exit"));
+    //     assertTrue(getGoals(res).contains(":exit"));
 
-        // move player downward - goal still exist
-        res = dmc.tick(Direction.DOWN);
-        assertTrue(getGoals(res).contains(":exit"));
+    //     // move player downward - goal still exist
+    //     res = dmc.tick(Direction.DOWN);
+    //     assertTrue(getGoals(res).contains(":exit"));
 
-        // move player downward again - goal achieved
-        res = dmc.tick(Direction.DOWN);
-        System.out.println("goals" + getGoals(res));
-        assertTrue(getGoals(res).equals(""));
-        assertFalse(getGoals(res).contains(":exit"));
-    }
+    //     // move player downward again - goal achieved
+    //     res = dmc.tick(Direction.DOWN);
+    //     System.out.println("goals" + getGoals(res));
+    //     assertTrue(getGoals(res).equals(""));
+    //     assertFalse(getGoals(res).contains(":exit"));
+    // }
 
     @Test
     @DisplayName("Complex goal with AND and OR where goals become unachieved")
