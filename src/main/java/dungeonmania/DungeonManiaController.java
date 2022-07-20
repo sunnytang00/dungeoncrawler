@@ -297,6 +297,7 @@ public class DungeonManiaController {
         return null;
     }
 
+
     /**
      * /games/all
      */
