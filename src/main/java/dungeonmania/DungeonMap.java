@@ -154,7 +154,7 @@ public class DungeonMap {
     public Spider spawnSpider(int currentTick, DungeonMap map) {
         int spawnrate = JSONConfig.getConfig("spider_spawn_rate");
         if (spawnrate == 0 ) { return null;}
-
+        if (getPlayer() == null) {return null;}
         Position playerPos = getPlayer().getPosition();
         List<Position> adjPos = playerPos.getPositionsWithInBox(7);
         List<Position> possiblePos = new ArrayList<Position>();
