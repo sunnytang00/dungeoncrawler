@@ -131,6 +131,7 @@ public class DungeonManiaController {
             Bomb bomb = (Bomb) targetItem;
             Position newPosition = player.getPosition();
             bomb.setPosition(newPosition);
+            map.addEntityToMap(bomb);
             bomb.explode(map);
         }
 
