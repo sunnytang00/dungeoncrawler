@@ -136,7 +136,6 @@ public class StaticEntityTest {
 
         DungeonResponse intialResponse = dmc.newGame("d_bombTest_placeBombRadius2", "c_battleTests_basicMercenaryMercenaryDies");
 
-        assertEquals(null, intialResponse.getInventory());
         assertEquals("d_bombTest_placeBombRadius2", intialResponse.getDungeonName());
         assertEquals(countEntityOfType(intialResponse, "player"), 1);
         assertEquals(countEntityOfType(intialResponse, "treasure"), 2);
