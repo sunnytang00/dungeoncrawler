@@ -1,7 +1,6 @@
 package dungeonmania.movingEntity;
 
 import java.util.Arrays;
-import java.util.List;
 
 import dungeonmania.DungeonMap;
 import dungeonmania.util.Position;

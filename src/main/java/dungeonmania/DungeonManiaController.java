@@ -62,9 +62,15 @@ public class DungeonManiaController {
         goals = jMap.getComposedGoals(jMap.getGoals(), map);
 
         List<EntityResponse> entityResponses = map.getEntityResponses();
-        game = new DungeonGame(goals.getGoalsAsString(map), null, null, null);
+        List<Item> inventoryItems = new ArrayList<Item>();
+        List<ItemResponse> inventoryResponses = new ArrayList<ItemResponse>();
+        List<Battle> battles = new ArrayList<Battle>();
+        List<BattleResponse> battleResponses = new ArrayList<BattleResponse>();
+        List<String> buildableItems = new ArrayList<String>();
 
-        return new DungeonResponse(game.getDungeonId(), dungeonName, entityResponses, null, null, null,
+        game = new DungeonGame(goals.getGoalsAsString(map), inventoryItems, battles, buildableItems);
+
+        return new DungeonResponse(game.getDungeonId(), dungeonName, entityResponses, inventoryResponses, battleResponses, buildableItems,
                 goals.getGoalsAsString(map));
     }
 
@@ -125,6 +131,7 @@ public class DungeonManiaController {
             Bomb bomb = (Bomb) targetItem;
             Position newPosition = player.getPosition();
             bomb.setPosition(newPosition);
+            map.addEntityToMap(bomb);
             bomb.explode(map);
         }
 

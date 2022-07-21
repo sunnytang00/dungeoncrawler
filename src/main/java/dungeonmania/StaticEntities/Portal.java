@@ -16,7 +16,7 @@ public class Portal extends StaticEntity {
     public Portal(String type, Position position, String colour) {
         super(type, position, colour);
         this.pair = null;
-        setType("portal_" + colour);
+        setType("portal_" + colour.toLowerCase());
     }
     
     /**
