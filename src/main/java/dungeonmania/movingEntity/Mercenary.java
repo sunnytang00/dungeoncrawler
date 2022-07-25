@@ -3,6 +3,7 @@ package dungeonmania.movingEntity;
 import java.util.Arrays;
 
 import dungeonmania.DungeonMap;
+import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
 public class Mercenary extends BribableEnemy {
@@ -18,6 +19,7 @@ public class Mercenary extends BribableEnemy {
         setMovingStrategy(new MoveTowardsPlayer());
         setState(new MercViciousState());
         getState().currentState(this);
+        this.setBribeAmount((int) JSONConfig.getConfig("bribe_amount"));
         this.setNonTraversibles(Arrays.asList("wall", "door"));
     }
     
@@ -64,25 +66,18 @@ public class Mercenary extends BribableEnemy {
     }
 
 
-    public boolean isInRad(DungeonMap map) {
-        boolean inRadius = false;
-
-        Player player = map.getPlayer();
-        Position playerPos = player.getPosition();
-        Position mercPos = this.getPosition();
-        if (mercPos.getDistanceBetween(playerPos) <= this.getBribeRadius()) {
-            inRadius = true;
-        }
-
-        return inRadius;
-    }
-
     @Override
     public boolean becomeAlly() {
         if (isBribed) {
             return true;
         }
         return false;
+    }
+
+    public void bribe() {
+        this.setState(new MercBribedState());
+        getState().currentState(this);
+        setInteractable(false);
     }
 
 }

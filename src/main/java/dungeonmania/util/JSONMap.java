@@ -65,6 +65,8 @@ public class JSONMap {
                 entity = new ZombieToast(type, position, false); break;
             case "mercenary":
                 entity = new Mercenary(type, position, true); break;
+            case "assassin":
+                entity = new Assassin(type, position, true); break;
             case "treasure":
                 entity = new Treasure(type, position); break;
             case "key":

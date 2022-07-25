@@ -15,9 +15,9 @@ public class Shield extends Weapon implements ItemBuildable {
 
     public Shield(String type) {
         super(type);
-        setDurability(JSONConfig.getConfig("shield_durability"));
+        setDurability((int) JSONConfig.getConfig("shield_durability"));
         setDamageValue(0);
-        setDefence(JSONConfig.getConfig("shield_defence"));
+        setDefence((int) JSONConfig.getConfig("shield_defence"));
     }
     
     public void build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException {

@@ -12,11 +12,11 @@ public class JSONConfig {
         JSONConfig.fileName = fileName;
     }
 
-    public static int getConfig(String field) throws IllegalArgumentException {
+    public static double getConfig(String field) throws IllegalArgumentException {
         InputStream is = FileLoader.class.getResourceAsStream("/configs/" + fileName + ".json");
         if (is == null) { throw new IllegalArgumentException(); }
         JSONTokener tokener = new JSONTokener(is);
         JSONObject object = new JSONObject(tokener);
-        return object.getInt(field);
+        return object.getDouble(field);
     }
 }

@@ -113,9 +113,9 @@ public class Player extends MovingEntity {
         this.slayedEnemy = slayedEnemy;
     }
 
-    public boolean hasEnoughToBribe() {
+    public boolean hasEnoughToBribe(Mercenary merc) {
         boolean enoughWealth = false;
-        if (this.getWealth() >= JSONConfig.getConfig("bribe_amount")) {
+        if (this.getWealth() >= merc.getBribeAmount()) {
             enoughWealth = true;
         }
         return enoughWealth;
@@ -367,7 +367,7 @@ public class Player extends MovingEntity {
         if (currPotion != null) { 
             if (currPotion instanceof InvincibilityPotion) {
                 setState(new InvincibleState());
-            } else if (currPotion instanceof InvisibilityPotion){
+            } else if (currPotion instanceof InvisibilityPotion) {
                 setState(new InvisibleState());
             }
         } else {
@@ -522,14 +522,13 @@ public class Player extends MovingEntity {
 
     public void interactWithMercenary(Mercenary merc, DungeonMap map) throws InvalidActionException {
     
-        if (!merc.isInRad(map)) {
-            throw new InvalidActionException("Mercenary not in radius");
-        } else if (!this.hasEnoughToBribe()) {
+        if (!merc.isInRad(map, merc.getBribeRadius())) {
+            throw new InvalidActionException("Bribable enemy not in radius");
+        } else if (!hasEnoughToBribe(merc)) {
             throw new InvalidActionException("Player does not have enough treasure to bribe");
         } else {
-            merc.setState(new MercBribedState());
-            merc.getState().currentState(merc);
-            consumeInventory("treasure", JSONConfig.getConfig("bribe_amount"));
+            merc.bribe();
+            consumeInventory("treasure", merc.getBribeAmount());
         }
         
     }
