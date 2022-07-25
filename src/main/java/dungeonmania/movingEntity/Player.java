@@ -236,6 +236,10 @@ public class Player extends MovingEntity {
                 }
                 double deltaPlayerHealth = - enemy.getAttack()/10;
                 double deltaEnemyHealth = - getAttack()/5;
+                if (enemy instanceof Hydra) {
+                    Hydra hydra = (Hydra) enemy;
+                    deltaEnemyHealth = hydra.inBattle(deltaEnemyHealth);
+                }
                 if (hasShield) {
                     deltaEnemyHealth *= 2;
                 }

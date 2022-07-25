@@ -177,7 +177,6 @@ public class BattleTest {
         assertEquals(0, getEntities(consume, "invincibility_potion").size());
 
         assertEquals(1, countEntityOfType(consume, "spider"));
-       
         
     }
 

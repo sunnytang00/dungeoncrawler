@@ -51,8 +51,8 @@ public class Assassin extends Mercenary {
     @Override
     public void bribe() {
         Random random = new Random();
-        int num = random.nextInt(100);
-        double threshold = 100 * JSONConfig.getConfig("assassin_bribe_fail_rate");
+        int num = random.nextInt(1000);
+        double threshold = 1000 * JSONConfig.getConfig("assassin_bribe_fail_rate");
         if (num > threshold) {
             this.setState(new MercBribedState());
             getState().currentState(this);

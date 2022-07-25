@@ -67,6 +67,8 @@ public class JSONMap {
                 entity = new Mercenary(type, position, true); break;
             case "assassin":
                 entity = new Assassin(type, position, true); break;
+            case "hydra":
+                entity = new Hydra(type, position, false); break;
             case "treasure":
                 entity = new Treasure(type, position); break;
             case "key":

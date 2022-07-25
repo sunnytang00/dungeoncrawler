@@ -120,7 +120,7 @@ public class AssassinTest {
     }
 
     @Test
-    @DisplayName("Test merc move in advance map")
+    @DisplayName("Test assassin move in advance map")
     public void testmercAdvanceMap() {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse initDungonRes = dmc.newGame("d_basicAssassin", "M3_config");
