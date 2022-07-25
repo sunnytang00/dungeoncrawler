@@ -16,7 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DungeonManiaController {
-
+    
+    private ArrayList<DungeonMap> mapList;
+    private ArrayList<DungeonGame> gameList;
     private DungeonMap map;
     private DungeonGame game;
     private Goals goals;
@@ -69,6 +71,9 @@ public class DungeonManiaController {
         List<String> buildableItems = new ArrayList<String>();
 
         game = new DungeonGame(goals.getGoalsAsString(map), inventoryItems, battles, buildableItems);
+
+        gameList.add(game);
+        mapList.add(map);
 
         return new DungeonResponse(game.getDungeonId(), dungeonName, entityResponses, inventoryResponses, battleResponses, buildableItems,
                 goals.getGoalsAsString(map));
@@ -179,6 +184,10 @@ public class DungeonManiaController {
             map.addEntityToMap(spiderToAdd);
         }
         map.BoulderSwitchOverlap();
+        
+        gameList.add(game);
+        mapList.add(map);
+
         return getDungeonResponseModel();
     }
 
@@ -226,7 +235,10 @@ public class DungeonManiaController {
         }
         map.BoulderSwitchOverlap();
 
-        return getDungeonResponseModel();
+        gameList.add(game);
+        mapList.add(map);
+
+        return getDungeonResponseModel();   
 
     }
 
@@ -310,6 +322,27 @@ public class DungeonManiaController {
      */
     public List<String> allGames() {
         return new ArrayList<>();
+    }
+
+    public DungeonResponse rewind(int ticks) throws IllegalArgumentException {
+
+        int gameSize = gameList.size();
+        //arraylist of dungresponse should look like 0, 1, 2, 3, 4 so size = 5
+        if (ticks <= 0) {
+            throw new IllegalArgumentException("The number of ticks must be > 0");
+        }
+
+        if (ticks >= gameSize) {
+            throw new IllegalArgumentException("The number of ticks has not occured yet");
+        }
+
+        if (gameSize > ticks) {//We should be in here if there are no problems
+            game = gameList.get((gameSize - ticks) - 1);
+            map = mapList.get((gameSize - ticks) - 1);
+        }
+
+        return getDungeonResponseModel();
+        
     }
 
 }

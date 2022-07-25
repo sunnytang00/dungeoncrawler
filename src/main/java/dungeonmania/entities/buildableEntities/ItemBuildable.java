@@ -17,6 +17,14 @@ public interface ItemBuildable {
      * The shield type name
      */
     String BUILDABLE_TYPE_SHIELD = "shield";
+    /**
+     * Sceptre name
+     */
+    String BUILDABLE_TYPE_SCEPTRE = "sceptre";
+    /**
+     * Armour name
+     */
+    String BUILDABLE_TYPE_MIDNIGHT_ARMOUR = "midnight_armour";
 
     /**
      * Build the complex items by the passing simple items
