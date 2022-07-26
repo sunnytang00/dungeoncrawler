@@ -25,7 +25,7 @@ public class ZombieToastSpawner extends StaticEntity {
      * @param spawnTick zombe_spawn_rate, read in from the config file
      */
     public ZombieToast spawnZombie(int currentTick, DungeonMap map) {
-        int spawnrate = JSONConfig.getConfig("zombie_spawn_rate");
+        int spawnrate = (int) JSONConfig.getConfig("zombie_spawn_rate");
         if (spawnrate == 0 ) { return null;}
 
         List<Position> cardinallyAdj = this.getPosition().getCardinallyAdjacentPositions();

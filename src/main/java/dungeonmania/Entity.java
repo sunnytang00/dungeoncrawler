@@ -69,4 +69,14 @@ public abstract class Entity {
         return colour;
     }
 
+    public boolean isInteractable() {
+        return isInteractable;
+    }
+
+    public void setInteractable(boolean isInteractable) {
+        this.isInteractable = isInteractable;
+    }
+
+    
+
 }

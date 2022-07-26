@@ -33,7 +33,6 @@ public class RunAway implements MovingStrategy{
                     List<Entity> atAdj = map.getEntityFromPos(pos);
                     if (atAdj == null || atAdj.size() == 0 || !movingEntity.blockedBy(atAdj)) {
                         moveablePos.add(pos);
-
                     }     
                 }
             }
@@ -41,6 +40,7 @@ public class RunAway implements MovingStrategy{
         if (moveablePos == null || moveablePos.size() == 0) {
             return;
         }
+
         movingEntity.setPosition(getRandomPosition(moveablePos));
         
     }

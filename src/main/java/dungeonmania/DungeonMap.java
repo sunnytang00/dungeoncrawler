@@ -152,7 +152,7 @@ public class DungeonMap {
      * @param spawnTick spider_spawn_rate, read in from the config file
      */
     public Spider spawnSpider(int currentTick, DungeonMap map) {
-        int spawnrate = JSONConfig.getConfig("spider_spawn_rate");
+        int spawnrate = (int) JSONConfig.getConfig("spider_spawn_rate");
         if (spawnrate == 0 ) { return null;}
         if (getPlayer() == null) {return null;}
         Position playerPos = getPlayer().getPosition();

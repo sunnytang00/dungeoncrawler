@@ -23,6 +23,7 @@ public class PotionQueue {
         if (currentPotion.getTicks() == 0) {
             potionQueue.remove(currentPotion);
         }
+
         return currentPotion;
     }
 
