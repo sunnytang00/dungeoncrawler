@@ -8,6 +8,7 @@ import dungeonmania.util.JSONMap;
 import dungeonmania.entities.buildableEntities.*;
 import dungeonmania.entities.collectableEntities.*;
 import dungeonmania.movingEntity.*;
+import dungeonmania.StaticEntities.TimeTravellingPortal;
 import dungeonmania.StaticEntities.ZombieToastSpawner;
 import dungeonmania.entities.*;
 
@@ -200,6 +201,12 @@ public class DungeonManiaController {
         // potion effect
         player.playerPotionQueueUpdateTick();
 
+        //Time travelling portal
+        Position nextPos = player.getPosition().translateBy(movementDirection);
+        if (map.getEntityFromPos(nextPos).stream().anyMatch(x -> x instanceof TimeTravellingPortal)) {
+            rewind(30);
+        }
+        
         player.move(game, map, movementDirection);
         List<Enemy> enemies = new ArrayList<>();
         List<ZombieToast> zombiesToAdd = new ArrayList<>();
