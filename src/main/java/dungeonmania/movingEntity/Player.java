@@ -100,8 +100,10 @@ public class Player extends MovingEntity {
 
     public int getWealth() {
         int totalTreasure = (int) inventory.stream().filter(i -> i instanceof Treasure).count();
+        int totalSunstone = (int) inventory.stream().filter(i -> i instanceof SunStone).count();
         
-        return totalTreasure;
+        int totalWealth = totalTreasure + totalSunstone;
+        return totalWealth;
     }
 
     public int getSlayedEnemy(){
@@ -191,11 +193,15 @@ public class Player extends MovingEntity {
             Door door = (Door) entity;
             int doorKeyId = door.getKeyID();
             currKey = getCurrKey();
-            if (currKey != null && (currKey.getDoorKeyId() == doorKeyId)) {
+            int totalSunstone = (int) inventory.stream().filter(i -> i instanceof SunStone).count();
 
+            // assume sunstone always used first when it comes to open doors
+            if (totalSunstone > 0) {
+                door.unlockDoorThroughSunstone();
+            } else if (currKey != null && (currKey.getDoorKeyId() == doorKeyId)) {
                 door.unlockDoor(currKey);
                 inventory.remove(currKey);
-            }
+            } 
         } else if (entity instanceof Portal) {
             interfereByEntity = teleportThroughPortal(entity, map);
         }

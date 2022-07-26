@@ -71,6 +71,8 @@ public class JSONMap {
                 entity = new Hydra(type, position, false); break;
             case "treasure":
                 entity = new Treasure(type, position); break;
+            case "sun_stone":
+                entity = new SunStone(type, position); break; 
             case "key":
                 entity = new Key(type, position, obj.getInt("key")); break;
             case "invincibility_potion":
