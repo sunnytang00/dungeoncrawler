@@ -19,7 +19,7 @@ public class Bomb extends Item {
     }
 
     public int getBombRadius() {
-        return JSONConfig.getConfig("bomb_radius");
+        return (int) JSONConfig.getConfig("bomb_radius");
     }
 
     public void explode(DungeonMap map) {

@@ -17,7 +17,7 @@ public abstract class MovingEntity extends Entity  {
     private List<String> nontraversibles = new ArrayList<String>();
 
     public MovingEntity(String type, Position position, boolean isInteractable) {
-        super(type, position);
+        super(type, position, isInteractable);
         this.initialPosition = position;
         this.nontraversibles = null;
     }
