@@ -24,6 +24,11 @@ public class Door extends StaticEntity {
         return keyID;
     }
 
+    public void unlockDoorThroughSunstone() {
+        setTraversable(true);
+        setType("door_open");
+    }
+
     
     
 }
