@@ -17,7 +17,7 @@ public class Bow extends Weapon implements ItemBuildable {
 
     public Bow(String type) {
         super(type);
-        setDurability(JSONConfig.getConfig("bow_durability"));
+        setDurability((int) JSONConfig.getConfig("bow_durability"));
         setDamageValue(0);
         setDefence(0);
     }

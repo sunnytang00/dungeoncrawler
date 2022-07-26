@@ -6,7 +6,7 @@
   "bribe_amount": 1,
   "bribe_radius": 1,
   "enemy_goal": 1,
-  "invincibility_potion_duration": 10,
+  "invincibility_potion_duration": 1,
   "invisibility_potion_duration": 10,
   "mercenary_attack": 20,
   "mercenary_health": 10,
@@ -16,7 +16,7 @@
   "shield_durability": 1,
   "spider_attack": 20,
   "spider_health": 5,
-  "spider_spawn_rate": 1,
+  "spider_spawn_rate": 2,
   "sword_attack": 2,
   "sword_durability": 1,
   "treasure_goal": 1,
@@ -27,6 +27,6 @@
   "assassin_bribe_amount": 1,
   "assassin_bribe_fail_rate": 0.3,
   "assassin_health": 10,
-  "assassin_recon_radius": 5
+  "assassin_recon_radius": 20
   
 }
