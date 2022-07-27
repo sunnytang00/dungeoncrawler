@@ -79,6 +79,36 @@ public class AdvanceMoveTest {
     }
 
     @Test
+    @DisplayName("Test enemy stuck for 0 ticks")
+    public void testStuckfor0Ticks() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse intialResponse = dmc.newGame("d_testSwamp0", "M3_config");
+
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+        Position playerPos = getEntities(move, "player").get(0).getPosition();
+        Position mercPos = getEntities(move, "mercenary").get(0).getPosition();
+        
+        assertEquals(playerPos.getX(), 1);
+        assertEquals(playerPos.getY(), 1);
+        assertEquals(mercPos.getX(), 2);
+        assertEquals(mercPos.getY(), 1);
+
+        move = dmc.tick(Direction.LEFT);
+        playerPos = getEntities(move, "player").get(0).getPosition();
+        mercPos = getEntities(move, "mercenary").get(0).getPosition();
+
+        assertEquals(playerPos.getX(), 0);
+        assertEquals(playerPos.getY(), 1);
+        assertEquals(mercPos.getX(), 1);
+        assertEquals(mercPos.getY(), 1);
+
+
+
+    }
+
+    @Test
     @DisplayName("Test enemy stuck for 4 ticks")
     public void testStuckfor4Ticks() {
 
