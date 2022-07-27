@@ -87,6 +87,18 @@ public class JSONMap {
                 entity = new Bomb(type, position); break;
             case "sword":
                 entity = new Sword(type, position); break;
+            case "swamp_tile":
+                // entity = new SwampTile(type, position, obj.getInt("movement_factor")); break;
+            case "time_turner":
+                // entity = new TimeTurner(type, position); break;
+            case "time_travelling_portal":
+                // entity = new TimeTravellingPortal(type, position); break;
+            case "light_bulb_off":
+                // entity = new LightBulb(type, position); break;
+            case "wire":
+                // entity = new Wire(type, position); break;
+            case "switch_door":
+                // entity = new SwitchDoor(type, position); break;
         }
         initialMapEntities.add(entity);
     }
@@ -97,30 +109,6 @@ public class JSONMap {
 
     public JSONObject getGoals() {
         return JSONgoals;
-    }
-
-    public Goals getComposedGoals(JSONObject goals, DungeonMap map) {
-        switch(goals.getString("goal")) {
-            case "AND":
-                JSONArray subgoalsAnd = goals.getJSONArray("subgoals");
-                CompositeGoal compositeAndGoal = new CompositeAnd(getComposedGoals(subgoalsAnd.getJSONObject(0), map),
-                                                                  getComposedGoals(subgoalsAnd.getJSONObject(1), map));
-                return compositeAndGoal;
-            case "OR":
-                JSONArray subgoalsOr = goals.getJSONArray("subgoals");
-                CompositeGoal compositeOrGoal = new CompositeOr(getComposedGoals(subgoalsOr.getJSONObject(0), map),
-                                                                 getComposedGoals(subgoalsOr.getJSONObject(1), map));
-                return compositeOrGoal;
-            case "exit":
-                return new GetExit(map);
-            case "enemies":
-                return new DestroyEnemy(map);
-            case "boulders":
-                return new BoulderOnSwitch(map);
-            case "treasure":
-                return new CollectTreasure(map);
-        }
-        return null;
     }
 
 }
