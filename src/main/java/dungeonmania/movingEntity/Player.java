@@ -411,7 +411,7 @@ public class Player extends MovingEntity {
         return inventory.stream().map(Item::getItemResponse).collect(Collectors.toList());
     }
 
-    public List<String> getBuildables() {
+    public List<String> getBuildables(DungeonMap map) {
 
         List<String> ret = new ArrayList<String>();
         
@@ -421,6 +421,14 @@ public class Player extends MovingEntity {
 
         if (canBuildShield()) {
             ret.add("shield");
+        }
+
+        if (canBuildArmour(map)) {
+            ret.add("midnight_armour");
+        }
+
+        if (canBuildSceptre()) {
+            ret.add("sceptre");
         }
         
         return ret;
@@ -471,6 +479,71 @@ public class Player extends MovingEntity {
             }
 
             if ((woodNumber >= 1) && (arrowsNumber >= 3)) {
+                return true;
+            } else {
+                return false;
+            }
+                
+        }
+        return false;
+    }
+
+    public boolean canBuildArmour(DungeonMap map) {
+
+        if (!inventory.isEmpty()) {
+            int sunStoneNum = 0;
+            int swordNum = 0;
+            
+            for (Item item : inventory) {
+
+                if (item instanceof SunStone) {
+                    sunStoneNum++;
+                }
+
+                if (item instanceof Sword) {
+                    swordNum++;
+                }
+            }
+
+            if ((sunStoneNum >= 1) && (swordNum >= 1) && (map.getEntitiesFromType(map.getMapEntities(), "zombie").isEmpty())) {
+                return true;
+            } else {
+                return false;
+            }
+                
+        }
+        return false;
+
+    }
+
+    public boolean canBuildSceptre() {
+
+        if (!inventory.isEmpty()) {
+            int woodNumber = 0;
+            int arrowsNumber = 0;
+            int keyOrTreasureNum = 0;
+            int sunStoneNum = 0;
+
+            for (Item item : inventory) {
+
+                if (item instanceof Wood) {
+                    woodNumber++;
+                }
+
+                if (item instanceof Arrows) {
+                    arrowsNumber++;
+                }
+
+                if ((item instanceof Treasure) || (item instanceof Key)) {
+                    keyOrTreasureNum++;
+                }
+
+                if (item instanceof SunStone) {
+                    sunStoneNum++;
+                }
+            }
+
+            if (((woodNumber >= 1) || (arrowsNumber >= 2)) && (keyOrTreasureNum >= 1) && (sunStoneNum >= 1)) {
                 return true;
             } else {
                 return false;
