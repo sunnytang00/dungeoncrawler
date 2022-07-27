@@ -22,6 +22,10 @@ public class DungeonManiaController {
     private DungeonGame game;
     private ArrayList<DungeonMap> mapList = new ArrayList<DungeonMap>();
     private ArrayList<DungeonGame> gameList = new ArrayList<DungeonGame>();
+    private ArrayList<DungeonMap> mapsToPlayOut = new ArrayList<DungeonMap>();
+    private ArrayList<DungeonGame> gamesToPlayOut = new ArrayList<DungeonGame>();
+    private boolean timeTravelled = false;
+
 
     private Goals goals;
 
@@ -205,6 +209,7 @@ public class DungeonManiaController {
         
         Position nextPos = player.getPosition().translateBy(movementDirection);
         if (map.getEntityFromPos(nextPos).stream().anyMatch(x -> x instanceof TimeTravellingPortal)) {
+            player.move(game, map, movementDirection);
             rewind(30);
         }
 
@@ -347,14 +352,16 @@ public class DungeonManiaController {
 
     /**
      * Rewind
-     * @param ticks
+     * @param ticks<
      * @return
      * @throws IllegalArgumentException
      */
 
     public DungeonResponse rewind(int ticks) throws IllegalArgumentException {
-
+        timeTravelled = true;
         int gameSize = gameList.size();
+        int idx;
+        Position playerPosition = map.getPlayer().getPosition();
         //arraylist of dungresponse should look like 0, 1, 2, 3, 4 so size = 5
         if (ticks <= 0) {
             throw new IllegalArgumentException("The number of ticks must be > 0");
@@ -364,10 +371,27 @@ public class DungeonManiaController {
             throw new IllegalArgumentException("The number of ticks has not occured yet");
         }
 
-        if (gameSize > ticks) {//We should be in here if there are no problems
-            game = gameList.get((gameSize - ticks) - 1);
+        for (DungeonMap map: mapList) {//Change all player entitys in previous states to type older_player
+            map.changePlayerToOlder();
+        }
+        
+        for (idx = gameSize - ticks; idx < gameSize; idx++) {//Add the games that need to be played out to a new list
+            gamesToPlayOut.add(gameList.get(idx));
+            mapsToPlayOut.add(mapList.get(idx));
+        } 
+
+        if (ticks == 30 && (gameList.size() < 30)) {//If we go through portal and we have been through < 30 ticks, we go back to initial state
+            map = mapList.get(0);
+            game = gameList.get(0);
+
+        } else if (gameSize > ticks) {//We should be in here if there are no problems
+            game = gameList.get((gameSize - ticks) - 1);//Set the current game and map state to the rewinded one
             map = mapList.get((gameSize - ticks) - 1);
         }
+
+        map.addEntityToMap(new Player("player", playerPosition, false));
+
+        
 
         return getDungeonResponseModel();
         
