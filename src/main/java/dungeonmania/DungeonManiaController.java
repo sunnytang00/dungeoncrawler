@@ -266,6 +266,16 @@ public class DungeonManiaController {
                 Shield shield = new Shield(buildable);
                 shield.build(player.getInventory(), player, map);
                 break;
+            
+            case "sceptre":
+                Sceptre sceptre = new Sceptre(buildable);
+                sceptre.build(player.getInventory(), player, map);
+                break;
+            
+            case "midnight_armour":
+                MidnightArmour armour = new MidnightArmour(buildable);
+                armour.build(player.getInventory(), player, map);
+                break;
 
             default:
                 throw new IllegalArgumentException(buildable + " is not one of bow, shield");

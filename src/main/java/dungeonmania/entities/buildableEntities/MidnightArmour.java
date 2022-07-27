@@ -14,7 +14,7 @@ public class MidnightArmour extends Weapon implements ItemBuildable {
 
     public MidnightArmour(String type) {
         super(type);
-        setDurability(999999999);
+        
         setDamageValue(JSONConfig.getConfig("midnight_armour_attack"));
         setDefence(JSONConfig.getConfig("midnight_armour_defence"));
     }

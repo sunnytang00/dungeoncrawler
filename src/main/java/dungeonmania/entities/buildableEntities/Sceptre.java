@@ -71,5 +71,7 @@ public class Sceptre extends Item implements ItemBuildable {
         ass.setState(new MercBribedState());
     }
 
+    
+
 }
 

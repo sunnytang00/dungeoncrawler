@@ -214,6 +214,48 @@ public class ItemTest {
 
     }
 
+    @Test
+    public void TestBuildSceptre() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse initialResponse = dmc.newGame("build_sceptre_and_armour", "c_battleTests_basicMercenaryMercenaryDies");
+        
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+        for (int i = 0; i < 3; i++) {//move right 3 times, 0 1 2
+            move = dmc.tick(Direction.RIGHT);
+        }
+
+        List<String> buildables = new ArrayList<>();
+        buildables.add("sceptre");
+        assertListAreEqualIgnoringOrder(buildables, move.getBuildables());
+        move = dmc.build("sceptre");
+        buildables.remove(0);
+        assertListAreEqualIgnoringOrder(buildables, move.getBuildables());
+
+    }
+
+    @Test
+    public void TestBuildArmour() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse initialResponse = dmc.newGame("build_sceptre_and_armour", "c_battleTests_basicMercenaryMercenaryDies");
+        
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+        for (int i = 0; i < 2; i++) {//move right 2 times, 0 1 
+            move = dmc.tick(Direction.RIGHT);
+        }
+
+        List<String> buildables = new ArrayList<>();
+        buildables.add("midnight_armour");
+        assertListAreEqualIgnoringOrder(buildables, move.getBuildables());
+        move = dmc.build("midnight_armour");
+        buildables.remove(0);
+        assertListAreEqualIgnoringOrder(buildables, move.getBuildables());
+
+    }
+
 
 
 
