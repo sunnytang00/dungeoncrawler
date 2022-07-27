@@ -8,6 +8,7 @@ import dungeonmania.util.JSONMap;
 import dungeonmania.entities.buildableEntities.*;
 import dungeonmania.entities.collectableEntities.*;
 import dungeonmania.movingEntity.*;
+import dungeonmania.StaticEntities.TimeTravellingPortal;
 import dungeonmania.StaticEntities.ZombieToastSpawner;
 import dungeonmania.entities.*;
 
@@ -19,6 +20,9 @@ public class DungeonManiaController {
 
     private DungeonMap map;
     private DungeonGame game;
+    private ArrayList<DungeonMap> mapList = new ArrayList<DungeonMap>();
+    private ArrayList<DungeonGame> gameList = new ArrayList<DungeonGame>();
+
     private Goals goals;
 
     public String getSkin() {
@@ -69,6 +73,10 @@ public class DungeonManiaController {
         List<String> buildableItems = new ArrayList<String>();
 
         game = new DungeonGame(goals.getGoalsAsString(map), inventoryItems, battles, buildableItems);
+        
+        gameList.add(game);
+        mapList.add(map);
+
 
         return new DungeonResponse(game.getDungeonId(), dungeonName, entityResponses, inventoryResponses, battleResponses, buildableItems,
                 goals.getGoalsAsString(map));
@@ -88,7 +96,7 @@ public class DungeonManiaController {
                     battles, null, goals.getGoalsAsString(map));
         }
         return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(),
-                player.getInventoryResponses(), battles, player.getBuildables(), goals.getGoalsAsString(map));
+                player.getInventoryResponses(), battles, player.getBuildables(map), goals.getGoalsAsString(map));
 
     }
 
@@ -179,6 +187,10 @@ public class DungeonManiaController {
             map.addEntityToMap(spiderToAdd);
         }
         map.BoulderSwitchOverlap();
+
+        gameList.add(game);
+        mapList.add(map);
+
         return getDungeonResponseModel();
     }
 
@@ -190,6 +202,12 @@ public class DungeonManiaController {
         Player player = map.getPlayer();
         // potion effect
         player.playerPotionQueueUpdateTick();
+        
+        Position nextPos = player.getPosition().translateBy(movementDirection);
+        if (map.getEntityFromPos(nextPos).stream().anyMatch(x -> x instanceof TimeTravellingPortal)) {
+            rewind(30);
+        }
+
 
         player.move(game, map, movementDirection);
         List<Enemy> enemies = new ArrayList<>();
@@ -226,6 +244,10 @@ public class DungeonManiaController {
         }
         map.BoulderSwitchOverlap();
 
+        gameList.add(game);
+        mapList.add(map);
+
+
         return getDungeonResponseModel();
 
     }
@@ -248,8 +270,19 @@ public class DungeonManiaController {
                 shield.build(player.getInventory(), player, map);
                 break;
 
+            case "sceptre":
+                Sceptre sceptre = new Sceptre(buildable);
+                sceptre.build(player.getInventory(), player, map);
+                break;
+            
+            case "midnight_armour":
+                MidnightArmour armour = new MidnightArmour(buildable);
+                armour.build(player.getInventory(), player, map);
+                break;
+
+
             default:
-                throw new IllegalArgumentException(buildable + " is not one of bow, shield");
+                throw new IllegalArgumentException(buildable + " is not one of bow, shield, midnight_armour or sceptre");
 
         }
 
@@ -311,5 +344,34 @@ public class DungeonManiaController {
     public List<String> allGames() {
         return new ArrayList<>();
     }
+
+    /**
+     * Rewind
+     * @param ticks
+     * @return
+     * @throws IllegalArgumentException
+     */
+
+    public DungeonResponse rewind(int ticks) throws IllegalArgumentException {
+
+        int gameSize = gameList.size();
+        //arraylist of dungresponse should look like 0, 1, 2, 3, 4 so size = 5
+        if (ticks <= 0) {
+            throw new IllegalArgumentException("The number of ticks must be > 0");
+        }
+
+        if (ticks >= gameSize) {
+            throw new IllegalArgumentException("The number of ticks has not occured yet");
+        }
+
+        if (gameSize > ticks) {//We should be in here if there are no problems
+            game = gameList.get((gameSize - ticks) - 1);
+            map = mapList.get((gameSize - ticks) - 1);
+        }
+
+        return getDungeonResponseModel();
+        
+    }
+
 
 }
