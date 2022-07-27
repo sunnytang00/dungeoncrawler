@@ -30,7 +30,11 @@ public class Assassin extends Mercenary {
                 setMovingStrategy(new FollowPlayer());
             }   
         }
-        getMovingStrategy().move(this, map);  
+        
+        this.stuckOnSwamp(map);
+        if (getRemainingStuckTicks() == 0) {
+            getMovingStrategy().move(this, map);  
+        } 
     }
 
     public void moveWhenInvisible(DungeonMap map) {

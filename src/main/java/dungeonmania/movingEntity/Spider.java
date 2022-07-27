@@ -23,7 +23,10 @@ public class Spider extends Enemy {
     
     @Override
     public void move(Enemy movingEntity, DungeonMap map) {
-        getMovingStrategy().move(this, map);  
+        this.stuckOnSwamp(map);
+        if (getRemainingStuckTicks() == 0) {
+            getMovingStrategy().move(this, map);  
+        } 
     }
 
     public boolean isClockwiseMove() {
