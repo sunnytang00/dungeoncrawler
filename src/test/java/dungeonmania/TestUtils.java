@@ -43,6 +43,7 @@ public class TestUtils {
 
     public static String getGoals(DungeonResponse dr) {
         String goals = dr.getGoals();
+        // System.out.println("utils: " + goals);
         return goals != null ? goals : "";
     }
 
