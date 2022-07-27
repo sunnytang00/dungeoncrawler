@@ -407,6 +407,10 @@ public class Player extends MovingEntity {
         return inventory.stream().anyMatch(i -> i.getType().equals("key"));
     }
 
+    public boolean hasSceptre() {
+        return inventory.stream().anyMatch(i -> i.getType().equals("sceptre"));
+    }
+
     public List<ItemResponse> getInventoryResponses() {
         return inventory.stream().map(Item::getItemResponse).collect(Collectors.toList());
     }
@@ -605,13 +609,20 @@ public class Player extends MovingEntity {
 
     public void interactWithMercenary(Mercenary merc, DungeonMap map) throws InvalidActionException {
     
-        if (!merc.isInRad(map, merc.getBribeRadius())) {
+        if (!merc.isInRad(map, merc.getBribeRadius()) && !hasSceptre()) {
             throw new InvalidActionException("Bribable enemy not in radius");
-        } else if (!hasEnoughToBribe(merc)) {
-            throw new InvalidActionException("Player does not have enough treasure to bribe");
+        } else if (!hasEnoughToBribe(merc) && !hasSceptre()) {
+            throw new InvalidActionException("Player does not have enough treasure and does not have a sceptre to bribe/mind-control enemy");
         } else {
-            merc.bribe();
-            consumeInventory("treasure", merc.getBribeAmount());
+            if (hasSceptre()) {
+                merc.mindControl();
+                // assume sceptre can be consumed like potion and can only be used once
+                consumeInventory("sceptre", 1);
+            } else if (hasEnoughToBribe(merc) && !hasSceptre()) {
+                merc.bribe();
+                merc.setBribedByTreasure(true);
+                consumeInventory("treasure", merc.getBribeAmount());
+            }
         }
         
     }

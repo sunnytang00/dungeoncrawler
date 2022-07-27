@@ -16,11 +16,8 @@ import java.util.List;
 
 public class Sceptre extends Item implements ItemBuildable {
 
-    private int mindControlDuration;
-
     public Sceptre(String type) {
         super(type);
-        this.mindControlDuration = (int)JSONConfig.getConfig("mind_control_duration");
     }
     
     public void build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException {
@@ -64,12 +61,5 @@ public class Sceptre extends Item implements ItemBuildable {
         }
     }
 
-    public void mindControl(Mercenary merc) {
-        merc.setState(new MercBribedState());
-    }
-
-    public void mindControl(Assassin ass) {
-        ass.setState(new MercBribedState());
-    }
 
 }
