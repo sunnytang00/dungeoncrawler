@@ -189,6 +189,15 @@ public class DungeonMap {
         return list.get(rand.nextInt(list.size()));
     }
 
+    public void changePlayerToOlder() {
+        for (Entity entity : mapEntities) {
+            if (entity instanceof Player) {
+                entity.setType("older_player");
+                break;
+            }
+        }
+    }
+
     public boolean containsType(List<Entity> entities, String type) {
         boolean found = entities.stream().anyMatch(entity -> entity.getType().equals(type));
         return found;    
