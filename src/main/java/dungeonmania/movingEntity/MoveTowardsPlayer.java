@@ -33,73 +33,37 @@ public class MoveTowardsPlayer implements MovingStrategy {
         if (playerPos.equals(currPos)) {
             return;
         }
-        List<Position> adjPos = currPos.getCardinallyAdjacentPositions();
-        List<Position> moveablePos = new ArrayList<Position>();
-        List<Position> moveablePasswall = new ArrayList<Position>();
-        if (adjPos != null && adjPos.size() > 0) {
-            for (Position pos : adjPos) {
-                if (pos.getDistanceBetween(playerPos) < currPos.getDistanceBetween(playerPos)) {
-                    List<Entity> atAdj = map.getEntityFromPos(pos);
-                    if (atAdj == null || atAdj.size() == 0|| !movingEntity.blockedBy(atAdj)) {
-                        moveablePos.add(pos);
-                    } 
-                } else {
-                    // find the empty spot not blocked by wall
-                    List<Entity> atAdj = map.getEntityFromPos(pos);
-                    if (atAdj == null || atAdj.size() == 0|| !movingEntity.blockedBy(atAdj)) {
-                        moveablePasswall.add(pos);
-                    } 
-                }
+
+        List<Position> grid = getGrid(playerPos, currPos);
+        Map<Position,Position> prev = Dijkstras(grid, currPos, movingEntity, map);
+        Position newPos = prev.get(playerPos);
+        if (newPos != null && newPos.equals(nextPos)) {
+            nextPos = playerPos;
+        } else {
+            while (newPos != null && !currPos.equals(newPos)) {
+                nextPos = newPos;
+                newPos = prev.get(newPos);
             }
         }
-        if (moveablePos != null && moveablePos.size() > 0) {
-            movingEntity.setPosition(getRandomPosition(moveablePos));
 
-        } else if (moveablePasswall != null && moveablePasswall.size() > 0) {
-            // find spot to pass around walls
-            movingEntity.setPosition(getRandomPosition(moveablePasswall));
+        movingEntity.setPosition(nextPos);
+    }
+
+    public List<Position> getGrid(Position playerPos, Position enemyPos) {
+        int pX = playerPos.getX();
+        int pY = playerPos.getY();
+        int eX = enemyPos.getX();
+        int eY = enemyPos.getY();
+        List<Position> grid = new ArrayList<Position>();
+
+        for (int x = Math.min(pX, eX); x <= Math.max(pX,eX); x++) {
+            for (int y = Math.min(pY, eY); y <= Math.max(pY,eY); y++) {
+                grid.add(new Position(x, y));
+            }
         }
 
-
-        // List<Position> grid = getGrid(playerPos, currPos);
-        // Map<Position,Position> prev = Dijkstras(grid, currPos, movingEntity, map);
-        // Position newPos = prev.get(playerPos);
-        // if (newPos != null && newPos.equals(nextPos)) {
-        //     nextPos = playerPos;
-        // } else {
-        //     while (newPos != null && !currPos.equals(newPos)) {
-        //         nextPos = newPos;
-        //         newPos = prev.get(newPos);
-        //     }
-        // }
-
-        // movingEntity.setPosition(nextPos);
+        return grid;
     }
-
-
-    // Randomly select items from a List in Java
-    // Reference: https://www.geeksforgeeks.org/randomly-select-items-from-a-list-in-java/
-
-    public Position getRandomPosition(List<Position> list) {
-        Random rand = new Random();
-        return list.get(rand.nextInt(list.size()));
-    }
-
-    // public List<Position> getGrid(Position playerPos, Position enemyPos) {
-    //     int pX = playerPos.getX();
-    //     int pY = playerPos.getY();
-    //     int eX = enemyPos.getX();
-    //     int eY = enemyPos.getY();
-    //     List<Position> grid = new ArrayList<Position>();
-
-    //     for (int x = Math.min(pX, eX); x <= Math.max(pX,eX); x++) {
-    //         for (int y = Math.min(pY, eY); y <= Math.max(pY,eY); y++) {
-    //             grid.add(new Position(x, y));
-    //         }
-    //     }
-
-    //     return grid;
-    // }
 
     /*
     function Dijkstras(grid, source):
@@ -125,51 +89,51 @@ public class MoveTowardsPlayer implements MovingStrategy {
     //  swamp tile is taken into acount
     //! but portal is not, remember now mercenary and assassin can choose to move through protal if portal move is beneficial
 
-    // public Map<Position, Position> Dijkstras(List<Position> gridPositions, Position src, Enemy movingEntity, DungeonMap map){
+    public Map<Position, Position> Dijkstras(List<Position> gridPositions, Position src, Enemy movingEntity, DungeonMap map){
 
-    //     Map<Position, Double> dist = new HashMap<Position, Double>();
-    //     Map<Position, Position> prev = new HashMap<Position, Position>();
+        Map<Position, Double> dist = new HashMap<Position, Double>();
+        Map<Position, Position> prev = new HashMap<Position, Position>();
 
-    //     Queue<Position> queue = new LinkedList<Position>();
+        Queue<Position> queue = new LinkedList<Position>();
 
-    //     for (Position p : gridPositions) {
-    //         dist.put(p, Double.POSITIVE_INFINITY);
-    //         prev.put(p, null);
-    //     }
+        for (Position p : gridPositions) {
+            dist.put(p, Double.POSITIVE_INFINITY);
+            prev.put(p, null);
+        }
 
-    //     dist.put(src,(double) 0);
-    //     queue.add(src);
+        dist.put(src,(double) 0);
+        queue.add(src);
 
-    //     while (!queue.isEmpty()) {
-    //         Position u = queue.remove();
-    //         List<Position> adjPos = u.getCardinallyAdjacentPositions();
-    //         List<Position> moveableAdj = new ArrayList<Position>();
-    //         for (Position pos : adjPos) {
-    //             List<Entity> atAdj = map.getEntityFromPos(pos);
-    //             if (atAdj == null || atAdj.size() == 0|| !movingEntity.blockedBy(atAdj)) {
-    //                 moveableAdj.add(pos);
-    //             } 
+        while (!queue.isEmpty()) {
+            Position u = queue.remove();
+            List<Position> adjPos = u.getCardinallyAdjacentPositions();
+            List<Position> moveableAdj = new ArrayList<Position>();
+            for (Position pos : adjPos) {
+                List<Entity> atAdj = map.getEntityFromPos(pos);
+                if (atAdj == null || atAdj.size() == 0|| !movingEntity.blockedBy(atAdj)) {
+                    moveableAdj.add(pos);
+                } 
                 
-    //         }
+            }
 
-    //         for (Position v : moveableAdj) {
-    //             if (dist.get(u) != null && dist.get(v) != null) {
-    //                 int cost = 1;
-    //                 if (map.getSwampAtPos(v) != null) {
-    //                     SwampTile swamp = (SwampTile) map.getSwampAtPos(v);
-    //                     cost = swamp.getMovementFactor();
-    //                 }
+            for (Position v : moveableAdj) {
+                if (dist.get(u) != null && dist.get(v) != null) {
+                    int cost = 1;
+                    if (map.getSwampAtPos(v) != null) {
+                        SwampTile swamp = (SwampTile) map.getSwampAtPos(v);
+                        cost = swamp.getMovementFactor();
+                    }
 
-    //                 if (dist.get(u) + cost < dist.get(v)) {
-    //                     dist.put(v, dist.get(u) + cost);
-    //                     prev.put(v, u);
-    //                     queue.add(u);
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     return prev;
+                    if (dist.get(u) + cost < dist.get(v)) {
+                        dist.put(v, dist.get(u) + cost);
+                        prev.put(v, u);
+                        queue.add(v);
+                    }
+                }
+            }
+        }
+        return prev;
         
-    // }
+    }
 
 }
