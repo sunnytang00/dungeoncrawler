@@ -13,6 +13,8 @@ import java.util.List;
 
 public class Bomb extends Item {
 
+    private boolean isActivated;
+
 
     public Bomb(String type, Position position) {
         super(type, position);
@@ -65,6 +67,14 @@ public class Bomb extends Item {
         for (Entity entity : entities) {
             map.removeEntityFromMap(entity);
         }
+    }
+
+    public boolean isActivated() {
+        return isActivated;
+    }
+
+    public void setActivated(boolean activated) {
+        isActivated = activated;
     }
 }
 
