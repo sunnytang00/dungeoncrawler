@@ -180,6 +180,10 @@ public class DungeonManiaController {
         }
 
         for (Enemy enemy : enemies) {
+            if (enemy instanceof Mercenary) {
+                Mercenary mercenary = (Mercenary) enemy;
+                mercenary.updateMindControl();
+            }
             player.interactWithEnemies(enemy, map);
             player.battleWithEnemies(map, game);
         }
@@ -236,6 +240,10 @@ public class DungeonManiaController {
         }
 
         for (Enemy enemy : enemies) {
+            if (enemy instanceof Mercenary) {
+                Mercenary mercenary = (Mercenary) enemy;
+                mercenary.updateMindControl();
+            }
             player.interactWithEnemies(enemy, map);
             player.battleWithEnemies(map, game);
 
@@ -321,8 +329,7 @@ public class DungeonManiaController {
             if (mercenary.isBribed()) {
                 throw new IllegalArgumentException();
             }
-            player.interactWithMercenary((Mercenary) interact, map);
-
+            player.interactWithMercenary(mercenary, map);
         }
 
         return getDungeonResponseModel();
