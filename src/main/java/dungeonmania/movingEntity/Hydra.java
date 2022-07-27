@@ -27,6 +27,4 @@ public class Hydra extends ZombieToast {
         return newDelta;
     }
 
-
-    
 }

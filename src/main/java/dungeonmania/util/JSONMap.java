@@ -87,6 +87,8 @@ public class JSONMap {
                 entity = new Bomb(type, position); break;
             case "sword":
                 entity = new Sword(type, position); break;
+            case "swamp_tile":
+                entity = new SwampTile(type, position, obj.getInt("movement_factor")); break;
         }
         initialMapEntities.add(entity);
     }

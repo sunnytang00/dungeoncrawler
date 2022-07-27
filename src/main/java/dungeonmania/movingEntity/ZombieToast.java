@@ -26,8 +26,11 @@ public class ZombieToast extends Enemy {
             setMovingStrategy(new RunAway());
         }  else {
             setMovingStrategy(new RandomSpawn());
-        }   
-        getMovingStrategy().move(this, map);  
+        }
+        this.stuckOnSwamp(map);
+        if (getRemainingStuckTicks() == 0) {
+            getMovingStrategy().move(this, map);  
+        }    
     }
     
 }
