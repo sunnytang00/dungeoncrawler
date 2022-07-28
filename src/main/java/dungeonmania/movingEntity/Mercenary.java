@@ -114,6 +114,7 @@ public class Mercenary extends BribableEnemy {
 
     public void updateMindControl() {
         if (mindControlTicks > 0) {
+            bribe();
             mindControlTicks -= 1;
         } else if (mindControlTicks == 0 && !isBribedByTreasure()) {
             this.setState(new MercViciousState());
