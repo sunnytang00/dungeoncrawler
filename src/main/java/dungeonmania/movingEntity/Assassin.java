@@ -30,7 +30,7 @@ public class Assassin extends Mercenary {
                 setMovingStrategy(new FollowPlayer());
             }   
         }
-        
+
         this.stuckOnSwamp(map);
         if (getRemainingStuckTicks() == 0) {
             getMovingStrategy().move(this, map);  
@@ -54,10 +54,7 @@ public class Assassin extends Mercenary {
 
     @Override
     public void bribe() {
-        Random random = new Random();
-        int num = random.nextInt(1000);
-        double threshold = 1000 * JSONConfig.getConfig("assassin_bribe_fail_rate");
-        if (num > threshold) {
+        if (Math.random() > JSONConfig.getConfig("assassin_bribe_fail_rate")) {
             this.setState(new MercBribedState());
             getState().currentState(this);
             setInteractable(false);
