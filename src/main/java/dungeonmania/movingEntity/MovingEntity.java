@@ -7,6 +7,8 @@ import dungeonmania.util.Position;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 public abstract class MovingEntity extends Entity  {
 
     private Position initialPosition;
@@ -80,5 +82,11 @@ public abstract class MovingEntity extends Entity  {
         this.nontraversibles = nontraversibles;
     }
     
-    
+    @Override 
+    public JSONObject toJSON() {
+        JSONObject obj = super.toJSON();
+        obj.put("health", this.getHealth());
+        obj.put("interactable", this.getInteractable());
+        return obj;
+    }
 }

@@ -1,5 +1,7 @@
 package dungeonmania.StaticEntities;
 
+import org.json.JSONObject;
+
 import dungeonmania.StaticEntity;
 import dungeonmania.entities.collectableEntities.*;
 import dungeonmania.util.Position;
@@ -29,6 +31,11 @@ public class Door extends StaticEntity {
         setType("door_open");
     }
 
-    
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = super.toJSON();
+        obj.put("key", getKeyID());
+        return obj;
+    }
     
 }

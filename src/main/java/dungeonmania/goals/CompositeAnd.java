@@ -1,5 +1,7 @@
 package dungeonmania.goals;
 
+import org.json.JSONObject;
+
 import dungeonmania.DungeonMap;
 
 public class CompositeAnd extends CompositeGoal{
@@ -26,5 +28,12 @@ public class CompositeAnd extends CompositeGoal{
         // System.out.println("AND str: " + str);
 
         return str;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = new JSONObject();
+        
+        return obj;
     }
 }

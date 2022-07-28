@@ -37,6 +37,7 @@ public abstract class Weapon extends Item {
         this.damageValue = damageValue;
     }
 
+    @Override
     public int getDurability() {
         return durability;
     }

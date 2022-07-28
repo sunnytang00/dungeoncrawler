@@ -1,5 +1,7 @@
 package dungeonmania.goals;
 
+import org.json.JSONObject;
+
 import dungeonmania.DungeonMap;
 import dungeonmania.util.JSONConfig;
 
@@ -32,4 +34,12 @@ public class CollectTreasure extends LeafGoal {
         if (isAchieved(map)) { return ""; }
         return ":treasure ";
     }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("goal", "treasure");
+        return obj;
+    }
+
 }

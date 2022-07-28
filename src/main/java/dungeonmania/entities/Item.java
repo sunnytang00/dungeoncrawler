@@ -1,5 +1,7 @@
 package dungeonmania.entities;
 
+import org.json.JSONObject;
+
 import dungeonmania.Entity;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Position;
@@ -31,6 +33,10 @@ public abstract class Item extends Entity {
         this.usedTimes = usedTimes;
     }
 
+    public int getDurability() {
+        return usedTimes;
+    }
+
     /**
      * Judge whether the weapon could still be used according
      * to the used times
@@ -43,5 +49,17 @@ public abstract class Item extends Entity {
     public ItemResponse getItemResponse() {
         return new ItemResponse(getId(), getType());
     }
+
+    @Override
+    public JSONObject toJSON(String mode) {
+        JSONObject obj = super.toJSON(mode);
+        // mode can be "inventory" or "potions"
+        if (mode.equals("inventory")) {
+            obj.put("durability", getDurability());
+            return obj;
+        } 
+        return null;
+    }
+
 }
 

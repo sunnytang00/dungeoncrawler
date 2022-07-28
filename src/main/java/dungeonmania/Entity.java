@@ -2,6 +2,8 @@ package dungeonmania;
 
 import java.util.UUID;
 
+import org.json.JSONObject;
+
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Position;
 
@@ -77,6 +79,25 @@ public abstract class Entity {
         this.isInteractable = isInteractable;
     }
 
-    
+    public boolean getInteractable() {
+        return isInteractable;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject entity = new JSONObject();
+        entity.put("type", getType());
+        entity.put("id", getId());
+        entity.put("x", getXCoordinate());
+        entity.put("y", getYCoordinate());
+
+        return entity;
+    }
+
+    public JSONObject toJSON(String mode) {
+        JSONObject entity = new JSONObject();
+        entity.put("type", getType());
+        entity.put("id", getId());
+        return entity;
+    }
 
 }

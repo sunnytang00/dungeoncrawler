@@ -15,11 +15,15 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class DungeonManiaController {
 
     private DungeonMap map;
     private DungeonGame game;
     private Goals goals;
+    private static List<JSONObject> tickHistory = new ArrayList<JSONObject>();
 
     public String getSkin() {
         return "default";
@@ -59,7 +63,8 @@ public class DungeonManiaController {
 
         List<Entity> entities = jMap.getInitialMapEntities();
         map = new DungeonMap(entities, dungeonName);
-        goals = jMap.getComposedGoals(jMap.getGoals(), map);
+        goals = JSONLoadGoals.getComposedGoals(jMap.getGoals(), map);
+        map.setJSONGoals(jMap.getGoals());
 
         List<EntityResponse> entityResponses = map.getEntityResponses();
         List<Item> inventoryItems = new ArrayList<Item>();
@@ -80,7 +85,7 @@ public class DungeonManiaController {
     public DungeonResponse getDungeonResponseModel() {
 
         Player player = map.getPlayer();
-        
+        // System.out.println("dungeonresponse" + goals.getGoalsAsString(map));
         List<BattleResponse> battles = map.getBattleResponses(game.getBattles());
         if (player == null) {
             
@@ -179,6 +184,7 @@ public class DungeonManiaController {
             map.addEntityToMap(spiderToAdd);
         }
         map.BoulderSwitchOverlap();
+        saveTickToHistory();
         return getDungeonResponseModel();
     }
 
@@ -225,7 +231,8 @@ public class DungeonManiaController {
             map.addEntityToMap(spiderToAdd);
         }
         map.BoulderSwitchOverlap();
-
+        // System.out.println("goals in tick: " + goals.getGoalsAsString(map));
+        saveTickToHistory();
         return getDungeonResponseModel();
 
     }
@@ -301,7 +308,16 @@ public class DungeonManiaController {
      * /game/load
      */
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
-        return null;
+        InputStream is = FileLoader.class.getResourceAsStream("/dungeons/" + name + ".json");
+        if (is == null) {
+            throw new IllegalArgumentException("Cannot find the game to load");
+        }
+        JSONReloadGame reloadGame = new JSONReloadGame(is);
+        map = new DungeonMap(reloadGame.getMapEntities(), name);
+        goals = JSONLoadGoals.getComposedGoals(reloadGame.getGoals(), map);
+        map.setJSONGoals(reloadGame.getGoals());
+
+        return getDungeonResponseModel();
     }
 
 
@@ -310,6 +326,12 @@ public class DungeonManiaController {
      */
     public List<String> allGames() {
         return new ArrayList<>();
+    }
+
+    public void saveTickToHistory() {
+        JSONObject obj = JSONSaveGame.saveGame(map, map.getJSONGoals());
+        System.out.println(obj);
+        tickHistory.add(obj);
     }
 
 }

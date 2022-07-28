@@ -1,5 +1,7 @@
 package dungeonmania.goals;
 
+import org.json.JSONObject;
+
 import dungeonmania.DungeonMap;
 
 public class CompositeOr extends CompositeGoal{
@@ -23,5 +25,12 @@ public class CompositeOr extends CompositeGoal{
         String subgoal2 = getSubgoal2().getGoalsAsString(map);
         String str = "(" + subgoal1 + " OR " + subgoal2 + ")";
         return str;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = new JSONObject();
+        
+        return obj;
     }
 }

@@ -1,5 +1,7 @@
 package dungeonmania.goals;
 
+import org.json.JSONObject;
+
 import dungeonmania.DungeonMap;
 import dungeonmania.util.JSONConfig;
 
@@ -31,6 +33,13 @@ public class DestroyEnemy extends LeafGoal {
     public String getGoalsAsString(DungeonMap map) {
         if (isAchieved(map)) { return ""; }
         return ":enemies ";
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("goal", "enemies");
+        return obj;
     }
     
 }

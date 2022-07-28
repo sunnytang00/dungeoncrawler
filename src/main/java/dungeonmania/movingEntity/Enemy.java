@@ -1,5 +1,7 @@
 package dungeonmania.movingEntity;
 
+import org.json.JSONObject;
+
 import dungeonmania.DungeonMap;
 import dungeonmania.util.Position;
 
@@ -26,6 +28,5 @@ public abstract class Enemy extends MovingEntity {
     public void move(Enemy enemy, DungeonMap map) {
     }
 
-    
     
 }
