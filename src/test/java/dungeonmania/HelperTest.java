@@ -4,8 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
-import dungeonmania.StaticEntities.Portal;
-import dungeonmania.StaticEntities.Wall;
+
+import dungeonmania.entities.Entity;
+import dungeonmania.entities.StaticEntities.Portal;
+import dungeonmania.entities.StaticEntities.Wall;
 import dungeonmania.util.Helper;
 import dungeonmania.util.Position;
 

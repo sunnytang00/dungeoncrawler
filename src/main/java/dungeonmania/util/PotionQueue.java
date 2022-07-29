@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dungeonmania.entities.collectableEntities.*;
+import dungeonmania.entities.collectableEntities.potions.Potion;
 
 public class PotionQueue {
     

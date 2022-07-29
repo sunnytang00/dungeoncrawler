@@ -7,10 +7,12 @@ import java.util.stream.Collectors;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import dungeonmania.movingEntity.*;
 import dungeonmania.response.models.*;
 import dungeonmania.util.*;
-import dungeonmania.StaticEntities.*;
+import dungeonmania.entities.Entity;
+import dungeonmania.entities.StaticEntities.*;
+import dungeonmania.entities.movingEntity.enemies.*;
+import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.goals.Goals;
 
 import java.util.ArrayList;

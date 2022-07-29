@@ -2,13 +2,16 @@ package dungeonmania.util;
 
 import dungeonmania.DungeonManiaController;
 import dungeonmania.DungeonMap;
-import dungeonmania.Entity;
-import dungeonmania.StaticEntities.*;
-import dungeonmania.movingEntity.*;
+import dungeonmania.entities.Entity;
 import dungeonmania.entities.Item;
+import dungeonmania.entities.StaticEntities.*;
+import dungeonmania.entities.StaticEntities.logicSwitches.*;
 import dungeonmania.entities.buildableEntities.*;
 import dungeonmania.entities.collectableEntities.*;
-import dungeonmania.logicSwitches.*;
+import dungeonmania.entities.collectableEntities.potions.InvincibilityPotion;
+import dungeonmania.entities.collectableEntities.potions.InvisibilityPotion;
+import dungeonmania.entities.movingEntity.enemies.*;
+import dungeonmania.entities.movingEntity.player.*;
 import dungeonmania.goals.Goals;
 
 import java.io.InputStream;

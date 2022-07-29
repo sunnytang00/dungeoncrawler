@@ -7,10 +7,12 @@ import dungeonmania.util.*;
 import dungeonmania.util.JSONMap;
 import dungeonmania.entities.buildableEntities.*;
 import dungeonmania.entities.collectableEntities.*;
-import dungeonmania.movingEntity.*;
-import dungeonmania.StaticEntities.TimeTravellingPortal;
-import dungeonmania.StaticEntities.ZombieToastSpawner;
+import dungeonmania.entities.collectableEntities.potions.*;
 import dungeonmania.entities.*;
+import dungeonmania.entities.StaticEntities.TimeTravellingPortal;
+import dungeonmania.entities.StaticEntities.ZombieToastSpawner;
+import dungeonmania.entities.movingEntity.enemies.*;
+import dungeonmania.entities.movingEntity.player.*;
 
 import java.io.InputStream;
 import java.util.ArrayList;

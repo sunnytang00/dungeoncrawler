@@ -5,9 +5,9 @@ import org.json.JSONObject;
 import org.json.JSONString;
 
 import dungeonmania.DungeonMap;
-import dungeonmania.Entity;
+import dungeonmania.entities.Entity;
 import dungeonmania.entities.Item;
-import dungeonmania.entities.collectableEntities.Potion;
+import dungeonmania.entities.collectableEntities.potions.Potion;
 import dungeonmania.goals.Goals;
 
 public class JSONSaveGame {

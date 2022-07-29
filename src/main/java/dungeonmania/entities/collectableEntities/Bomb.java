@@ -5,10 +5,10 @@ import java.util.List;
 
 import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
-import dungeonmania.Entity;
-import dungeonmania.StaticEntities.FloorSwitch;
+import dungeonmania.entities.Entity;
 import dungeonmania.entities.Item;
-import dungeonmania.movingEntity.Player;
+import dungeonmania.entities.StaticEntities.FloorSwitch;
+import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 

@@ -1,8 +1,8 @@
 package dungeonmania.goals;
 
 import dungeonmania.DungeonMap;
-import dungeonmania.Entity;
-import dungeonmania.StaticEntities.FloorSwitch;
+import dungeonmania.entities.Entity;
+import dungeonmania.entities.StaticEntities.FloorSwitch;
 
 import java.util.List;
 

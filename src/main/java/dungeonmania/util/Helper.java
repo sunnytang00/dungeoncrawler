@@ -2,9 +2,9 @@ package dungeonmania.util;
 
 import java.util.List;
 
-import dungeonmania.Entity;
-import dungeonmania.StaticEntity;
-import dungeonmania.logicSwitches.LogicEnum;
+import dungeonmania.entities.Entity;
+import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.StaticEntities.logicSwitches.LogicEnum;
 
 public final class Helper {
     

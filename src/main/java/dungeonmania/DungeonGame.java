@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import dungeonmania.entities.Item;
-import dungeonmania.movingEntity.Player;
+import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.Battle;
 
 public class DungeonGame {

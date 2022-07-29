@@ -1,10 +1,10 @@
 package dungeonmania.entities.buildableEntities;
 
 import dungeonmania.DungeonMap;
-import dungeonmania.entities.Item;
 import dungeonmania.entities.collectableEntities.*;
+import dungeonmania.entities.movingEntity.player.Player;
+import dungeonmania.entities.Item;
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.movingEntity.Player;
 import dungeonmania.util.JSONConfig;
 
 import java.util.ArrayList;

@@ -3,7 +3,7 @@ package dungeonmania.entities;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonMap;
-import dungeonmania.Entity;
+import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Position;
 
@@ -60,6 +60,10 @@ public abstract class Item extends Entity {
             return obj;
         }
         return null;
+    }
+
+    public void playerInteract(DungeonMap map, Player player) {
+        
     }
 
 }
