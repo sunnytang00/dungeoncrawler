@@ -501,6 +501,10 @@ public class Player extends MovingEntity {
     }
 
     public boolean canBuildArmour(DungeonMap map) {
+        
+        if (map.hasZombies()) {
+            return false;
+        }
 
         if (!inventory.isEmpty()) {
             int sunStoneNum = 0;
