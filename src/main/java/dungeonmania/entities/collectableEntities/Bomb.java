@@ -76,27 +76,6 @@ public class Bomb extends Item {
             map.removeEntityFromMap(entity);
         }
     }
-<<<<<<< HEAD
-
-    public boolean isActivated() {
-        return isActivated;
-    }
-
-    public void setActivated(boolean activated) {
-        isActivated = activated;
-    }
-
-=======
->>>>>>> 4dcaa0111579c7dc66f09dbe5454190cada123e8
-    @Override
-    public JSONObject toJSON() {
-        JSONObject obj = super.toJSON();
-        obj.put("is_active", isActivated);
-        // obj.put("is_pickable", isPickable);
-        return obj;
-<<<<<<< HEAD
-=======
-    }
 
     public boolean isActivated() {
         return isActivated;
@@ -112,7 +91,15 @@ public class Bomb extends Item {
 
     public void setPickable(boolean pickable) {
         this.pickable = pickable;
->>>>>>> 4dcaa0111579c7dc66f09dbe5454190cada123e8
     }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = super.toJSON();
+        obj.put("is_active", isActivated);
+        obj.put("is_pickable", pickable);
+        return obj;
+    }
+
 }
 

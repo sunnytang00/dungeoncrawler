@@ -96,20 +96,8 @@ public class Mercenary extends BribableEnemy {
         this.setState(new MercBribedState());
         getState().currentState(this);
         setInteractable(false);
-<<<<<<< HEAD
     }    
 
-=======
-    }
-
-    @Override
-    public JSONObject toJSON() {
-        JSONObject obj = super.toJSON();
-        obj.put("state", getState());
-        return obj;
-    }
-    
->>>>>>> 4dcaa0111579c7dc66f09dbe5454190cada123e8
     public int getMindControlTicks() {
         return mindControlTicks;
     }
@@ -136,7 +124,6 @@ public class Mercenary extends BribableEnemy {
         }
     }
 
-<<<<<<< HEAD
     @Override
     public JSONObject toJSON() {
         JSONObject obj = super.toJSON();
@@ -144,7 +131,4 @@ public class Mercenary extends BribableEnemy {
         return obj;
     }
     
-=======
-
->>>>>>> 4dcaa0111579c7dc66f09dbe5454190cada123e8
 }
