@@ -1,5 +1,7 @@
 package dungeonmania.movingEntity;
 
+import org.json.JSONObject;
+
 import dungeonmania.DungeonMap;
 import dungeonmania.StaticEntities.SwampTile;
 import dungeonmania.util.Position;
@@ -54,8 +56,6 @@ public abstract class Enemy extends MovingEntity {
     public void updateRemainingStuckTicks() {
         remainingStuckTicks -= 1;
     }
-    
-    
 
-
+    
 }

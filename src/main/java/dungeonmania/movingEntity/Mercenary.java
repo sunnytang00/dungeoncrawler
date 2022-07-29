@@ -2,6 +2,8 @@ package dungeonmania.movingEntity;
 
 import java.util.Arrays;
 
+import org.json.JSONObject;
+
 import dungeonmania.DungeonMap;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
@@ -94,8 +96,7 @@ public class Mercenary extends BribableEnemy {
         this.setState(new MercBribedState());
         getState().currentState(this);
         setInteractable(false);
-    }
-
+    }    
 
     public int getMindControlTicks() {
         return mindControlTicks;
@@ -123,5 +124,11 @@ public class Mercenary extends BribableEnemy {
         }
     }
 
-
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = super.toJSON();
+        obj.put("state", getState());
+        return obj;
+    }
+    
 }

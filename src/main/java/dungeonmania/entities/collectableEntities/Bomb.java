@@ -11,11 +11,17 @@ import dungeonmania.movingEntity.Player;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.imageio.ImageTypeSpecifier;
+
+import org.json.JSONObject;
+
 public class Bomb extends Item {
 
     private boolean isActivated;
     private boolean pickable;
-
 
     public Bomb(String type, Position position) {
         super(type, position);
@@ -86,5 +92,14 @@ public class Bomb extends Item {
     public void setPickable(boolean pickable) {
         this.pickable = pickable;
     }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = super.toJSON();
+        obj.put("is_active", isActivated);
+        obj.put("is_pickable", pickable);
+        return obj;
+    }
+
 }
 

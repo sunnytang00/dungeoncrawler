@@ -2,6 +2,8 @@ package dungeonmania.movingEntity;
 
 import java.util.Arrays;
 
+import org.json.JSONObject;
+
 import dungeonmania.DungeonMap;
 import dungeonmania.util.Direction;
 import dungeonmania.util.JSONConfig;
@@ -32,8 +34,21 @@ public class Spider extends Enemy {
     public boolean isClockwiseMove() {
         return isClockwiseMove;
     }
+
     public void setClockwiseMove(boolean clockwise) {
         this.isClockwiseMove = clockwise;
+    }
+
+    // returns the movement position of spiders 
+    public int getMovementPosition() {
+        return 0;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = super.toJSON();
+        obj.put("movement", getMovementPosition());
+        return obj;
     }
     
 }

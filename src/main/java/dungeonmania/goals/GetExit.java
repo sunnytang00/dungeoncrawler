@@ -6,6 +6,8 @@ import dungeonmania.util.Position;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
 public class GetExit extends LeafGoal {
 
     public GetExit(DungeonMap map) {
@@ -14,6 +16,7 @@ public class GetExit extends LeafGoal {
 
     @Override
     public boolean isAchieved(DungeonMap map) {
+        // System.out.println("Exit");
         if (map.getRemainingConditions() > 1 || map.getPlayer() == null) { 
             return false; 
         }
@@ -35,6 +38,13 @@ public class GetExit extends LeafGoal {
     public String getGoalsAsString(DungeonMap map) {
         if (isAchieved(map)) { return ""; }
         return ":exit";
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("goal", "exit");
+        return obj;
     }
 
 }

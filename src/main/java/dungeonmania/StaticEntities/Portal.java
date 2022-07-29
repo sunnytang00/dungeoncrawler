@@ -3,6 +3,8 @@ package dungeonmania.StaticEntities;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import dungeonmania.Entity;
 import dungeonmania.StaticEntity;
 import dungeonmania.util.Direction;
@@ -55,6 +57,11 @@ public class Portal extends StaticEntity {
         return pair;
     }
     
-    
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = super.toJSON();
+        obj.put("colour", getColour());
+        return obj;
+    }
     
 }

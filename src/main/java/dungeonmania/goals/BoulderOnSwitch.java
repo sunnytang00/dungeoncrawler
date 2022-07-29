@@ -6,6 +6,8 @@ import dungeonmania.StaticEntities.FloorSwitch;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
 public class BoulderOnSwitch extends LeafGoal {
 
     private boolean prevIsAchieved = false;
@@ -33,6 +35,13 @@ public class BoulderOnSwitch extends LeafGoal {
     public String getGoalsAsString(DungeonMap map) {
         if (isAchieved(map)) { return ""; }
         return ":boulders ";
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("goal", "boulders");
+        return obj;
     }
     
 }

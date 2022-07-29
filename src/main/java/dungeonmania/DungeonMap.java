@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import dungeonmania.movingEntity.*;
 import dungeonmania.response.models.*;
 import dungeonmania.util.*;
@@ -18,6 +21,7 @@ public class DungeonMap {
     private String dungeonName;
     private int remainingConditions; 
     private boolean gameWin = false;
+    private JSONObject goalsJSON;
 
     public DungeonMap(List<Entity> mapEntities, String dungeonName) {
         this.mapEntities = mapEntities;
@@ -155,6 +159,14 @@ public class DungeonMap {
     public int getRemainingConditions() {
         return remainingConditions;
     }
+
+    public void setJSONGoals(JSONObject goalsJSON) {
+        this.goalsJSON = goalsJSON;
+    }
+
+    public JSONObject getJSONGoals() {
+        return goalsJSON;
+    }
     
     /**
      * Method to spawn spider
@@ -219,6 +231,15 @@ public class DungeonMap {
                 } 
             }
         }
+    }
+
+    public JSONArray mapEntitiesToJSON() {
+        JSONArray entitiesJSON = new JSONArray();
+        for (Entity e : mapEntities) {
+            JSONObject obj = e.toJSON();
+            entitiesJSON.put(obj);
+        }
+        return entitiesJSON;
     }
 
 }

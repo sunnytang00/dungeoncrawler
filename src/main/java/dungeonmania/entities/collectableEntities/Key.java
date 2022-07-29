@@ -1,5 +1,7 @@
 package dungeonmania.entities.collectableEntities;
 
+import org.json.JSONObject;
+
 import dungeonmania.entities.Item;
 import dungeonmania.util.Position;
 
@@ -20,6 +22,13 @@ public class Key extends Item {
 
     public void setDoorKeyId(int doorKeyId) {
         this.doorKeyId = doorKeyId;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = super.toJSON();
+        obj.put("key", getDoorKeyId());
+        return obj;
     }
 }
 
