@@ -30,6 +30,17 @@ public class PotionQueue {
         return currentPotion;
     }
 
+    public int queueSize() {
+        return potionQueue.size();
+    }
+
+    public Potion potionInUse() {
+        if (queueSize() == 1) { // no potion in use
+            return null;
+        }
+        return potionQueue.get(0);
+    }
+
     public JSONArray toJSON(String mode) {
         JSONArray arr = new JSONArray();
         for (Potion p : potionQueue) {

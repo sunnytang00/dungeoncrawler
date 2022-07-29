@@ -98,11 +98,11 @@ public class JSONMap {
             case "time_travelling_portal":
                 entity = new TimeTravellingPortal(type, position); break;
             case "light_bulb_off":
-                entity = new LightBulb(type, position, getLogic(obj.getString("logic"))); break;
+                entity = new LightBulb(type, position, Helper.getLogic(obj.getString("logic"))); break;
             case "wire":
-                entity = new Wire(type, position, getLogic(obj.getString("logic"))); break;
+                entity = new Wire(type, position, Helper.getLogic(obj.getString("logic"))); break;
             case "switch_door":
-                entity = new SwitchDoor(type, position, getLogic(obj.getString("logic")), obj.getInt("key")); break;
+                entity = new SwitchDoor(type, position, Helper.getLogic(obj.getString("logic")), obj.getInt("key")); break;
 
         }
         initialMapEntities.add(entity);
@@ -114,20 +114,6 @@ public class JSONMap {
 
     public JSONObject getGoals() {
         return JSONgoals;
-    }
-
-    private LogicEnum getLogic(String logic) {
-        switch(logic) {
-            case "and":
-                return LogicEnum.AND;
-            case "or":
-                return LogicEnum.OR;
-            case "xor":
-                return LogicEnum.XOR;
-            case "co_and":
-                return LogicEnum.CO_AND;
-        }
-        return null;
     }
 
 }

@@ -127,7 +127,12 @@ public class Mercenary extends BribableEnemy {
     @Override
     public JSONObject toJSON() {
         JSONObject obj = super.toJSON();
-        obj.put("state", getState());
+
+        String state = getState().toString();
+        state = state.replaceAll("dungeonmania.movingEntity.", "");
+        state = state.substring(0, state.indexOf("@"));
+        
+        obj.put("state", state);
         return obj;
     }
     

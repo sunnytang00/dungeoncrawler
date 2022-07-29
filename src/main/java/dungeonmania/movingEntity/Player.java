@@ -647,8 +647,14 @@ public class Player extends MovingEntity {
     @Override
     public JSONObject toJSON() {
         JSONObject obj = super.toJSON();
-        obj.put("state", getState());
+        
+        String state = getState().toString();
+        state = state.replaceAll("dungeonmania.movingEntity.", "");
+        state = state.substring(0, state.indexOf("@"));
+
+        obj.put("state", state);
         obj.put("slayed-enemies", slayedEnemy);
+        
         return obj;
     }
 

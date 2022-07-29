@@ -11,7 +11,7 @@ import dungeonmania.movingEntity.*;
 import dungeonmania.response.models.*;
 import dungeonmania.util.*;
 import dungeonmania.StaticEntities.*;
-
+import dungeonmania.goals.Goals;
 
 import java.util.ArrayList;
 
@@ -22,6 +22,7 @@ public class DungeonMap {
     private int remainingConditions; 
     private boolean gameWin = false;
     private JSONObject goalsJSON;
+    private Goals goals;
 
     public DungeonMap(List<Entity> mapEntities, String dungeonName) {
         this.mapEntities = mapEntities;
@@ -242,5 +243,13 @@ public class DungeonMap {
         return entitiesJSON;
     }
 
+    public void resetGoals(JSONObject JSONgoals, DungeonMap map) {
+        goals = JSONLoadGoals.getComposedGoals(JSONgoals, map);
+    }
+
+    public Goals getResetGoals() {
+        return goals;
+    }
+    
 }
 

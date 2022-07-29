@@ -1,11 +1,14 @@
 package dungeonmania.util;
 
+import dungeonmania.DungeonManiaController;
+import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
 import dungeonmania.StaticEntities.*;
 import dungeonmania.movingEntity.*;
 import dungeonmania.entities.Item;
 import dungeonmania.entities.buildableEntities.*;
 import dungeonmania.entities.collectableEntities.*;
+import dungeonmania.entities.logicSwitches.*;
 import dungeonmania.goals.Goals;
 
 import java.io.InputStream;
@@ -155,6 +158,7 @@ public class JSONReloadGame {
     private PotionQueue potions = new PotionQueue();
     private JSONObject JSONgoals;
     private Goals goals; 
+    private DungeonMap newMap;
 
     public List<Entity> getMapEntities() {
         return mapEntities;
@@ -168,41 +172,76 @@ public class JSONReloadGame {
         return JSONgoals;
     }
 
-    public JSONReloadGame(InputStream is) {
+    public JSONReloadGame(InputStream is, String name) {
 
         JSONTokener tokener = new JSONTokener(is);
         JSONObject object = new JSONObject(tokener);
 
-        JSONgoals = object.getJSONObject("goal-condition");
-        JSONArray entitiesJSON = object.getJSONArray("entities");
-        JSONArray inventoryJSON = object.getJSONArray("inventory");
-        JSONArray potionsJSON = object.getJSONArray("potion-queue");
-        // JSONArray battlesJSON = object.getJSONArray("battle-queue");
-        String configFile = object.getString("config-file");
-        
-        JSONConfig.setConfig(configFile);
-        
-        // initialise entities 
-        for (int i = 0; i < entitiesJSON.length(); i++) {
-            JSONObject obj = entitiesJSON.getJSONObject(i);
-            String type = obj.getString("type");
-            initialiseMapEntities(type, obj);
-        }   
+        newMap = new DungeonMap(mapEntities, name);
+        newMap = resetGame(object, newMap);
+
         // restore inventory 
+        JSONArray inventoryJSON = object.getJSONArray("inventory");
         for (int i = 0; i < inventoryJSON.length(); i++) {
             JSONObject obj = inventoryJSON.getJSONObject(i);
             setInventory(obj);
         }
         Player player = (Player) mapEntities.stream().filter(e -> e.getType().equals("player")).findAny().orElse(null);
         player.setInventory(inventory);
-
+        
         // restore potion queue
+        JSONArray potionsJSON = object.getJSONArray("potion-queue");
         for (int i = 0; i < potionsJSON.length(); i++) {
             JSONObject obj = potionsJSON.getJSONObject(i);
             setPotionQueue(obj);
         }
         player.setPotionQueue(potions);
+        if (potions.potionInUse() == null) { // no potion in use right now
+            player.setInvincible(false);
+            player.setInvisible(false);
+        } else if (potions.potionInUse() instanceof InvincibilityPotion) {
+            player.setInvincible(true);
+            player.setInvisible(false);
+        } else {
+            player.setInvincible(false);
+            player.setInvisible(true);
+        }
+
+        // reset current tick
+        int tickJSON = object.getJSONObject("tick").getInt("current_tick");
+
+        // restore battle queue
+        JSONArray battlesJSON = object.getJSONArray("battle-queue");
+
+
+        // restore time travel memories
+        JSONArray timeTravelJSON = object.getJSONArray("time-travel");
+
+
+        // restore config file
+        String configFile = object.getJSONObject("config-file").getString("file_name");
+        JSONConfig.setConfig(configFile);
     }
+
+    public DungeonMap resetGame(JSONObject object, DungeonMap map) {
+        JSONArray entitiesJSON = object.getJSONArray("entities");
+        JSONgoals = object.getJSONObject("goal-condition");
+        int remaingingGoalConditions = object.getJSONObject("remaining-goal-conditions").getInt("remains");
+        
+        // initialise entities 
+        for (int i = 0; i < entitiesJSON.length(); i++) {
+            JSONObject obj = entitiesJSON.getJSONObject(i);
+            String type = obj.getString("type");
+            initialiseMapEntities(type, obj);
+        } 
+        // reset remaining goal conditions 
+        map.setRemainingConditions(remaingingGoalConditions);
+        // reset goals at current tick 
+        map.resetGoals(JSONgoals, map);
+        
+        return map;
+    }
+
 
     private void initialiseMapEntities(String type, JSONObject obj) {
         int x = obj.getInt("x");
@@ -214,13 +253,15 @@ public class JSONReloadGame {
         switch(type) { // assumption: id of entities will change
             case "player":
                 player = new Player(type, position, obj.getBoolean("interactable")); 
+                player.setSlayedEnemy(obj.getInt("slayed-enemies"));
                 entity = player;
                 initialiseState(obj.getString("state"), entity);
                 ((Player) entity).setHealth(obj.getInt("health")); break;
-            case "older_player": // do not know how old player is defined
-                // entity = new Player(type, position, obj.getBoolean("interactable")); 
-                // ((Player) entity).setHealth(obj.getInt("health")); 
-                // break;
+            case "older_player": 
+                entity = new OlderPlayer(type, position, obj.getBoolean("interactable")); 
+                initialiseState(obj.getString("state"), entity);
+                ((Player) entity).setHealth(obj.getInt("health")); 
+                break;
             case "wall":
                 entity = new Wall(type, position); break;
             case "exit":
@@ -231,29 +272,37 @@ public class JSONReloadGame {
                 entity = new FloorSwitch(type, position); break;
             case "door":
                 entity = new Door(type, position, obj.getInt("key")); break;
+            case "door_open":
+                entity = new Door(type, position, obj.getInt("key")); break;
             case "portal":
                 entity = new Portal(type, position, obj.getString("colour")); break;
             case "zombie_toast_spawner":
                 entity = new ZombieToastSpawner(type, position, obj.getBoolean("interactable")); break;
             case "spider":
-                entity = new Spider(type, position, obj.getBoolean("interactable"));
-                ((Spider) entity).setHealth(obj.getInt("health")); break;
+                Spider spider = new Spider(type, position, obj.getBoolean("interactable"));
+                spider.setRemainingStuckTicks(obj.getInt("remaining_stuck_tick"));
+                spider.setHealth(obj.getInt("health")); 
+                entity = spider; break;
             case "zombie_toast":
-                entity = new ZombieToast(type, position, obj.getBoolean("interactable")); 
-                initialiseState(obj.getString("state"), entity);
-                ((Player) entity).setHealth(obj.getInt("health"));  break;
+                ZombieToast zt = new ZombieToast(type, position, obj.getBoolean("interactable")); 
+                zt.setRemainingStuckTicks(obj.getInt("remaining_stuck_tick"));
+                zt.setHealth(obj.getInt("health")); 
+                entity = zt; break;
             case "mercenary":
-                entity = new Mercenary(type, position, obj.getBoolean("interactable")); 
-                initialiseState(obj.getString("state"), entity);
-                ((Mercenary) entity).setHealth(obj.getInt("health"));  break;
+                Mercenary merc = new Mercenary(type, position, obj.getBoolean("interactable")); 
+                merc.setRemainingStuckTicks(obj.getInt("remaining_stuck_tick"));
+                merc.setHealth(obj.getInt("health"));  
+                entity = merc;
+                initialiseState(obj.getString("state"), entity); break;
             case "assassin":
-                entity = new Assassin(type, position, obj.getBoolean("interactable")); 
-                initialiseState(obj.getString("state"), entity);
-                ((Assassin) entity).setHealth(obj.getInt("health"));  break;
+                Assassin assassin = new Assassin(type, position, obj.getBoolean("interactable")); 
+                assassin.setHealth(obj.getInt("health"));  
+                entity = assassin;
+                initialiseState(obj.getString("state"), entity); break;
             case "hydra":
-                entity = new Hydra(type, position, obj.getBoolean("interactable")); 
-                initialiseState(obj.getString("state"), entity);
-                ((Hydra) entity).setHealth(obj.getInt("health"));  break;
+                Hydra hydra = new Hydra(type, position, obj.getBoolean("interactable")); 
+                hydra.setHealth(obj.getInt("health")); 
+                entity = hydra; break;
             case "treasure":
                 entity = new Treasure(type, position); break;
             case "sun_stone":
@@ -269,36 +318,41 @@ public class JSONReloadGame {
             case "arrow":
                 entity = new Arrows(type, position); break;
             case "bomb":
-                entity = new Bomb(type, position); break;
+                Bomb bomb = new Bomb(type, position); 
+                bomb.setActivated(obj.getBoolean("is_active"));
+                bomb.setPickable(obj.getBoolean("is_pickable"));
+                entity = bomb; break;
             case "sword":
                 entity = new Sword(type, position); break;
             case "swamp_tile":
-                // entity = new SwampTile(type, position, obj.getInt("movement_factor")); break;
+                entity = new SwampTile(type, position, obj.getInt("movement_factor")); break;
             case "time_turner":
                 // entity = new TimeTurner(type, position); break;
             case "time_travelling_portal":
-                // entity = new TimeTravellingPortal(type, position); break;
+                entity = new TimeTravellingPortal(type, position); break;
             case "light_bulb_off":
-                // entity = new LightBulb(type, position); break;
+                entity = new LightBulb(type, position, Helper.getLogic(obj.getString("logic"))); break;
+            case "light_bulb_on":
+                entity = new LightBulb(type, position, Helper.getLogic(obj.getString("logic"))); break;
             case "wire":
-                // entity = new Wire(type, position); break;
+                entity = new Wire(type, position, Helper.getLogic(obj.getString("logic"))); break;
             case "switch_door":
-                // entity = new SwitchDoor(type, position); break;
+                entity = new SwitchDoor(type, position, Helper.getLogic(obj.getString("logic")), obj.getInt("key")); break;
         }
         mapEntities.add(entity);
     }
 
     private void initialiseState(String state, Entity e) {
         switch(state) {
-            case "player_default_state":
+            case "PlayerDefaultDtate":
                 ((Player) e).setState(new PlayerDefaultState());
-            case "invisible_state":
+            case "InvisibleState":
                 ((Player) e).setState(new InvisibleState());
-            case "invincible_state":
+            case "InvincibleState":
                 ((Player) e).setState(new InvisibleState());
-            case "merc_bribed_state":
+            case "MercBribedState":
                 ((Mercenary) e).setState(new MercBribedState());
-            case "merc_vicious_state":
+            case "MercViciousState":
                 ((Mercenary) e).setState(new MercViciousState());
         }
     }
@@ -341,13 +395,13 @@ public class JSONReloadGame {
                 inventory.add(bow);
                 (bow).setDurability(durability); break;
             case "midnight_armour":
-                // MidnightArmour arnour = new MidnightArmour(type);
-                // inventory.add(armour);
-                // (armour).setDurability(durability); break;
+                MidnightArmour armour = new MidnightArmour(type);
+                inventory.add(armour);
+                (armour).setDurability(durability); break;
             case "scepture":
-                // Scepture scepture = new Scepture(type);
-                // inventory.add(scepture);
-                // (scepture).setDurability(durability); break;
+                Sceptre sceptre = new Sceptre(type);
+                inventory.add(sceptre);
+                (sceptre).setDurability(durability); break;
             case "time_turner":
                 // inventory.add((TimeTurner) entity); break;
         }
