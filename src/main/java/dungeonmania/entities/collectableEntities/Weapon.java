@@ -8,8 +8,6 @@ import dungeonmania.util.Position;
  */
 public abstract class Weapon extends Item {
 
-
-    private int durability;
     private int defence;
     private int damageValue;
 
@@ -35,15 +33,6 @@ public abstract class Weapon extends Item {
 
     public void setDamageValue(int damageValue) {
         this.damageValue = damageValue;
-    }
-
-    @Override
-    public int getDurability() {
-        return durability;
-    }
-
-    public void setDurability(int durability) {
-        this.durability = durability;
     }
 
     public boolean isUsable() {

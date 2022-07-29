@@ -7,7 +7,7 @@ public class Wood extends Item {
     public Wood(String type, Position position) {
         super(type, position);
         // the wood just could be used one time
-        setUsedTimes(1);
+        setDurability(1);
     }
 }
 

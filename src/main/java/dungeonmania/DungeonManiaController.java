@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class DungeonManiaController {
@@ -23,7 +22,7 @@ public class DungeonManiaController {
     private DungeonMap map;
     private DungeonGame game;
     private Goals goals;
-    private static List<JSONObject> tickHistory = new ArrayList<JSONObject>();
+    private List<JSONObject> tickHistory = new ArrayList<JSONObject>();
 
     public String getSkin() {
         return "default";
@@ -329,8 +328,12 @@ public class DungeonManiaController {
     }
 
     public void saveTickToHistory() {
-        JSONObject obj = JSONSaveGame.saveGame(map, map.getJSONGoals());
-        System.out.println(obj);
+        if (map.getPlayer() == null || goals.getGoalsAsString(map).equals("")) {
+            // player wins or loses
+            return;
+        }
+        JSONObject obj = JSONSaveGame.saveGame(map, map.getJSONGoals(), game.getCurrentTick());
+        // System.out.println(obj);
         tickHistory.add(obj);
     }
 

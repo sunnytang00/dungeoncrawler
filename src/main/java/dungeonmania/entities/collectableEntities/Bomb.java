@@ -11,6 +11,10 @@ import dungeonmania.util.Position;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageTypeSpecifier;
+
+import org.json.JSONObject;
+
 public class Bomb extends Item {
 
 
@@ -65,6 +69,14 @@ public class Bomb extends Item {
         for (Entity entity : entities) {
             map.removeEntityFromMap(entity);
         }
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = super.toJSON();
+        // obj.put("is_active", isTriggered);
+        // obj.put("is_pickable", isPickable);
+        return obj;
     }
 }
 

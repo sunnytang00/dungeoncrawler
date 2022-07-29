@@ -552,12 +552,32 @@ public class Player extends MovingEntity {
     public JSONObject toJSON() {
         JSONObject obj = super.toJSON();
         obj.put("state", getState());
+        obj.put("slayed-enemies", slayedEnemy);
         return obj;
     }
 
     public JSONArray potionQueueToJSON() {
-        JSONArray potions = potionQueue.toJSON("potions");
+        JSONArray potions = potionQueue.toJSON("durability");
         return potions;
+    }
+
+    public JSONArray inventoryToJSON() {
+        JSONArray inventoryJSON = new JSONArray();
+        for (Item i : inventory) {
+            JSONObject obj = i.toJSON("durability");
+            inventoryJSON.put(obj);
+        }
+        return inventoryJSON;
+    }
+
+    public JSONArray battlesToJSON() {
+        JSONArray battlesJSON = new JSONArray();
+        for (Enemy enemy : battleQueue) {
+            
+            JSONObject obj = enemy.toJSON("battles");
+            battlesJSON.put(obj);
+        }
+        return battlesJSON;
     }
 
 }

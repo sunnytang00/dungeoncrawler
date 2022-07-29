@@ -22,8 +22,8 @@ public class PotionQueue {
         }
         
         Potion currentPotion = potionQueue.get(0);
-        currentPotion.updateTicks();
-        if (currentPotion.getTicks() == 0) {
+        currentPotion.setDurability(currentPotion.getDurability() - 1);
+        if (currentPotion.getDurability() == 0) {
             potionQueue.remove(currentPotion);
         }
 

@@ -20,34 +20,71 @@ import org.json.JSONTokener;
  * Reload games from a list of saved json files 
  * File structure as below: 
  * {
+ *      "tick": {"current_tick": <int>},
  *      "entities": [
  *          {
- *              "type": <player / old_player / merc>,
+ *              "type": <player>,
  *              "id": <String>,
  *              "x": <double>,
  *              "y": <double>,
  *              "interactable": <boolean>,
  *              "state": <String>,
- *              "health": 
+ *              "health": <int> , 
+ *              "slayed-enemies": {"number": <int>}
+ *          }, {
+ *              "type": <old_player>,
+ *              "id": <String>,
+ *              "x": <double>,
+ *              "y": <double>,
+ *              "interactable": <boolean>,
+ *              "state": <String>,
+ *              "health": <int> 
+ *          }, {"type": <merc>,
+ *              "id": <String>,
+ *              "x": <double>,
+ *              "y": <double>,
+ *              "interactable": <boolean>,
+ *              "state": <String>,
+ *              "health": <int>, 
+ *              "remaining_stuck_tick": <int> 
+ *          }, {
+ *              "type": <spider>,
+ *              "id": <String>,
+ *              "x": <double>,
+ *              "y": <double>,
+ *              "interactable": <boolean>,
+ *              "initial_x": <int>,
+ *              "initial_y": <int>,
+ *              "is_clockwise": <boolean>,
+ *              "health": ,
+ *              "remaining_stuck_tick": <int>
  *          }, {
  *              "type": <other moving entities - enemies>,
  *              "id": <String>,
  *              "x": <double>,
  *              "y": <double>,
  *              "interactable": <boolean>,
- *              "health": 
- *          },  {
+ *              "health": ,
+ *              "remaining_stuck_tick": <int>
+ *          }, {
+ *              "type": <bomb>,
+ *              "id": ,
+ *              "x": ,
+ *              "y": , 
+ *              "is_active": <boolean> , 
+ *              "is_pickable": <boolean>,
+ *          }, {
  *              "type": <collectables / static entities / time travel portal>,
  *              "id": ,
  *              "x": ,
  *              "y":
  *          }, {
- *              "type": <key / door>,
+ *              "type": <key / door / door_open>,
  *              "id": ,
  *              "x": ,
  *              "y": ,
  *              "key": ,
- *          },{ 
+ *          }, { 
  *              "type": <portal>,
  *              "id": ,
  *              "x": ,
@@ -58,7 +95,7 @@ import org.json.JSONTokener;
  *              "id": ,
  *              "x": ,
  *              "y": ,
- *              "movement_factor": 
+ *              "movement_factor": <int>
  *          },
  *      ], 
  *      "goal-condition": {
@@ -67,7 +104,7 @@ import org.json.JSONTokener;
  *                          {"goal": },
  *                          {"goal": }
  *                      ]
- *       }, 
+ *      }, 
  *      "inventory": [
  *          {
  *              "type": , 
@@ -81,7 +118,7 @@ import org.json.JSONTokener;
  *          {
  *              "type": <invisibility_potion / invincibility_potion>,
  *              "id": ,
- *              "duration": ,
+ *              "durability": ,
  *          }, 
  *          {
  *          }
@@ -96,12 +133,16 @@ import org.json.JSONTokener;
  *          ]
  *      ], 
  *      "battle-queue": [
- *          <not too sure if we have to store previous battles> 
+ *          {
+ *              "type": <enemies>, 
+ *              "health":
+ *          }, {
+ *          }
  *      ],
  *      
  *      "config-file": {"file_name": },
  *      "remaining-goal-conditions": {"remains": <int>},
- *      "slayed-enemies": {"number": <int>}
+ *      
  * }
  */
 
@@ -277,15 +318,15 @@ public class JSONReloadGame {
                 inventory.add((Item) entity); break;
             case "invincibility_potion":
                 inventory.add((InvincibilityPotion) entity); 
-                ((InvincibilityPotion) entity).setPotionDuration(durability); break;
+                ((InvincibilityPotion) entity).setDurability(durability); break;
             case "invisibility_potion":
                 inventory.add((InvisibilityPotion) entity);  
-                ((InvisibilityPotion) entity).setPotionDuration(durability); break;
+                ((InvisibilityPotion) entity).setDurability(durability); break;
             case "wood":
                 inventory.add((Wood) entity); break;
             case "arrow":
                 inventory.add((Arrows) entity);  
-                ((Arrows) entity).setUsedTimes(durability); break;
+                ((Arrows) entity).setDurability(durability); break;
             case "bomb":
                 inventory.add((Bomb) entity); break;
             case "sword":
@@ -321,10 +362,10 @@ public class JSONReloadGame {
         switch(type) {
             case "invincibility_potion":
                 potions.addPotionToQueue((InvincibilityPotion) entity); 
-                ((InvincibilityPotion) entity).setPotionDuration(durability); break;
+                ((InvincibilityPotion) entity).setDurability(durability); break;
             case "invisibility_potion":
                 potions.addPotionToQueue((InvisibilityPotion) entity);  
-                ((InvisibilityPotion) entity).setPotionDuration(durability); break;
+                ((InvisibilityPotion) entity).setDurability(durability); break;
         }
     }
 

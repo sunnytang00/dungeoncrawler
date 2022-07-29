@@ -14,31 +14,26 @@ public class JSONSaveGame {
     // save files to "./bin/saved_games/" + <fileName> + ".json" 
     // save files to "/dungeons/" + <fileName> + ".json" 
 
-    public static JSONObject saveGame(DungeonMap map, JSONObject goalsJSON) {
-        JSONArray entities = new JSONArray();
-        JSONArray inventory = new JSONArray();
-        JSONArray potions = new JSONArray();
+    public static JSONObject saveGame(DungeonMap map, JSONObject goalsJSON, int currTick) {
+
         JSONArray timeTravel = new JSONArray();
-        JSONArray battles = new JSONArray();
         JSONObject config = new JSONObject();
+        JSONObject tick = new JSONObject();
+        JSONArray entities = map.mapEntitiesToJSON();
+        JSONArray inventory = map.getPlayer().inventoryToJSON();
+        JSONArray potions = map.getPlayer().potionQueueToJSON();
+        JSONArray battles = new JSONArray();
         // JSONObject goalsJSON = map.getJSONGoals();
 
-        for (Entity e : map.getMapEntities()) {
-            JSONObject obj = e.toJSON();
-            entities.put(obj);
-        }
-        for (Item i : map.getPlayer().getInventory()) {
-            JSONObject obj = i.toJSON("inventory");
-            inventory.put(obj);
-        }
-        potions = map.getPlayer().potionQueueToJSON();
         config.put("file_name", JSONConfig.getConfigName());
+        tick.put("current_tick", currTick);
 
         // time travel not done 
         // battle queue to be confirmed 
 
         // combining
         JSONObject gameJSON = new JSONObject();
+        gameJSON.put("tick", tick);
         gameJSON.put("entities", entities);
         gameJSON.put("goal-condition", goalsJSON);
         gameJSON.put("inventory", inventory);

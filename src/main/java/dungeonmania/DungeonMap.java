@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dungeonmania.movingEntity.*;
@@ -211,6 +212,15 @@ public class DungeonMap {
                 } 
             }
         }
+    }
+
+    public JSONArray mapEntitiesToJSON() {
+        JSONArray entitiesJSON = new JSONArray();
+        for (Entity e : mapEntities) {
+            JSONObject obj = e.toJSON();
+            entitiesJSON.put(obj);
+        }
+        return entitiesJSON;
     }
 
 }

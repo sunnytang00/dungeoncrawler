@@ -19,7 +19,7 @@ public abstract class Item extends Entity {
     /**
      * Record the durability times of the sword
      */
-    private int usedTimes;
+    private int durability;
 
     public Item(String type) {
         super(type);
@@ -29,12 +29,12 @@ public abstract class Item extends Entity {
         super(type, position);
     }
 
-    public void setUsedTimes(int usedTimes) {
-        this.usedTimes = usedTimes;
+    public void setDurability(int durability) {
+        this.durability = durability;
     }
 
     public int getDurability() {
-        return usedTimes;
+        return durability;
     }
 
     /**
@@ -53,11 +53,11 @@ public abstract class Item extends Entity {
     @Override
     public JSONObject toJSON(String mode) {
         JSONObject obj = super.toJSON(mode);
-        // mode can be "inventory" or "potions"
+        // mode: "durability" - means we have to save the durability
         if (mode.equals("inventory")) {
             obj.put("durability", getDurability());
             return obj;
-        } 
+        }
         return null;
     }
 
