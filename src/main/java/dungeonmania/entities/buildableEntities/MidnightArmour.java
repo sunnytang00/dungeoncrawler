@@ -19,9 +19,8 @@ public class MidnightArmour extends Weapon implements ItemBuildable {
     }
     
     public void build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException {
-        boolean zombies = map.getEntitiesFromType(map.getMapEntities(), "zombie").isEmpty();//If any zombies in map
 
-        if (!zombies) {
+        if (map.hasZombies()) {
             throw new InvalidActionException("There are zombies in map");
         }
 
@@ -44,7 +43,7 @@ public class MidnightArmour extends Weapon implements ItemBuildable {
                 }
             }
     
-            if ((sunStone == 1) && (swordNum == 1) && zombies) {
+            if ((sunStone == 1) && (swordNum == 1)) {
                 removingPosition.forEach(i -> inventory.remove(i));
                 player.collectToInventory(new MidnightArmour(BUILDABLE_TYPE_MIDNIGHT_ARMOUR), map);
             } else {

@@ -1,10 +1,13 @@
 package dungeonmania.entities.collectableEntities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
 import dungeonmania.StaticEntities.FloorSwitch;
 import dungeonmania.entities.Item;
-import dungeonmania.movingEntity.*;
+import dungeonmania.movingEntity.Player;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
@@ -18,9 +21,11 @@ import org.json.JSONObject;
 public class Bomb extends Item {
 
     private boolean isActivated;
+    private boolean pickable;
 
     public Bomb(String type, Position position) {
         super(type, position);
+        pickable = true;
     }
 
     public int getBombRadius() {
@@ -71,6 +76,7 @@ public class Bomb extends Item {
             map.removeEntityFromMap(entity);
         }
     }
+<<<<<<< HEAD
 
     public boolean isActivated() {
         return isActivated;
@@ -80,12 +86,33 @@ public class Bomb extends Item {
         isActivated = activated;
     }
 
+=======
+>>>>>>> 4dcaa0111579c7dc66f09dbe5454190cada123e8
     @Override
     public JSONObject toJSON() {
         JSONObject obj = super.toJSON();
         obj.put("is_active", isActivated);
         // obj.put("is_pickable", isPickable);
         return obj;
+<<<<<<< HEAD
+=======
+    }
+
+    public boolean isActivated() {
+        return isActivated;
+    }
+
+    public void setActivated(boolean activated) {
+        isActivated = activated;
+    }
+
+    public boolean isPickable() {
+        return pickable;
+    }
+
+    public void setPickable(boolean pickable) {
+        this.pickable = pickable;
+>>>>>>> 4dcaa0111579c7dc66f09dbe5454190cada123e8
     }
 }
 

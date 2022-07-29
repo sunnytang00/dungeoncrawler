@@ -56,5 +56,9 @@ public abstract class Enemy extends MovingEntity {
     public void updateRemainingStuckTicks() {
         remainingStuckTicks -= 1;
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 4dcaa0111579c7dc66f09dbe5454190cada123e8
 }

@@ -103,6 +103,7 @@ public class JSONMap {
                 entity = new Wire(type, position, getLogic(obj.getString("logic"))); break;
             case "switch_door":
                 entity = new SwitchDoor(type, position, getLogic(obj.getString("logic")), obj.getInt("key")); break;
+
         }
         initialMapEntities.add(entity);
     }
