@@ -8,5 +8,5 @@ public class Wall extends StaticEntity {
     public Wall(String type, Position position) {
         super(type, position);
     }
-      
+
 }

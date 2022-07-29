@@ -32,6 +32,12 @@ public abstract class MovingEntity extends Entity  {
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
+    
+
+    public void setInitialPosition(Position initialPosition) {
+        this.initialPosition = initialPosition;
+    }
+
 
     public Position getInitialPosition() {
         return initialPosition;

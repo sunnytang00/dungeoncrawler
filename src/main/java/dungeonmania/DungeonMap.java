@@ -52,7 +52,16 @@ public class DungeonMap {
         List<Entity> entitiesAtPos = this.getEntityFromPos(position);
         for (Entity entity : entitiesAtPos) {
             if (entity instanceof Portal) {
-                
+                return entity;
+            }
+        }
+        return null;
+    }
+
+    public Entity getSwampAtPos(Position position) {
+        List<Entity> entitiesAtPos = this.getEntityFromPos(position);
+        for (Entity entity : entitiesAtPos) {
+            if (entity instanceof SwampTile) {
                 return entity;
             }
         }
@@ -92,6 +101,7 @@ public class DungeonMap {
     public int getNumOfAlly() {
         int count = 0;
         for (Entity entity : mapEntities) {
+            // do we need assassin as well here
             if (entity instanceof Mercenary) {
                 Mercenary merc = (Mercenary) entity;
                 if (merc.isBribed()) {
@@ -189,6 +199,15 @@ public class DungeonMap {
     public Position getRandomPosition(List<Position> list) {
         Random rand = new Random();
         return list.get(rand.nextInt(list.size()));
+    }
+
+    public boolean hasZombies() {
+        for (Entity e : mapEntities) {
+            if (e instanceof ZombieToast) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean containsType(List<Entity> entities, String type) {

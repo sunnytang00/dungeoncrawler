@@ -88,17 +88,18 @@ public class JSONMap {
             case "sword":
                 entity = new Sword(type, position); break;
             case "swamp_tile":
-                // entity = new SwampTile(type, position, obj.getInt("movement_factor")); break;
+                entity = new SwampTile(type, position, obj.getInt("movement_factor")); break;
             case "time_turner":
-                // entity = new TimeTurner(type, position); break;
+                entity = new TimeTurner(type, position); break;
             case "time_travelling_portal":
-                // entity = new TimeTravellingPortal(type, position); break;
+                entity = new TimeTravellingPortal(type, position); break;
             case "light_bulb_off":
-                // entity = new LightBulb(type, position); break;
+                entity = new LightBulb(type, position); break;
             case "wire":
-                // entity = new Wire(type, position); break;
+                entity = new Wire(type, position); break;
             case "switch_door":
-                // entity = new SwitchDoor(type, position); break;
+                entity = new SwitchDoor(type, position); break;
+
         }
         initialMapEntities.add(entity);
     }

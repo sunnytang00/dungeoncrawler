@@ -23,6 +23,7 @@ import static dungeonmania.TestUtils.getEntities;
 import static dungeonmania.TestUtils.countEntityOfType;
 import static dungeonmania.TestUtils.getInventory;
 import static dungeonmania.TestHelpers.assertListAreEqualIgnoringOrder;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class ItemTest {
@@ -213,6 +214,80 @@ public class ItemTest {
         assertListAreEqualIgnoringOrder(buildables, move.getBuildables());
 
     }
+
+    @Test
+    public void TestBuildSceptre() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse initialResponse = dmc.newGame("test_build_sceptre_and_armour", "c_testConfigSceptreArmour");
+        
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+        for (int i = 0; i < 3; i++) {//move right 3 times, 0 1 2
+            move = dmc.tick(Direction.RIGHT);
+        }
+
+        List<String> buildables = new ArrayList<>();
+        buildables.add("sceptre");
+        assertListAreEqualIgnoringOrder(buildables, move.getBuildables());
+        move = dmc.build("sceptre");
+        buildables.remove(0);
+        assertListAreEqualIgnoringOrder(buildables, move.getBuildables());
+
+    }
+
+    @Test
+    public void TestBuildArmour() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse initialResponse = dmc.newGame("test_build_sceptre_and_armour", "c_testConfigSceptreArmour");
+        
+        DungeonResponse move = dmc.tick(Direction.LEFT);
+        for (int i = 0; i < 2; i++) {//move left 2 times, 0 1 
+            move = dmc.tick(Direction.LEFT);
+        }
+
+        List<String> buildables = new ArrayList<>();
+        buildables.add("midnight_armour");
+        assertListAreEqualIgnoringOrder(buildables, move.getBuildables());
+        move = dmc.build("midnight_armour");
+        buildables.remove(0);
+        assertListAreEqualIgnoringOrder(buildables, move.getBuildables());
+
+    }
+
+    @Test
+    public void TestNoMaterialsArmour() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse initialResponse = dmc.newGame("test_build_sceptre_and_armour", "c_testConfigSceptreArmour");
+
+        DungeonResponse move = dmc.tick(Direction.LEFT);
+
+        assertThrows(InvalidActionException.class, () -> {
+            dmc.build("midnight_armour");
+        });
+    }
+
+    @Test
+    public void TestZombiesCannotBuildArmour() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse initialResponse = dmc.newGame("test_build_sceptre_and_armour", "c_testArmourSpawnZombie");
+
+        for (int i = 0; i < 10; i++) {//tick some bit to spawn zombies
+            DungeonResponse move = dmc.tick(Direction.LEFT);
+        }
+
+        assertThrows(InvalidActionException.class, () -> {
+            dmc.build("midnight_armour");
+        });
+    }
+
+
 
 
 

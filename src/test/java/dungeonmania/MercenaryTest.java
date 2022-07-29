@@ -352,7 +352,7 @@ public class MercenaryTest {
 
         DungeonManiaController dmc = new DungeonManiaController();
         // bribe radius and amount are 1
-        DungeonResponse intialResponse = dmc.newGame("d_allyNotRunAway", "simple");
+        DungeonResponse intialResponse = dmc.newGame("d_allyNotRunAway", "c_simple_ally");
 
         DungeonResponse move = dmc.tick(Direction.RIGHT);
         move = dmc.tick(Direction.RIGHT);
@@ -383,11 +383,44 @@ public class MercenaryTest {
         assertEquals(0, getInventory(consume, "invincibility_potion").size());
         assertEquals(0, getEntities(consume, "invincibility_potion").size());
         newP = getEntities(consume, "player").get(0).getPosition();
-
-
-        move = dmc.tick(Direction.UP);
-        mercP = getEntities(move, "mercenary").get(0).getPosition();
-        assertEquals(mercP, newP);
+        mercP = getEntities(consume, "mercenary").get(0).getPosition();
+        assertEquals(4, mercP.getX());
+        assertEquals(1, mercP.getY());
     }
 
+    @Test
+    @DisplayName("Test mind control mercenary")
+    public void TestmindControlMerc() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse initialResponse = dmc.newGame("test_build_sceptre_mindcontrol", "c_testConfigSceptreArmour");
+        
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+        for (int i = 0; i < 3; i++) {//move right 3 times, 0 1 2
+            move = dmc.tick(Direction.RIGHT);
+        }
+        String mercId = getEntities(move, "mercenary").get(0).getId();
+        assertThrows(InvalidActionException.class, () -> dmc.interact(mercId));
+        DungeonResponse build = dmc.build("sceptre");
+        assertEquals(1, getInventory(build, "sceptre").size());
+        assertEquals(0, getInventory(build, "sun_stone").size());
+
+        assertTrue(getEntities(build, "mercenary").get(0).isInteractable());
+
+        DungeonResponse interact = dmc.interact(mercId);
+        // assume sceptre can be consumed like potion and can only be used once
+        assertEquals(0, getInventory(interact, "sceptre").size());
+
+        for (int i = 0; i < 2; i++) {//move right 2 times
+            move = dmc.tick(Direction.RIGHT);
+            assertFalse(getEntities(move, "mercenary").get(0).isInteractable());
+        }
+
+        move = dmc.tick(Direction.RIGHT);
+        assertTrue(getEntities(move, "mercenary").get(0).isInteractable());
+        move = dmc.tick(Direction.RIGHT);
+        assertTrue(getEntities(move, "mercenary").get(0).isInteractable());
+        
+    }
 }

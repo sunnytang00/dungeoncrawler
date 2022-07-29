@@ -46,7 +46,6 @@ public class CirclingSpawn implements MovingStrategy {
         Position iniPos = spider.getInitialPosition();
         Position currPos = spider.getPosition();
         List<Position> adjPos = iniPos.getAdjacentPositions();
-        // List<Entity> adjEntities = new ArrayList<Entity>();
         // first move
         if (iniPos.equals(currPos)) {
             Position firstMovePos = iniPos.translateBy(Direction.UP);
