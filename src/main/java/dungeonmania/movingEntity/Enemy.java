@@ -2,6 +2,7 @@ package dungeonmania.movingEntity;
 
 import org.json.JSONObject;
 
+import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
 import dungeonmania.StaticEntities.SwampTile;
 import dungeonmania.util.Position;
@@ -57,5 +58,9 @@ public abstract class Enemy extends MovingEntity {
         remainingStuckTicks -= 1;
     }
 
-    
+    @Override
+    public void tick(DungeonGame game) {
+        DungeonMap map = game.getMap();
+        move(this, map);
+    }
 }

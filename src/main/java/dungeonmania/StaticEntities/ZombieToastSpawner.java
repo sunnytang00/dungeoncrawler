@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
 import dungeonmania.StaticEntity;
@@ -24,9 +25,12 @@ public class ZombieToastSpawner extends StaticEntity {
      * @param currentTick curent tick 
      * @param spawnTick zombe_spawn_rate, read in from the config file
      */
-    public ZombieToast spawnZombie(int currentTick, DungeonMap map) {
+    public ZombieToast spawnZombie(DungeonGame game) {
+        DungeonMap map = game.getMap();
+        int currentTick = game.getCurrentTick();
         int spawnrate = (int) JSONConfig.getConfig("zombie_spawn_rate");
         if (spawnrate == 0 ) { return null;}
+        if (!(currentTick % spawnrate == 0)) { return null;}
 
         List<Position> cardinallyAdj = this.getPosition().getCardinallyAdjacentPositions();
         List<Position> possibleSpawns = new ArrayList<Position>();
@@ -39,7 +43,7 @@ public class ZombieToastSpawner extends StaticEntity {
             }
         }
 
-        if ((currentTick % spawnrate == 0) && possibleSpawns != null && possibleSpawns.size() > 0) {
+        if (possibleSpawns != null && possibleSpawns.size() > 0) {
             
             return new ZombieToast("zombie_toast", getRandomPosition(possibleSpawns), true);
         }
@@ -56,5 +60,14 @@ public class ZombieToastSpawner extends StaticEntity {
     public boolean containsWall(List<Entity> entities) {
         boolean found = entities.stream().anyMatch(entity -> entity.getType().equals("wall"));
         return found;    
+    }
+
+    @Override
+    public void tick(DungeonGame game) {
+        DungeonMap map = game.getMap();
+        ZombieToast zombie = spawnZombie(game);
+        if (zombie != null) {
+            map.addEnemyToSpawn(zombie);
+        }
     }
 }

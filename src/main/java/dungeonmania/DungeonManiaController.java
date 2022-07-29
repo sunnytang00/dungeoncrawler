@@ -78,7 +78,7 @@ public class DungeonManiaController {
         List<BattleResponse> battleResponses = new ArrayList<BattleResponse>();
         List<String> buildableItems = new ArrayList<String>();
 
-        game = new DungeonGame(goals.getGoalsAsString(map), inventoryItems, battles, buildableItems);
+        game = new DungeonGame(goals.getGoalsAsString(map), inventoryItems, battles, buildableItems, map);
         
         gameList.add(game);
         mapList.add(map);
@@ -141,61 +141,30 @@ public class DungeonManiaController {
         inventory.remove(targetItem);
         player.setInventory(inventory);
 
-        if (targetItem instanceof Bomb) {
-            Bomb bomb = (Bomb) targetItem;
-            Position newPosition = player.getPosition();
-            bomb.setPosition(newPosition);
-            map.addEntityToMap(bomb);
-            bomb.explode(map);
-        }
-
-        if (targetItem instanceof InvincibilityPotion) {
-            InvincibilityPotion invincibilityPotion = (InvincibilityPotion) targetItem;
-            player.consumePotion(invincibilityPotion);
-        }
-
-        if (targetItem instanceof InvisibilityPotion) {
-            InvisibilityPotion invisibilityPotion = (InvisibilityPotion) targetItem;
-            player.consumePotion(invisibilityPotion);
-        }
-
+        targetItem.tick(game);
         player.playerPotionQueueUpdateTick();
 
-        // List<EntityResponse> entityResponses = map.getEntityResponses();
-        // DungeonGame dDame = new DungeonGame(goals.getGoalsAsString(map), inventory, null, null);
-
-        // List<ItemResponse> itemResponses = Helper.convertFromItem(inventory);
-        List<Enemy> enemies = new ArrayList<>();
         for (Entity entity : map.getMapEntities()) {
-            if (entity instanceof Enemy) {
-                Enemy enemy = (Enemy) entity;
-                enemies.add(enemy);
-                enemy.move(enemy, map);
-            }
-            if (entity instanceof ZombieToastSpawner) {
-                ZombieToastSpawner ZTSpawner = (ZombieToastSpawner) entity;
-                ZombieToast zombie = ZTSpawner.spawnZombie(game.getCurrentTick(), map);
-                if (zombie != null) {
-                    zombiesToAdd.add(zombie);
-                }
+            if (entity instanceof Enemy || entity instanceof ZombieToastSpawner) {
+                entity.tick(game);
             }
         }
 
+        List<Enemy> enemies = map.getEnemies();
         for (Enemy enemy : enemies) {
-            if (enemy instanceof Mercenary) {
-                Mercenary mercenary = (Mercenary) enemy;
-                mercenary.updateMindControl();
-            }
             player.interactWithEnemies(enemy, map);
             player.battleWithEnemies(map, game);
+
         }
 
-        map.addEntitiesToMap(zombiesToAdd);
-        Spider spiderToAdd = map.spawnSpider(game.getCurrentTick(), map);
-
-        if (spiderToAdd != null) {
-            map.addEntityToMap(spiderToAdd);
+        map.spawnSpider(game);
+        List<Entity> enemiesToSpawn = map.getEnemiesToSpawn();
+        if (enemiesToSpawn != null && enemiesToSpawn.size() > 0) {
+            map.addEntitiesToMap(enemiesToSpawn);
         }
+
+        map.setEnemiesToSpawn(new ArrayList<Entity>());
+
         map.BoulderSwitchOverlap();
 
         gameList.add(game);
@@ -220,44 +189,31 @@ public class DungeonManiaController {
             rewind(30);
         }
 
-
         player.move(game, map, movementDirection);
-        List<Enemy> enemies = new ArrayList<>();
-        List<ZombieToast> zombiesToAdd = new ArrayList<>();
 
+        
         for (Entity entity : map.getMapEntities()) {
-            if (entity instanceof Enemy) {
-                Enemy enemy = (Enemy) entity;
-                enemies.add(enemy);
-                enemy.move(enemy, map);
+            if (entity instanceof Enemy || entity instanceof ZombieToastSpawner) {
+                entity.tick(game);
             }
-
-            if (entity instanceof ZombieToastSpawner) {
-                ZombieToastSpawner ZTSpawner = (ZombieToastSpawner) entity;
-                ZombieToast zombie = ZTSpawner.spawnZombie(game.getCurrentTick(), map);
-                if (zombie != null) {
-                    zombiesToAdd.add(zombie);
-                }
-            }
-
         }
 
+        List<Enemy> enemies = map.getEnemies();
         for (Enemy enemy : enemies) {
-            if (enemy instanceof Mercenary) {
-                Mercenary mercenary = (Mercenary) enemy;
-                mercenary.updateMindControl();
-            }
             player.interactWithEnemies(enemy, map);
             player.battleWithEnemies(map, game);
 
         }
-        map.addEntitiesToMap(zombiesToAdd);
+        
 
-        Spider spiderToAdd = map.spawnSpider(game.getCurrentTick(), map);
-
-        if (spiderToAdd != null) {
-            map.addEntityToMap(spiderToAdd);
+        map.spawnSpider(game);
+        List<Entity> enemiesToSpawn = map.getEnemiesToSpawn();
+        if (enemiesToSpawn != null && enemiesToSpawn.size() > 0) {
+            map.addEntitiesToMap(enemiesToSpawn);
         }
+
+        map.setEnemiesToSpawn(new ArrayList<Entity>());
+
         map.BoulderSwitchOverlap();
 
         gameList.add(game);

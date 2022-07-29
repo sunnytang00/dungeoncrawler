@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.json.JSONObject;
 
+import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
@@ -134,6 +135,13 @@ public class Mercenary extends BribableEnemy {
         
         obj.put("state", state);
         return obj;
+    }
+
+    @Override
+    public void tick(DungeonGame game) {
+        updateMindControl();
+        DungeonMap map = game.getMap();
+        move(this, map);
     }
     
 }

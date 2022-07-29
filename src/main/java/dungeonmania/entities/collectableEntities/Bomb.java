@@ -3,6 +3,7 @@ package dungeonmania.entities.collectableEntities;
 import java.util.ArrayList;
 import java.util.List;
 
+import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
 import dungeonmania.StaticEntities.FloorSwitch;
@@ -30,6 +31,22 @@ public class Bomb extends Item {
 
     public int getBombRadius() {
         return (int) JSONConfig.getConfig("bomb_radius");
+    }
+
+    public boolean isActivated() {
+        return isActivated;
+    }
+
+    public void setActivated(boolean activated) {
+        isActivated = activated;
+    }
+
+    public boolean isPickable() {
+        return pickable;
+    }
+
+    public void setPickable(boolean pickable) {
+        this.pickable = pickable;
     }
 
     public void explode(DungeonMap map) {
@@ -77,20 +94,15 @@ public class Bomb extends Item {
         }
     }
 
-    public boolean isActivated() {
-        return isActivated;
-    }
+    @Override
+    public void tick(DungeonGame game) {
+        Player player = game.getPlayer();
+        DungeonMap map = game.getMap();
+        Position newPosition = player.getPosition();
+        setPosition(newPosition);
+        map.addEntityToMap(this);
+        explode(map);
 
-    public void setActivated(boolean activated) {
-        isActivated = activated;
-    }
-
-    public boolean isPickable() {
-        return pickable;
-    }
-
-    public void setPickable(boolean pickable) {
-        this.pickable = pickable;
     }
 
     @Override

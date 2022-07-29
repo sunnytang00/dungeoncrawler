@@ -9,5 +9,6 @@ public class InvisibilityPotion extends Potion {
         super(type, position);
         setDurability((int) JSONConfig.getConfig("invisibility_potion_duration"));
     }
+
 }
 

@@ -100,4 +100,8 @@ public abstract class Entity {
         return entity;
     }
 
+    public void tick(DungeonGame game) {
+    
+    }
+
 }

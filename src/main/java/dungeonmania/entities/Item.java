@@ -2,6 +2,7 @@ package dungeonmania.entities;
 
 import org.json.JSONObject;
 
+import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Position;

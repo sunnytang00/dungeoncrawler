@@ -23,10 +23,12 @@ public class DungeonMap {
     private boolean gameWin = false;
     private JSONObject goalsJSON;
     private Goals goals;
+    private List<Entity> enemiesToSpawn;
 
     public DungeonMap(List<Entity> mapEntities, String dungeonName) {
         this.mapEntities = mapEntities;
         this.dungeonName = dungeonName;
+        this.enemiesToSpawn = new ArrayList<Entity>();
     }
 
     public List<Entity> getMapEntities() {
@@ -75,6 +77,16 @@ public class DungeonMap {
                 .findAny()
                 .orElse(null);
         return player;
+    }
+
+    public List<Enemy> getEnemies() {
+        List<Enemy> enemies = new ArrayList<Enemy>();
+        for (Entity entity: mapEntities) {
+            if (entity instanceof Enemy) {
+                enemies.add((Enemy) entity);
+            }
+        }
+        return enemies;
     }
 
     public List<Entity> getEntitiesFromType(List<Entity> list, String type) {
@@ -149,7 +161,7 @@ public class DungeonMap {
         return true;
     }
 
-    public void addEntitiesToMap(List<ZombieToast> entities) {
+    public void addEntitiesToMap(List<Entity> entities) {
         mapEntities.addAll(entities);
     }
 
@@ -174,27 +186,28 @@ public class DungeonMap {
      * @param currentTick curent tick 
      * @param spawnTick spider_spawn_rate, read in from the config file
      */
-    public Spider spawnSpider(int currentTick, DungeonMap map) {
+    public void spawnSpider(DungeonGame game) {
+        int currentTick = game.getCurrentTick();
         int spawnrate = (int) JSONConfig.getConfig("spider_spawn_rate");
-        if (spawnrate == 0 ) { return null;}
-        if (getPlayer() == null) {return null;}
+        if (spawnrate == 0 ) { return;}
+        if (getPlayer() == null) {return;}
+        if (!(currentTick % spawnrate == 0)) {return;}
         Position playerPos = getPlayer().getPosition();
         List<Position> adjPos = playerPos.getPositionsWithInBox(7);
         List<Position> possiblePos = new ArrayList<Position>();
         if (adjPos != null && adjPos.size() != 0) {
             for (Position pos : adjPos) {
-                List<Entity> atAdj = map.getEntityFromPos(pos);
+                List<Entity> atAdj = getEntityFromPos(pos);
                 if (atAdj == null || !containsType(atAdj, "boulder")) {
                     possiblePos.add(pos);
                 }
             }
         }
 
-        if (currentTick % spawnrate == 0 && possiblePos != null && possiblePos.size() > 0) {
-            return new Spider("spider", getRandomPosition(possiblePos), false);
+        if (possiblePos != null && possiblePos.size() > 0) {
+            Spider spider = new Spider("spider", getRandomPosition(possiblePos), false);
+            addEnemyToSpawn(spider);
         }
-
-        return null;
     }
 
     public Position getRandomPosition(List<Position> list) {
@@ -250,6 +263,20 @@ public class DungeonMap {
     public Goals getResetGoals() {
         return goals;
     }
+
+    public void addEnemyToSpawn(Enemy entity) {
+        enemiesToSpawn.add(entity);
+    }
+
+    public List<Entity> getEnemiesToSpawn() {
+        return enemiesToSpawn;
+    }
+
+    public void setEnemiesToSpawn(List<Entity> enemiesToSpawn) {
+        this.enemiesToSpawn = enemiesToSpawn;
+    }
+
+    
     
 }
 

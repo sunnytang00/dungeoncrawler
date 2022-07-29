@@ -2,7 +2,10 @@ package dungeonmania.entities.collectableEntities;
 
 import org.json.JSONObject;
 
+import dungeonmania.DungeonGame;
+import dungeonmania.DungeonMap;
 import dungeonmania.entities.Item;
+import dungeonmania.movingEntity.Player;
 import dungeonmania.util.Position;
 
 public abstract class Potion extends Item {
@@ -13,6 +16,12 @@ public abstract class Potion extends Item {
 
     public Potion(String type, Position position) {
         super(type, position);
+    }
+    
+    @Override
+    public void tick(DungeonGame game) {
+        Player player = game.getPlayer();
+        player.consumePotion(this);
     }
     
     // // set initial potion duration from config file

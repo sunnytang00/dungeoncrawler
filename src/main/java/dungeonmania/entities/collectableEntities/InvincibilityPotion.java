@@ -9,5 +9,6 @@ public class InvincibilityPotion extends Potion {
         super(type, position);
         setDurability((int) JSONConfig.getConfig("invincibility_potion_duration"));
     }
+
 }
 

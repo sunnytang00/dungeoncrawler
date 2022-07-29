@@ -1,5 +1,6 @@
 package dungeonmania.movingEntity;
 
+import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -96,4 +97,5 @@ public abstract class MovingEntity extends Entity  {
         // obj.put("remaining_stuck_tick", getRemainingStuckTick());
         return obj;
     }
+
 }
