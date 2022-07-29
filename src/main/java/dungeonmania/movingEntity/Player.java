@@ -412,11 +412,15 @@ public class Player extends MovingEntity {
         return inventory.stream().anyMatch(i -> i.getType().equals("key"));
     }
 
+    public boolean hasSceptre() {
+        return inventory.stream().anyMatch(i -> i.getType().equals("sceptre"));
+    }
+
     public List<ItemResponse> getInventoryResponses() {
         return inventory.stream().map(Item::getItemResponse).collect(Collectors.toList());
     }
 
-    public List<String> getBuildables() {
+    public List<String> getBuildables(DungeonMap map) {
 
         List<String> ret = new ArrayList<String>();
         
@@ -426,6 +430,14 @@ public class Player extends MovingEntity {
 
         if (canBuildShield()) {
             ret.add("shield");
+        }
+
+        if (canBuildArmour(map)) {
+            ret.add("midnight_armour");
+        }
+
+        if (canBuildSceptre()) {
+            ret.add("sceptre");
         }
         
         return ret;
@@ -476,6 +488,71 @@ public class Player extends MovingEntity {
             }
 
             if ((woodNumber >= 1) && (arrowsNumber >= 3)) {
+                return true;
+            } else {
+                return false;
+            }
+                
+        }
+        return false;
+    }
+
+    public boolean canBuildArmour(DungeonMap map) {
+
+        if (!inventory.isEmpty()) {
+            int sunStoneNum = 0;
+            int swordNum = 0;
+            
+            for (Item item : inventory) {
+
+                if (item instanceof SunStone) {
+                    sunStoneNum++;
+                }
+
+                if (item instanceof Sword) {
+                    swordNum++;
+                }
+            }
+
+            if ((sunStoneNum >= 1) && (swordNum >= 1) && (map.getEntitiesFromType(map.getMapEntities(), "zombie").isEmpty())) {
+                return true;
+            } else {
+                return false;
+            }
+                
+        }
+        return false;
+
+    }
+
+    public boolean canBuildSceptre() {
+
+        if (!inventory.isEmpty()) {
+            int woodNumber = 0;
+            int arrowsNumber = 0;
+            int keyOrTreasureNum = 0;
+            int sunStoneNum = 0;
+
+            for (Item item : inventory) {
+
+                if (item instanceof Wood) {
+                    woodNumber++;
+                }
+
+                if (item instanceof Arrows) {
+                    arrowsNumber++;
+                }
+
+                if ((item instanceof Treasure) || (item instanceof Key)) {
+                    keyOrTreasureNum++;
+                }
+
+                if (item instanceof SunStone) {
+                    sunStoneNum++;
+                }
+            }
+
+            if (((woodNumber >= 1) || (arrowsNumber >= 2)) && (keyOrTreasureNum >= 1) && (sunStoneNum >= 1)) {
                 return true;
             } else {
                 return false;
@@ -537,13 +614,20 @@ public class Player extends MovingEntity {
 
     public void interactWithMercenary(Mercenary merc, DungeonMap map) throws InvalidActionException {
     
-        if (!merc.isInRad(map, merc.getBribeRadius())) {
+        if (!merc.isInRad(map, merc.getBribeRadius()) && !hasSceptre()) {
             throw new InvalidActionException("Bribable enemy not in radius");
-        } else if (!hasEnoughToBribe(merc)) {
-            throw new InvalidActionException("Player does not have enough treasure to bribe");
+        } else if (!hasEnoughToBribe(merc) && !hasSceptre()) {
+            throw new InvalidActionException("Player does not have enough treasure and does not have a sceptre to bribe/mind-control enemy");
         } else {
-            merc.bribe();
-            consumeInventory("treasure", merc.getBribeAmount());
+            if (hasSceptre()) {
+                merc.mindControl();
+                // assume sceptre can be consumed like potion and can only be used once
+                consumeInventory("sceptre", 1);
+            } else if (hasEnoughToBribe(merc) && !hasSceptre()) {
+                merc.bribe();
+                merc.setBribedByTreasure(true);
+                consumeInventory("treasure", merc.getBribeAmount());
+            }
         }
         
     }

@@ -434,5 +434,41 @@ public class AssassinTest {
         
         assertEquals(mercP, newP);
     }
+
+    @Test
+    @DisplayName("Test mind control assassin")
+    public void TestmindControlAssassin() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse initialResponse = dmc.newGame("test_build_sceptre_mindcontrolasn", "c_testConfigSceptre");
+        
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+        for (int i = 0; i < 3; i++) {//move right 3 times, 0 1 2
+            move = dmc.tick(Direction.RIGHT);
+        }
+        String mercId = getEntities(move, "assassin").get(0).getId();
+        assertThrows(InvalidActionException.class, () -> dmc.interact(mercId));
+        DungeonResponse build = dmc.build("sceptre");
+        assertEquals(1, getInventory(build, "sceptre").size());
+        assertEquals(0, getInventory(build, "sun_stone").size());
+
+        assertTrue(getEntities(build, "assassin").get(0).isInteractable());
+
+        DungeonResponse interact = dmc.interact(mercId);
+        // assume sceptre can be consumed like potion and can only be used once
+        assertEquals(0, getInventory(interact, "sceptre").size());
+
+        for (int i = 0; i < 4; i++) {//move right 2 times
+            move = dmc.tick(Direction.RIGHT);
+            assertFalse(getEntities(move, "assassin").get(0).isInteractable());
+        }
+
+        move = dmc.tick(Direction.RIGHT);
+        assertTrue(getEntities(move, "assassin").get(0).isInteractable());
+        move = dmc.tick(Direction.RIGHT);
+        assertTrue(getEntities(move, "assassin").get(0).isInteractable());
+        
+    }
     
 }

@@ -5,6 +5,7 @@ import dungeonmania.Entity;
 import dungeonmania.StaticEntities.*;
 import dungeonmania.movingEntity.*;
 import dungeonmania.entities.collectableEntities.*;
+import dungeonmania.entities.logicSwitches.*;
 import dungeonmania.goals.*;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import java.io.InputStream;
+import java.security.cert.LDAPCertStoreParameters;
 
 public class JSONMap {
 
@@ -45,6 +47,8 @@ public class JSONMap {
         switch (type) {
             case "player":
                 entity = new Player(type, position, false); break;
+            case "old_player":
+                entity = new OlderPlayer(type, position, false); break;
             case "wall":
                 entity = new Wall(type, position); break;
             case "exit":
@@ -88,17 +92,17 @@ public class JSONMap {
             case "sword":
                 entity = new Sword(type, position); break;
             case "swamp_tile":
-                // entity = new SwampTile(type, position, obj.getInt("movement_factor")); break;
+                entity = new SwampTile(type, position, obj.getInt("movement_factor")); break;
             case "time_turner":
                 // entity = new TimeTurner(type, position); break;
             case "time_travelling_portal":
-                // entity = new TimeTravellingPortal(type, position); break;
+                entity = new TimeTravellingPortal(type, position); break;
             case "light_bulb_off":
-                // entity = new LightBulb(type, position); break;
+                entity = new LightBulb(type, position, getLogic(obj.getString("logic"))); break;
             case "wire":
-                // entity = new Wire(type, position); break;
+                entity = new Wire(type, position, getLogic(obj.getString("logic"))); break;
             case "switch_door":
-                // entity = new SwitchDoor(type, position); break;
+                entity = new SwitchDoor(type, position, getLogic(obj.getString("logic")), obj.getInt("key")); break;
         }
         initialMapEntities.add(entity);
     }
@@ -109,6 +113,20 @@ public class JSONMap {
 
     public JSONObject getGoals() {
         return JSONgoals;
+    }
+
+    private LogicEnum getLogic(String logic) {
+        switch(logic) {
+            case "and":
+                return LogicEnum.AND;
+            case "or":
+                return LogicEnum.OR;
+            case "xor":
+                return LogicEnum.XOR;
+            case "co_and":
+                return LogicEnum.CO_AND;
+        }
+        return null;
     }
 
 }

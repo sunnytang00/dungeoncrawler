@@ -13,6 +13,8 @@ public class Mercenary extends BribableEnemy {
 
     private MercenaryState state = new MercViciousState();
     private boolean isBribed;
+    private int mindControlTicks;
+    private boolean bribedByTreasure;
 
 
     public Mercenary(String type, Position position, boolean isInteractable) {
@@ -23,6 +25,8 @@ public class Mercenary extends BribableEnemy {
         getState().currentState(this);
         this.setBribeAmount((int) JSONConfig.getConfig("bribe_amount"));
         this.setNonTraversibles(Arrays.asList("wall", "door"));
+        mindControlTicks = 0;
+        bribedByTreasure = false;
     }
     
 
@@ -47,6 +51,15 @@ public class Mercenary extends BribableEnemy {
         this.isBribed = isBribed;
     }
 
+    public boolean isBribedByTreasure() {
+        return bribedByTreasure;
+    }
+
+
+    public void setBribedByTreasure(boolean bribedByTreasure) {
+        this.bribedByTreasure = bribedByTreasure;
+    }
+
     @Override
     public void move(Enemy movingEntity, DungeonMap map) {
         if (!isBribed()) {
@@ -64,7 +77,10 @@ public class Mercenary extends BribableEnemy {
                 setMovingStrategy(new FollowPlayer());
             }   
         }
-        getMovingStrategy().move(this, map);  
+        this.stuckOnSwamp(map);
+        if (getRemainingStuckTicks() == 0) {
+            getMovingStrategy().move(this, map);  
+        } 
     }
 
 
@@ -80,6 +96,32 @@ public class Mercenary extends BribableEnemy {
         this.setState(new MercBribedState());
         getState().currentState(this);
         setInteractable(false);
+    }    
+
+    public int getMindControlTicks() {
+        return mindControlTicks;
+    }
+
+
+    public void setMindControlTicks(int mindControlTicks) {
+        this.mindControlTicks = mindControlTicks;
+    }
+
+    public void mindControl() {
+        int mindControlDuration = (int) JSONConfig.getConfig("mind_control_duration");
+        setMindControlTicks(mindControlDuration);
+        bribe();
+    }
+
+    public void updateMindControl() {
+        if (mindControlTicks > 0) {
+            bribe();
+            mindControlTicks -= 1;
+        } else if (mindControlTicks == 0 && !isBribedByTreasure()) {
+            this.setState(new MercViciousState());
+            getState().currentState(this);
+            setInteractable(true);
+        }
     }
 
     @Override

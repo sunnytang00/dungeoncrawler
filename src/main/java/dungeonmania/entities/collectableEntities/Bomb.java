@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 public class Bomb extends Item {
 
+    private boolean isActivated;
 
     public Bomb(String type, Position position) {
         super(type, position);
@@ -71,10 +72,18 @@ public class Bomb extends Item {
         }
     }
 
+    public boolean isActivated() {
+        return isActivated;
+    }
+
+    public void setActivated(boolean activated) {
+        isActivated = activated;
+    }
+
     @Override
     public JSONObject toJSON() {
         JSONObject obj = super.toJSON();
-        // obj.put("is_active", isTriggered);
+        obj.put("is_active", isActivated);
         // obj.put("is_pickable", isPickable);
         return obj;
     }
