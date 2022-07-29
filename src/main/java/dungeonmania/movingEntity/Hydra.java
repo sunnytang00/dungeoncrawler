@@ -18,10 +18,7 @@ public class Hydra extends ZombieToast {
 
     public double inBattle(double deltaEnemyHealth) {
         double newDelta = deltaEnemyHealth;
-        Random rand = new Random();
-        int num = rand.nextInt(1000); 
-        double threshold = 1000 * JSONConfig.getConfig("hydra_health_increase_rate");
-        if (num <= threshold) {
+        if (Math.random() < JSONConfig.getConfig("hydra_health_increase_rate")) {
             newDelta = getHealth() + JSONConfig.getConfig("hydra_health_increase_amount");
         }
         return newDelta;
