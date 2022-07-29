@@ -1,10 +1,11 @@
-package dungeonmania.entities.logicSwitches;
+package dungeonmania.logicSwitches;
 
 import dungeonmania.DungeonMap;
+import dungeonmania.StaticEntity;
 import dungeonmania.entities.Item;
 import dungeonmania.util.Position;
 
-public abstract class LogicItem extends Item {
+public abstract class LogicItem extends StaticEntity {
 
     /**
      * Each Entity in the logicSwitches package have

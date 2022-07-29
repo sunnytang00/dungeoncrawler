@@ -1,9 +1,8 @@
-package dungeonmania.entities.logicSwitches;
+package dungeonmania.logicSwitches;
 
 import dungeonmania.DungeonMap;
 
-public class ANDActivateStrategy extends BaseActivateStrategy {
-
+public class CO_ANDActivateStrategy extends BaseActivateStrategy {
     @Override
     public void activate(DungeonMap map, LogicItem logicItem) {
         super.activate(map, logicItem);

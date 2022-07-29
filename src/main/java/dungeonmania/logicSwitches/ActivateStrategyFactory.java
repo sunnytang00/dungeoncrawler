@@ -1,4 +1,4 @@
-package dungeonmania.entities.logicSwitches;
+package dungeonmania.logicSwitches;
 
 public class ActivateStrategyFactory {
     public static ActivateStrategy getActivateStrategyByLogic(LogicEnum logicEnum) {

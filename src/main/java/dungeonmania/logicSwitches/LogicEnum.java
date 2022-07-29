@@ -1,4 +1,4 @@
-package dungeonmania.entities.logicSwitches;
+package dungeonmania.logicSwitches;
 
 public enum LogicEnum {
     AND("AND"),

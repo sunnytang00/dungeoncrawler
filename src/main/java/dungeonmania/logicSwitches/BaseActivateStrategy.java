@@ -1,4 +1,4 @@
-package dungeonmania.entities.logicSwitches;
+package dungeonmania.logicSwitches;
 
 import dungeonmania.DungeonMap;
 import dungeonmania.Entity;

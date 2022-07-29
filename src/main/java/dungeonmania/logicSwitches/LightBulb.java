@@ -1,4 +1,4 @@
-package dungeonmania.entities.logicSwitches;
+package dungeonmania.logicSwitches;
 
 import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
@@ -22,6 +22,7 @@ public class LightBulb extends LogicItem {
                 for (Entity entity : entityFromPos) {
                     if (entity instanceof Boulder) {
                         this.isActivated = true;
+                        setType("light_bulb_on");
                         break;
                     }
                 }

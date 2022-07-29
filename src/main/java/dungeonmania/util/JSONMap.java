@@ -5,8 +5,8 @@ import dungeonmania.Entity;
 import dungeonmania.StaticEntities.*;
 import dungeonmania.movingEntity.*;
 import dungeonmania.entities.collectableEntities.*;
-import dungeonmania.entities.logicSwitches.*;
 import dungeonmania.goals.*;
+import dungeonmania.logicSwitches.*;
 
 import java.util.ArrayList;
 import java.util.List;
