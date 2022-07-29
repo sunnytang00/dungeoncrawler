@@ -278,20 +278,19 @@ public class AssassinTest {
         ItemResponse res = getInventory(move, "invincibility_potion").get(0);
         DungeonResponse consume = dmc.tick(res.getId());
 
-        res = getInventory(move, "invisibility_potion").get(0);
-        consume = dmc.tick(res.getId());
-
         assertEquals(0, getInventory(consume, "invincibility_potion").size());
         assertEquals(0, getEntities(consume, "invincibility_potion").size());
-
-        assertEquals(0, getInventory(consume, "invisibility_potion").size());
-        assertEquals(0, getEntities(consume, "invisibility_potion").size());
 
         assertEquals(1, countEntityOfType(consume, "assassin"));
 
         move = dmc.tick(Direction.RIGHT);
         // Position playerPrev = getEntities(consume, "player").get(0).getPosition();
         Position mercPrev = getEntities(move, "assassin").get(0).getPosition();
+        res = getInventory(move, "invisibility_potion").get(0);
+        consume = dmc.tick(res.getId());
+
+        assertEquals(0, getInventory(consume, "invincibility_potion").size());
+        assertEquals(0, getEntities(consume, "invincibility_potion").size());
 
         Position playerP = getEntities(consume, "player").get(0).getPosition();
         Position mercP = getEntities(consume, "assassin").get(0).getPosition();
