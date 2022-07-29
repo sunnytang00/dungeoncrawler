@@ -148,7 +148,7 @@ public class PotionTest {
 
         //PLAYER    BOULDER
 
-        DungeonResponse intialResponse = dmc.newGame("advanced", "simple");
+        DungeonResponse intialResponse = dmc.newGame("advanced", "c_testPotion");
 
         DungeonResponse move = dmc.tick(Direction.RIGHT);
         DungeonResponse move2 = dmc.tick(Direction.RIGHT);
@@ -161,6 +161,13 @@ public class PotionTest {
         assertEquals(0, getEntities(consume2, "invincibility_potion").size());
         assertEquals(0, getInventory(consume2, "invisibility_potion").size());
         assertEquals(0, getEntities(consume2, "invisibility_potion").size());
+
+        move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.RIGHT);
+
+
 
 
     }
