@@ -8,7 +8,7 @@ import dungeonmania.movingEntity.*;
 import dungeonmania.entities.Item;
 import dungeonmania.entities.buildableEntities.*;
 import dungeonmania.entities.collectableEntities.*;
-import dungeonmania.entities.logicSwitches.*;
+import dungeonmania.logicSwitches.*;
 import dungeonmania.goals.Goals;
 
 import java.io.InputStream;

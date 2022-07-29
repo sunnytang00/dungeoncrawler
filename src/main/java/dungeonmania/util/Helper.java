@@ -4,7 +4,7 @@ import java.util.List;
 
 import dungeonmania.Entity;
 import dungeonmania.StaticEntity;
-import dungeonmania.entities.logicSwitches.LogicEnum;
+import dungeonmania.logicSwitches.LogicEnum;
 
 public final class Helper {
     
