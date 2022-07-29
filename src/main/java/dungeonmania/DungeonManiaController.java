@@ -27,8 +27,6 @@ public class DungeonManiaController {
     private ArrayList<DungeonMap> mapsToPlayOut = new ArrayList<DungeonMap>();
     private ArrayList<DungeonGame> gamesToPlayOut = new ArrayList<DungeonGame>();
     private boolean timeTravelled = false;
-
-
     private Goals goals;
     private List<JSONObject> tickHistory = new ArrayList<JSONObject>();
 
@@ -351,11 +349,11 @@ public class DungeonManiaController {
      * /game/load
      */
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
-        InputStream is = FileLoader.class.getResourceAsStream("/dungeons/" + name + ".json");
+        InputStream is = FileLoader.class.getResourceAsStream("bin/recourses/dungeons/" + name + ".json");
         if (is == null) {
             throw new IllegalArgumentException("Cannot find the game to load");
         }
-        JSONReloadGame reloadGame = new JSONReloadGame(is);
+        JSONReloadGame reloadGame = new JSONReloadGame(is, name);
         map = new DungeonMap(reloadGame.getMapEntities(), name);
         goals = JSONLoadGoals.getComposedGoals(reloadGame.getGoals(), map);
         map.setJSONGoals(reloadGame.getGoals());
@@ -424,6 +422,5 @@ public class DungeonManiaController {
         // return getDungeonResponseModel();
         return null;
     }
-
 
 }

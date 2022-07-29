@@ -54,7 +54,7 @@ public abstract class Item extends Entity {
     public JSONObject toJSON(String mode) {
         JSONObject obj = super.toJSON(mode);
         // mode: "durability" - means we have to save the durability
-        if (mode.equals("inventory")) {
+        if (mode.equals("durability")) {
             obj.put("durability", getDurability());
             return obj;
         }
