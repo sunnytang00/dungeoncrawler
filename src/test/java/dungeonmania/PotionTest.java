@@ -148,7 +148,7 @@ public class PotionTest {
 
         //PLAYER    BOULDER
 
-        DungeonResponse intialResponse = dmc.newGame("advanced", "c_testPotion");
+        DungeonResponse intialResponse = dmc.newGame("d_twoPotion", "c_testPotion");
 
         DungeonResponse move = dmc.tick(Direction.RIGHT);
         DungeonResponse move2 = dmc.tick(Direction.RIGHT);
@@ -166,8 +166,6 @@ public class PotionTest {
         move = dmc.tick(Direction.RIGHT);
         move = dmc.tick(Direction.RIGHT);
         move = dmc.tick(Direction.RIGHT);
-
-
 
 
     }

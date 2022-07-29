@@ -357,10 +357,18 @@ public class Player extends MovingEntity {
         if ((item instanceof Key )&& hasKey()) {
             return;
         }
-        inventory.add(item);
+
         if (item instanceof Key) {
             setCurrKey((Key) item);
+        } else if (item instanceof Bomb) {
+            Bomb bomb = (Bomb) item;
+            if (bomb.isPickable()) {
+                bomb.setPickable(false);
+            } else {
+                return;
+            }
         }
+        inventory.add(item);
         List<Entity> newMapEntities = map.getMapEntities();
         newMapEntities.remove(item);
         map.setMapEntities(newMapEntities);
