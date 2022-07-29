@@ -22,6 +22,13 @@ public class DungeonGame {
         this.buildables = buildables;
     }
 
+    public DungeonGame(DungeonGame game) {
+        this.dungeonId = game.dungeonId;
+        this.inventories = game.inventories;
+        this.buildables = game.buildables;
+    }
+
+
     public String getDungeonId() {
         return dungeonId;
     }

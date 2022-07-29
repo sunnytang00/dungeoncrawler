@@ -25,6 +25,7 @@ public class DungeonManiaController {
     private ArrayList<DungeonMap> mapsToPlayOut = new ArrayList<DungeonMap>();
     private ArrayList<DungeonGame> gamesToPlayOut = new ArrayList<DungeonGame>();
     private boolean timeTravelled = false;
+    private int timeTravellingIDX;
 
 
     private Goals goals;
@@ -78,8 +79,10 @@ public class DungeonManiaController {
 
         game = new DungeonGame(goals.getGoalsAsString(map), inventoryItems, battles, buildableItems);
         
-        gameList.add(game);
-        mapList.add(map);
+        gameList.add(new DungeonGame(game));
+        mapList.add(new DungeonMap(map));
+        System.out.println("new game curr pos " + map.getPlayer().getPosition());
+        System.out.println("position at index 0 " + mapList.get(0).getPlayer().getPosition());
 
 
         return new DungeonResponse(game.getDungeonId(), dungeonName, entityResponses, inventoryResponses, battleResponses, buildableItems,
@@ -170,7 +173,7 @@ public class DungeonManiaController {
                 enemies.add(enemy);
                 enemy.move(enemy, map);
             }
-            if (entity instanceof ZombieToastSpawner) {
+            if (entity instanceof ZombieToastSpawner && !timeTravelled) {
                 ZombieToastSpawner ZTSpawner = (ZombieToastSpawner) entity;
                 ZombieToast zombie = ZTSpawner.spawnZombie(game.getCurrentTick(), map);
                 if (zombie != null) {
@@ -185,15 +188,22 @@ public class DungeonManiaController {
         }
 
         map.addEntitiesToMap(zombiesToAdd);
-        Spider spiderToAdd = map.spawnSpider(game.getCurrentTick(), map);
+        
+        if (!timeTravelled) {
+            Spider spiderToAdd = map.spawnSpider(game.getCurrentTick(), map);
 
-        if (spiderToAdd != null) {
+            if (spiderToAdd != null) {
             map.addEntityToMap(spiderToAdd);
+        }
         }
         map.BoulderSwitchOverlap();
 
-        gameList.add(game);
-        mapList.add(map);
+        if (!timeTravelled) {
+            gameList.add(new DungeonGame(game));
+            mapList.add(new DungeonMap(map));
+            System.out.println("curr pos " + map.getPlayer().getPosition());
+            System.out.println("map index 0 " + mapList.get(0).getPlayer().getPosition());
+        }
 
         return getDungeonResponseModel();
     }
@@ -203,6 +213,8 @@ public class DungeonManiaController {
      */
     public DungeonResponse tick(Direction movementDirection) {
         game.incrementTick();
+        // System.out.println(mapList.size()-1);
+        // System.out.println(mapList.get(mapList.size()-1).getPlayer().getPosition());
         Player player = map.getPlayer();
         // potion effect
         player.playerPotionQueueUpdateTick();
@@ -213,11 +225,14 @@ public class DungeonManiaController {
             rewind(30);
         }
 
-
+        System.out.println("1position at index 0 " + mapList.get(0).getPlayer().getPosition());
         player.move(game, map, movementDirection);
+        System.out.println("2position at index 0 " + mapList.get(0).getPlayer().getPosition());
+        
+        //Spawning
         List<Enemy> enemies = new ArrayList<>();
         List<ZombieToast> zombiesToAdd = new ArrayList<>();
-
+        
         for (Entity entity : map.getMapEntities()) {
             if (entity instanceof Enemy) {
                 Enemy enemy = (Enemy) entity;
@@ -225,7 +240,7 @@ public class DungeonManiaController {
                 enemy.move(enemy, map);
             }
 
-            if (entity instanceof ZombieToastSpawner) {
+            if (entity instanceof ZombieToastSpawner && !timeTravelled) {//Spawning shouldn't occur if we're in the past since we just replay the mapstoplay
                 ZombieToastSpawner ZTSpawner = (ZombieToastSpawner) entity;
                 ZombieToast zombie = ZTSpawner.spawnZombie(game.getCurrentTick(), map);
                 if (zombie != null) {
@@ -235,22 +250,35 @@ public class DungeonManiaController {
 
         }
 
+        map.addEntitiesToMap(zombiesToAdd);
+
+        if (!timeTravelled) {
+
+            Spider spiderToAdd = map.spawnSpider(game.getCurrentTick(), map);
+
+            if (spiderToAdd != null) {
+                map.addEntityToMap(spiderToAdd);
+            }
+        }
+
+        
+        //Check for overlap
+        map.BoulderSwitchOverlap();
+
         for (Enemy enemy : enemies) {
             player.interactWithEnemies(enemy, map);
             player.battleWithEnemies(map, game);
 
         }
-        map.addEntitiesToMap(zombiesToAdd);
 
-        Spider spiderToAdd = map.spawnSpider(game.getCurrentTick(), map);
-
-        if (spiderToAdd != null) {
-            map.addEntityToMap(spiderToAdd);
+        if (!timeTravelled) {
+            System.out.println("bmap index 0 " + mapList.get(0).getPlayer().getPosition());
+            gameList.add(new DungeonGame(game));
+            mapList.add(new DungeonMap(map));
+            System.out.println("curr pos " + map.getPlayer().getPosition());
+            System.out.println("map index 0 " + mapList.get(0).getPlayer().getPosition());
+            
         }
-        map.BoulderSwitchOverlap();
-
-        gameList.add(game);
-        mapList.add(map);
 
 
         return getDungeonResponseModel();
@@ -370,9 +398,11 @@ public class DungeonManiaController {
         if (ticks >= gameSize) {
             throw new IllegalArgumentException("The number of ticks has not occured yet");
         }
-
-        for (DungeonMap map: mapList) {//Change all player entitys in previous states to type older_player
-            map.changePlayerToOlder();
+        
+        for (DungeonMap map: mapList) {//Change all player entitys in previous states to type older_player;
+            System.out.println(map);
+            System.out.println(mapList.get(0).getPlayer().getPosition());
+            //map.changePlayerToOlder();
         }
         
         for (idx = gameSize - ticks; idx < gameSize; idx++) {//Add the games that need to be played out to a new list
@@ -385,7 +415,7 @@ public class DungeonManiaController {
             game = gameList.get(0);
 
         } else if (gameSize > ticks) {//We should be in here if there are no problems
-            game = gameList.get((gameSize - ticks) - 1);//Set the current game and map state to the rewinded one
+            game = gameList.get((gameSize - ticks) - 1);//Set the current game and map state to one of the previous ones
             map = mapList.get((gameSize - ticks) - 1);
         }
 

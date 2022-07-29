@@ -24,6 +24,11 @@ public class DungeonMap {
         this.dungeonName = dungeonName;
     }
 
+    public DungeonMap(DungeonMap map) {
+        this.mapEntities = map.mapEntities;
+        this.dungeonName = map.dungeonName;
+    }
+
     public List<Entity> getMapEntities() {
         return mapEntities;
     }
@@ -62,6 +67,14 @@ public class DungeonMap {
                 .orElse(null);
         return player;
     }
+
+    // public Player getOlderPlayer() {
+    //     Player olderPlayer = (Player) mapEntities.stream()
+    //             .filter(entity -> entity.getType().equals("older_player"))
+    //             .findAny()
+    //             .orElse(null);
+    //     return olderPlayer;
+    // }
 
     public List<Entity> getEntitiesFromType(List<Entity> list, String type) {
         return list.stream()
@@ -191,6 +204,15 @@ public class DungeonMap {
     public boolean containsType(List<Entity> entities, String type) {
         boolean found = entities.stream().anyMatch(entity -> entity.getType().equals(type));
         return found;    
+    }
+
+    public boolean hasZombies() {
+        for (Entity e : mapEntities) {
+            if (e instanceof ZombieToast) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void BoulderSwitchOverlap() {
