@@ -189,13 +189,13 @@ public class DungeonMap {
         return list.get(rand.nextInt(list.size()));
     }
 
-    public void changePlayerToOlder() {
-        for (Entity entity : mapEntities) {
-            if (entity instanceof Player) {
-                entity.setType("older_player");
-                break;
+    public boolean hasZombies() {
+        for (Entity e : mapEntities) {
+            if (e instanceof ZombieToast) {
+                return true;
             }
         }
+        return false;
     }
 
     public boolean containsType(List<Entity> entities, String type) {
