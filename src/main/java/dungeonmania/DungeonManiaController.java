@@ -152,13 +152,8 @@ public class DungeonManiaController {
             }
         }
 
-        List<Enemy> enemies = map.getEnemies();
-        if (!player.isInvisible()) {
-            for (Enemy enemy : enemies) {
-                player.interactWithEnemies(enemy, map);
-                player.battleWithEnemies(map, game);
-            }
-        }
+        player.battle(map, game);
+        if (game.getPlayer() == null) { return getDungeonResponseModel();}
 
         map.spawnSpider(game);
         List<Entity> enemiesToSpawn = map.getEnemiesToSpawn();
@@ -193,7 +188,7 @@ public class DungeonManiaController {
         }
 
         player.move(game, map, movementDirection);
-
+        if (game.getPlayer() == null) { return getDungeonResponseModel();}
         
         for (Entity entity : map.getMapEntities()) {
             if (entity instanceof Enemy || entity instanceof ZombieToastSpawner) {
@@ -201,14 +196,8 @@ public class DungeonManiaController {
             }
         }
 
-        List<Enemy> enemies = map.getEnemies();
-        if (!player.isInvisible()) {
-            for (Enemy enemy : enemies) {
-                player.interactWithEnemies(enemy, map);
-                player.battleWithEnemies(map, game);
-            }
-        }
-        
+        player.battle(map, game);
+        if (game.getPlayer() == null) { return getDungeonResponseModel();}
 
         map.spawnSpider(game);
         List<Entity> enemiesToSpawn = map.getEnemiesToSpawn();
