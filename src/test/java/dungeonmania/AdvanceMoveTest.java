@@ -186,35 +186,62 @@ public class AdvanceMoveTest {
         
         assertEquals(playerPos.getX(), 1);
         assertEquals(playerPos.getY(), 0);
-        // assertEquals(mercPos.getX(), 2);
-        // assertEquals(mercPos.getY(), 1);
+        assertEquals(mercPos.getX(), 7);
+        assertEquals(mercPos.getY(), 6);
 
-        // move = dmc.tick(Direction.LEFT);
-        // playerPos = getEntities(move, "player").get(0).getPosition();
-        // mercPos = getEntities(move, "mercenary").get(0).getPosition();
+        move = dmc.tick(Direction.LEFT);
+        mercPos = getEntities(move, "assassin").get(0).getPosition();
 
-        // assertEquals(playerPos.getX(), 0);
-        // assertEquals(playerPos.getY(), 1);
-        // assertEquals(mercPos.getX(), 2);
-        // assertEquals(mercPos.getY(), 1);
+        assertEquals(mercPos.getX(), 7);
+        assertEquals(mercPos.getY(), 5);
 
-        // move = dmc.tick(Direction.RIGHT);
-        // playerPos = getEntities(move, "player").get(0).getPosition();
-        // mercPos = getEntities(move, "mercenary").get(0).getPosition();
+        move = dmc.tick(Direction.RIGHT);
+        mercPos = getEntities(move, "assassin").get(0).getPosition();
 
-        // assertEquals(playerPos.getX(), 1);
-        // assertEquals(playerPos.getY(), 1);
-        // assertEquals(mercPos.getX(), 2);
-        // assertEquals(mercPos.getY(), 1);
+        assertEquals(mercPos.getX(), 7);
+        assertEquals(mercPos.getY(), 4);
 
-        // move = dmc.tick(Direction.LEFT);
-        // playerPos = getEntities(move, "player").get(0).getPosition();
-        // mercPos = getEntities(move, "mercenary").get(0).getPosition();
+        move = dmc.tick(Direction.LEFT);
+        mercPos = getEntities(move, "assassin").get(0).getPosition();
 
-        // assertEquals(playerPos.getX(), 0);
-        // assertEquals(playerPos.getY(), 1);
-        // assertEquals(mercPos.getX(), 1);
-        // assertEquals(mercPos.getY(), 1);
+        assertEquals(mercPos.getX(), 7);
+        assertEquals(mercPos.getY(), 3);
+
+        move = dmc.tick(Direction.RIGHT);
+        mercPos = getEntities(move, "assassin").get(0).getPosition();
+
+        assertEquals(mercPos.getX(), 7);
+        assertEquals(mercPos.getY(), 2);
+
+        move = dmc.tick(Direction.LEFT);
+        mercPos = getEntities(move, "assassin").get(0).getPosition();
+
+        assertEquals(mercPos.getX(), 7);
+        assertEquals(mercPos.getY(), 1);
+
+        move = dmc.tick(Direction.RIGHT);
+        mercPos = getEntities(move, "assassin").get(0).getPosition();
+
+        assertEquals(mercPos.getX(), 6);
+        assertEquals(mercPos.getY(), 1);
+
+        move = dmc.tick(Direction.LEFT);
+        mercPos = getEntities(move, "assassin").get(0).getPosition();
+
+        assertEquals(mercPos.getX(), 5);
+        assertEquals(mercPos.getY(), 1);
+
+        move = dmc.tick(Direction.RIGHT);
+        mercPos = getEntities(move, "assassin").get(0).getPosition();
+
+        assertEquals(mercPos.getX(), 4);
+        assertEquals(mercPos.getY(), 1);
+
+        move = dmc.tick(Direction.RIGHT);
+        mercPos = getEntities(move, "assassin").get(0).getPosition();
+
+        assertEquals(mercPos.getX(), 3);
+        assertEquals(mercPos.getY(), 1);
 
 
 
