@@ -1,9 +1,7 @@
 package dungeonmania.entities.collectableEntities.potions;
 
-import org.json.JSONObject;
 
 import dungeonmania.DungeonGame;
-import dungeonmania.DungeonMap;
 import dungeonmania.entities.Item;
 import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.Position;
@@ -24,24 +22,5 @@ public abstract class Potion extends Item {
         player.consumePotion(this);
     }
     
-    // // set initial potion duration from config file
-    // public void setDurability(int duration) {
-    //     this.d = duration;
-    // }
-
-    // // gets remaining duration of this potion
-    // public int getTicks() {
-    //     return ticks;
-    // }
-
-    // // update potion duration of this potion
-    // public void updateTicks() {
-    //     this.ticks -= 1;
-    // }
-
-    // @Override
-    // public JSONObject toJSON(String mode) {
-    //     JSONObject obj = super.toJSON(mode);
-    // }
 }
 

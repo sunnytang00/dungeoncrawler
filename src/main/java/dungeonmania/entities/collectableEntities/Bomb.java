@@ -12,10 +12,6 @@ import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.imageio.ImageTypeSpecifier;
 
 import org.json.JSONObject;
 

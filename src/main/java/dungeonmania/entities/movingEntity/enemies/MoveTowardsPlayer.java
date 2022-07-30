@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Random;
 
 import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;

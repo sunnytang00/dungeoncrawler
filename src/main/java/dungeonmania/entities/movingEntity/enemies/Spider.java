@@ -1,15 +1,10 @@
 package dungeonmania.entities.movingEntity.enemies;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.json.JSONObject;
 
-import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
-import dungeonmania.entities.Entity;
-import dungeonmania.util.Direction;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 

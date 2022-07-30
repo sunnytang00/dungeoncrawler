@@ -1,7 +1,5 @@
 package dungeonmania.entities;
 
-import java.util.List;
-
 import org.json.JSONObject;
 
 import dungeonmania.DungeonMap;

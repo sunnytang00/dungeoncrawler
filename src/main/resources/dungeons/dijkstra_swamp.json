@@ -103,7 +103,7 @@
       {
         "x": 3,
         "y": 3,
-        "type": "swamp",
+        "type": "swamp_tile",
         "movement_factor" : 2
       }
     ],
