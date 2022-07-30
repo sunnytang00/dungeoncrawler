@@ -1,6 +1,5 @@
 package dungeonmania.util;
 
-import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.StaticEntities.*;
 import dungeonmania.entities.StaticEntities.logicSwitches.*;
@@ -9,7 +8,6 @@ import dungeonmania.entities.collectableEntities.potions.InvincibilityPotion;
 import dungeonmania.entities.collectableEntities.potions.InvisibilityPotion;
 import dungeonmania.entities.movingEntity.enemies.*;
 import dungeonmania.entities.movingEntity.player.*;
-import dungeonmania.goals.*;
 
 import java.util.ArrayList;
 import java.util.List;

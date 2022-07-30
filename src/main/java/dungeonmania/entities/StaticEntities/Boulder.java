@@ -2,10 +2,7 @@ package dungeonmania.entities.StaticEntities;
 
 import dungeonmania.util.Position;
 
-import java.util.List;
-
 import dungeonmania.DungeonMap;
-import dungeonmania.entities.Entity;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.Direction;

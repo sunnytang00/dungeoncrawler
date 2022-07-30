@@ -256,7 +256,6 @@ public class Player extends MovingEntity {
 
                 if (newHealth <= 0) {
                     game.addToBattles(currBattle);
-                    // map.removeEntityFromMap(this);
                     map.removePlayerFromMap(false);
                     return;
                     // return battles;
@@ -538,6 +537,7 @@ public class Player extends MovingEntity {
         } else if (!hasEnoughToBribe(merc) && !hasSceptre()) {
             throw new InvalidActionException("Player does not have enough treasure and does not have a sceptre to bribe/mind-control enemy");
         } else {
+            // assume use sceptre in priority
             if (hasSceptre()) {
                 merc.mindControl();
                 // assume sceptre can be consumed like potion and can only be used once
@@ -546,6 +546,7 @@ public class Player extends MovingEntity {
                 merc.bribe();
                 merc.setBribedByTreasure(true);
                 consumeInventory("treasure", merc.getBribeAmount());
+                System.out.println(merc.getState());
             }
         }
         

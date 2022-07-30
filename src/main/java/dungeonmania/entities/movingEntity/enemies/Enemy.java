@@ -1,7 +1,5 @@
 package dungeonmania.entities.movingEntity.enemies;
 
-import org.json.JSONObject;
-
 import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
 import dungeonmania.entities.StaticEntities.SwampTile;

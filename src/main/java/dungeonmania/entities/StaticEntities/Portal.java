@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.movingEntity.MovingEntity;
 import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Helper;
@@ -71,15 +72,36 @@ public class Portal extends StaticEntity {
         return teleportThroughPortal(this, map, player);
     }
 
-    public boolean teleportThroughPortal(Portal portal, DungeonMap map, Player player) {
+    public boolean teleportThroughPortal(Portal portal, DungeonMap map, MovingEntity moving) {
         boolean teleportByPortal = false;
-        portal.linkPortals(map.getMapEntities());
+        List<Position> possiblePos = getTeleportPositions(portal, map);
         Position teleport = portal.getPairPosition();
         if (teleport == null) { return teleportByPortal; }
+        Position followDir = teleport.translateBy(moving.getDirection());
+        if (possiblePos != null && possiblePos.size() != 0) {
+            if (possiblePos.contains(followDir)) {
+                moving.setPosition(followDir);
+            } else {
+                moving.setPosition(possiblePos.get(0));
+            }
+            teleportByPortal = true;
+            Position teleportedP = moving.getPosition();
+            
+            Portal newPortal = map.getPortalAtPos(teleportedP);
+            if (newPortal == null) { return teleportByPortal; }
+
+            return teleportThroughPortal(newPortal, map, moving);
+        }
+        return teleportByPortal;
+    }
+
+    public List<Position> getTeleportPositions(Portal portal, DungeonMap map) {
+        portal.linkPortals(map.getMapEntities());
+        Position teleport = portal.getPairPosition();
+        if (teleport == null) { return null; }
 
         List<Position> telePositions = teleport.getCardinallyAdjacentPositions();
         List<Position> possiblePos = new ArrayList<Position>();
-        Position followDir = teleport.translateBy(player.getDirection());
         if (telePositions != null && telePositions.size() > 0) {
             for (Position pos : telePositions) {
                 List<Entity> entitiesAtPos = map.getEntityFromPos(pos);
@@ -89,21 +111,7 @@ public class Portal extends StaticEntity {
                 }
             }
         }
-        if (possiblePos != null && possiblePos.size() != 0) {
-            if (possiblePos.contains(followDir)) {
-                player.setPosition(followDir);
-            } else {
-                player.setPosition(possiblePos.get(0));
-            }
-            teleportByPortal = true;
-            Position teleportedP = player.getPosition();
-            
-            Portal newPortal = map.getPortalAtPos(teleportedP);
-            if (newPortal == null) { return teleportByPortal; }
-
-            return teleportThroughPortal(newPortal, map, player);
-        }
-        return teleportByPortal;
+        return possiblePos;
     }
     
 }
