@@ -218,11 +218,11 @@ public class Player extends MovingEntity {
 
             while (this.getHealth() > 0 && enemy.getHealth() > 0) {
                 List<Item> weaponryUsed = checkBattleBonuses(map);
-                boolean hasShield = false;
+                boolean hasBow = false;
                 if (weaponryUsed != null) {
                     for (Item weapon : weaponryUsed) {
-                        if (weapon instanceof Shield) {
-                            hasShield = true;
+                        if (weapon instanceof Bow) {
+                            hasBow = true;
                         }
                     }
                 }
@@ -232,7 +232,7 @@ public class Player extends MovingEntity {
                     Hydra hydra = (Hydra) enemy;
                     deltaEnemyHealth = hydra.inBattle(deltaEnemyHealth);
                 }
-                if (hasShield) {
+                if (hasBow) {
                     deltaEnemyHealth *= 2;
                 }
                 double newHealth = getHealth() + deltaPlayerHealth;
