@@ -219,8 +219,8 @@ public class JSONReloadGame {
 
         // restore time travel memories
         JSONObject timeTravelJSON = object.getJSONObject("time-travel");
-        
-
+        int timeTravelTick = timeTravelJSON.getInt("time_travel_tick");  
+        JSONArray histories = timeTravelJSON.getJSONArray("tick_histories");
 
         // restore config file
         String configFile = object.getJSONObject("config-file").getString("file_name");
