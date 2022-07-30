@@ -218,7 +218,8 @@ public class JSONReloadGame {
 
 
         // restore time travel memories
-        JSONArray timeTravelJSON = object.getJSONArray("time-travel");
+        JSONObject timeTravelJSON = object.getJSONObject("time-travel");
+        
 
 
         // restore config file
@@ -330,7 +331,7 @@ public class JSONReloadGame {
             case "swamp_tile":
                 entity = new SwampTile(type, position, obj.getInt("movement_factor")); break;
             case "time_turner":
-                // entity = new TimeTurner(type, position); break;
+                entity = new TimeTurner(type, position); break;
             case "time_travelling_portal":
                 entity = new TimeTravellingPortal(type, position); break;
             case "light_bulb_off":
@@ -406,7 +407,7 @@ public class JSONReloadGame {
                 inventory.add(sceptre);
                 (sceptre).setDurability(durability); break;
             case "time_turner":
-                // inventory.add((TimeTurner) entity); break;
+                inventory.add((TimeTurner) entity); break;
         }
     }
 
