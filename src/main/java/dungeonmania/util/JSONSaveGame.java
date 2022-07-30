@@ -39,5 +39,4 @@ public class JSONSaveGame {
 
         return gameJSON; 
     }
-
 }

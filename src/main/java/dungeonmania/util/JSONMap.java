@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import java.io.InputStream;
+import java.security.cert.LDAPCertStoreParameters;
 
 public class JSONMap {
 
