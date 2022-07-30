@@ -140,8 +140,16 @@ import org.json.JSONTokener;
  *      ], 
  *      "battle-queue": [
  *          {
- *              "type": <enemies>, 
- *              "health":
+ *              "enemy": <String>, 
+ *              "initial_player_health": <int>,
+ *              "initial_enemy_health": <int>,
+ *              "rounds": [
+ *                  "delta_player_health": <int>,
+ *                  "delta_enemy_health": <int>, 
+ *                  "weaponry_used": [
+ *                      "id": <String> // have to store the actual item instance from this given id
+ *                  ]
+ *               ]
  *          }, {
  *          }
  *      ],
@@ -175,8 +183,11 @@ public class JSONReloadGame {
         return JSONgoals;
     }
 
-    public JSONReloadGame(InputStream is, String name) {
+    public DungeonMap getReloadedMap() {
+        return newMap;
+    }
 
+    public JSONReloadGame(InputStream is, String name) {
         JSONTokener tokener = new JSONTokener(is);
         JSONObject object = new JSONObject(tokener);
 
@@ -210,12 +221,12 @@ public class JSONReloadGame {
             player.setInvisible(true);
         }
 
-        // reset current tick
-        int tickJSON = object.getJSONObject("tick").getInt("current_tick");
-
         // restore battle queue
         JSONArray battlesJSON = object.getJSONArray("battle-queue");
 
+        // reset current tick
+        int tickJSON = object.getJSONObject("tick").getInt("current_tick");
+        // game.setCurrtick
 
         // restore time travel memories
         JSONObject timeTravelJSON = object.getJSONObject("time-travel");

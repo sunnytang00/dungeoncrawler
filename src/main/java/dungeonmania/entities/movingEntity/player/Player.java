@@ -580,14 +580,14 @@ public class Player extends MovingEntity {
         return inventoryJSON;
     }
 
-    public JSONArray battlesToJSON() {
-        JSONArray battlesJSON = new JSONArray();
-        for (Enemy enemy : battleQueue) {
+    // public JSONArray battlesToJSON() {
+    //     JSONArray battlesJSON = new JSONArray();
+    //     for (Enemy enemy : battleQueue) {
             
-            JSONObject obj = enemy.toJSON("battles");
-            battlesJSON.put(obj);
-        }
-        return battlesJSON;
-    }
+    //         JSONObject obj = enemy.toJSON("battles");
+    //         battlesJSON.put(obj);
+    //     }
+    //     return battlesJSON;
+    // }
 
 }

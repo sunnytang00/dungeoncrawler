@@ -36,6 +36,8 @@ public class JSONSaveGame {
         timeTravel.put("tick_Histories", historyJSON);
 
         // battle queue to be confirmed 
+        List<Battle> battleList = game.getBattles();
+        
 
         // combining
         JSONObject gameJSON = new JSONObject();

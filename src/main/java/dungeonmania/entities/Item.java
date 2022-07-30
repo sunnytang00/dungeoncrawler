@@ -51,6 +51,12 @@ public abstract class Item extends Entity {
         return new ItemResponse(getId(), getType());
     }
 
+    public JSONObject weaponryUsedToJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("id", getId());
+        return obj;
+    }
+
     @Override
     public JSONObject toJSON(String mode) {
         JSONObject obj = super.toJSON(mode);

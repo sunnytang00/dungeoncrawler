@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.RoundResponse;
 
@@ -31,6 +34,20 @@ public class Battle {
 
     public BattleResponse getBattleResponse() {
         return new BattleResponse(enemy, getRoundResponses(rounds), initialPlayerHealth, initialEnemyHealth);
+    }
+
+    public JSONObject toJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("enemy", enemy);
+        obj.put("initial_player_health", initialPlayerHealth);
+        obj.put("initial_enemy_health", initialEnemyHealth);
+        JSONArray roundsJSON = new JSONArray();
+        for (Round r : rounds) {
+            JSONObject objR = r.toJSON();
+            roundsJSON.put(objR);
+        }
+        obj.put("rounds", roundsJSON);
+        return obj;
     }
     
 }

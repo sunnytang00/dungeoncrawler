@@ -70,6 +70,10 @@ public class DungeonGame {
         return currentTick;
     }
 
+    public void setCurrentTick(int tick) {
+        this.currentTick = tick;
+    }
+
     public void incrementTick() {
         currentTick += 1;
     }
