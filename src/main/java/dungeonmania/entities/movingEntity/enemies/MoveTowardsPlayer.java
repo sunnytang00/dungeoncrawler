@@ -130,6 +130,10 @@ public class MoveTowardsPlayer implements MovingStrategy {
                     }
 
                     if (dist.get(u) + cost < dist.get(v)) {
+                        double newCost = dist.get(u) + cost;
+                        System.out.println("new cost" + newCost);
+                        System.out.println("old cost" + dist.get(v));
+
                         dist.put(v, dist.get(u) + cost);
                         prev.put(v, u);
                         queue.add(v);
