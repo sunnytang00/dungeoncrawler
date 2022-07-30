@@ -341,7 +341,7 @@ public class DungeonManiaController {
 
     /**
      * Rewind
-     * @param ticks<
+     * @param ticks
      * @return
      * @throws IllegalArgumentException
      */
@@ -382,5 +382,10 @@ public class DungeonManiaController {
         // return getDungeonResponseModel();
         return null;
     }
+
+    public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String configName) {
+        return null;
+    }
+
 
 }
