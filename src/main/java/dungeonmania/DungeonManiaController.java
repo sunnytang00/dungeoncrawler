@@ -118,9 +118,11 @@ public class DungeonManiaController {
         game.incrementTick();
 
         Player player = map.getPlayer();
+        if (player == null) { return getDungeonResponseModel();}
+
         List<Item> inventory = player.getInventory();
         Item targetItem = null;
-        List<ZombieToast> zombiesToAdd = new ArrayList<>();
+
         for (Item item : inventory) {
             if (itemUsedId.equals(item.getId())) {
                 targetItem = item;
@@ -152,7 +154,7 @@ public class DungeonManiaController {
         }
 
         player.battle(map, game);
-        if (game.getPlayer() == null) { return getDungeonResponseModel();}
+        if (map.getPlayer() == null) { return getDungeonResponseModel();}
 
         map.spawnSpider(game);
         List<Entity> enemiesToSpawn = map.getEnemiesToSpawn();
@@ -174,6 +176,7 @@ public class DungeonManiaController {
     public DungeonResponse tick(Direction movementDirection) {
         game.incrementTick();
         Player player = map.getPlayer();
+        if (player == null) { return getDungeonResponseModel();}
         // potion effect
         player.playerPotionQueueUpdateTick();
 
@@ -184,7 +187,7 @@ public class DungeonManiaController {
         }
 
         player.move(game, map, movementDirection);
-        if (game.getPlayer() == null) { return getDungeonResponseModel();}
+        if (map.getPlayer() == null) { return getDungeonResponseModel();}
         
         for (Entity entity : map.getMapEntities()) {
             if (entity instanceof Enemy || entity instanceof ZombieToastSpawner) {
@@ -193,7 +196,7 @@ public class DungeonManiaController {
         }
 
         player.battle(map, game);
-        if (game.getPlayer() == null) { return getDungeonResponseModel();}
+        if (map.getPlayer() == null) { return getDungeonResponseModel();}
 
         map.spawnSpider(game);
         List<Entity> enemiesToSpawn = map.getEnemiesToSpawn();

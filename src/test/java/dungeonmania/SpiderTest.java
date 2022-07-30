@@ -299,13 +299,12 @@ public class SpiderTest {
         assertEquals(1, countEntityOfType(consume, "spider"));
 
         move = dmc.tick(Direction.RIGHT);
-        Position pos = getEntities(move, "spider").get(0).getPosition();
-
+        move = dmc.tick(Direction.RIGHT);
+        Position pos = getEntities(move, "spider").get(1).getPosition();
 
         List<Position> movementTrajectory = new ArrayList<Position>();
         int x = pos.getX();
         int y = pos.getY();
-        
         int nextPositionElement = 0;
         movementTrajectory.add(new Position(x  , y-1));
         movementTrajectory.add(new Position(x+1, y-1));
@@ -318,11 +317,14 @@ public class SpiderTest {
 
         // Assert Circular Movement of Spider
         for (int i = 0; i <= 10; ++i) {
-            move = dmc.tick(Direction.UP);
-            // since random could not use asset equals, but confirmed it is circuling spawn behavior
-            nextPositionElement++;
-            if (nextPositionElement == 8){
-                nextPositionElement = 0;
+            if (getEntities(move, "player").size() == 1) {
+                move = dmc.tick(Direction.UP);
+                assertEquals(movementTrajectory.get(nextPositionElement), getEntities(move, "spider").get(1).getPosition());
+                
+                nextPositionElement++;
+                if (nextPositionElement == 8){
+                    nextPositionElement = 0;
+                }
             }
         }
 

@@ -26,6 +26,7 @@ public class DungeonGame {
         this.dungeonId = UUID.randomUUID().toString();
         this.inventories = inventories;
         this.buildables = buildables;
+        this.battles = battles;
         this.map = map;
     }
 
