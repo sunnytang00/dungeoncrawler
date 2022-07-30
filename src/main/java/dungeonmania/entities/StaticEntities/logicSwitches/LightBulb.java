@@ -3,9 +3,12 @@ package dungeonmania.entities.StaticEntities.logicSwitches;
 import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.StaticEntities.Boulder;
+import dungeonmania.util.Helper;
 import dungeonmania.util.Position;
 
 import java.util.List;
+
+import org.json.JSONObject;
 
 public class LightBulb extends LogicItem {
 

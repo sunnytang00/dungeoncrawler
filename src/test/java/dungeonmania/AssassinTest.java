@@ -499,7 +499,6 @@ public class AssassinTest {
                 move = dmc.tick(Direction.UP);
                 boolean curr = getEntities(move, "assassin").get(0).isInteractable();
                 if (curr == true) {
-                    System.out.println("failed to bribe");
                     assertEquals(2, getInventory(move, "treasure").size());
                 }
                     

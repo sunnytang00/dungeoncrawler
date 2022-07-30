@@ -33,6 +33,10 @@ public class DungeonGame {
         return dungeonId;
     }
 
+    public void setDungeonId(String dungeonId) {
+        this.dungeonId = dungeonId;
+    }
+
     public List<Item> getInventory() {
         return inventories;
     }
@@ -43,10 +47,6 @@ public class DungeonGame {
 
     public final List<String> getBuildables() {
         return buildables;
-    }
-
-    public void setDungeonId(String dungeonId) {
-        this.dungeonId = dungeonId;
     }
 
     public void setInventories(List<Item> inventories) {
@@ -92,11 +92,15 @@ public class DungeonGame {
     }
 
     public JSONObject getGameFromTickHistory(int tick) {
-        return tickHistory.get(tick);
+        return tickHistory.get(tick - 1);
     }
 
     public void addToTickHistory(JSONObject game) {
         tickHistory.add(game);
+    }
+
+    public void resetTickHistory(List<JSONObject> tickHistory) {
+        this.tickHistory = tickHistory;
     }
 
     public DungeonMap getMap() {

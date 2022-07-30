@@ -185,7 +185,6 @@ public class GoalsTest {
         move = dmc.tick(Direction.RIGHT);
         assertEquals(3, getInventory(move, "treasure").size());
         assertTrue(getGoals(intialResponse).contains(":exit"));
-        // System.out.println("test returned: " + getGoals(intialResponse));
         // assertFalse(getGoals(intialResponse).contains(":treasure"));
         
         // Position mercP = getEntities(move, "mercenary").get(0).getPosition();

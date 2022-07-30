@@ -14,9 +14,17 @@ import dungeonmania.entities.StaticEntities.ZombieToastSpawner;
 import dungeonmania.entities.movingEntity.enemies.*;
 import dungeonmania.entities.movingEntity.player.*;
 
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.json.JSONObject;
 
@@ -95,13 +103,13 @@ public class DungeonManiaController {
     public DungeonResponse getDungeonResponseModel() {
 
         Player player = map.getPlayer();
-        // System.out.println("dungeonresponse" + goals.getGoalsAsString(map));
         List<BattleResponse> battles = map.getBattleResponses(game.getBattles());
         if (player == null) {
             
             return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), null,
                     battles, null, goals.getGoalsAsString(map));
         }
+
         return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(),
                 player.getInventoryResponses(), battles, player.getBuildables(map), goals.getGoalsAsString(map));
 
@@ -301,26 +309,43 @@ public class DungeonManiaController {
      * /game/save
      */
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
+        DungeonResponse res = getDungeonResponseModel();
         // save files to "./bin/saved_games/" + <fileName> + ".json" 
+        if (name.length() == 0) {
+            throw new IllegalArgumentException("please provide a name");
+        }
+        String path = "./bin/" + name + ".json";
         int currTick = game.getCurrentTick();
         JSONObject currGame = game.getGameFromTickHistory(currTick);
-        
-        return null;
+        try {
+            PrintWriter out = new PrintWriter(new FileWriter(path));
+            out.write(currGame.toString());
+            out.close();
+        } catch (Exception e) {
+            return null;
+        }
+        return res;
     }
 
     /**
      * /game/load
      */
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
-        InputStream is = FileLoader.class.getResourceAsStream("bin/recourses/dungeons/" + name + ".json");
-        if (is == null) {
-            throw new IllegalArgumentException("Cannot find the game to load");
+        if (name.length() == 0) {
+            throw new IllegalArgumentException("please provide a name");
         }
-        JSONReloadGame reloadGame = new JSONReloadGame(is, name);
-        map = new DungeonMap(reloadGame.getMapEntities(), name);
-        goals = JSONLoadGoals.getComposedGoals(reloadGame.getGoals(), map);
-        map.setJSONGoals(reloadGame.getGoals());
-
+        JSONReloadGame reloadGame = null;
+        try (InputStream is = new FileInputStream("bin/" + name + ".json")) {
+            reloadGame = new JSONReloadGame(is, name);
+            map = new DungeonMap(reloadGame.getMapEntities(), name);
+            goals = JSONLoadGoals.getComposedGoals(reloadGame.getGoals(), map);
+            map.setJSONGoals(reloadGame.getGoals());
+        } catch (IOException e) {
+            throw new IllegalArgumentException("cannot find such file");
+        }
+        map = reloadGame.getReloadedMap();
+        game = reloadGame.getReloadedGame();
+        goals = map.getResetGoals();
         return getDungeonResponseModel();
     }
 
@@ -329,7 +354,18 @@ public class DungeonManiaController {
      * /games/all
      */
     public List<String> allGames() {
-        return new ArrayList<>();
+        Path files = Paths.get("bin/");
+        try {
+            return Files.walk(files)
+                        .filter(Files::isRegularFile)
+                        .map(x -> {String name = x.toFile().getName();
+                                   int i = name.lastIndexOf('.');
+                                   return name.substring(0, i > -1 ? i : name.length());
+                            })
+                        .collect(Collectors.toList());
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     public void saveTickToHistory() {
@@ -338,11 +374,7 @@ public class DungeonManiaController {
             return;
         }
         JSONObject obj = JSONSaveGame.saveGame(map, map.getJSONGoals(), game);
-        // System.out.println(obj);
         game.addToTickHistory(obj);
-        // System.out.println(tickHistory);
-        // System.out.println(tickHistory.size());
-        // System.out.println("tick: " + game.getCurrentTick());
     }
 
     /**

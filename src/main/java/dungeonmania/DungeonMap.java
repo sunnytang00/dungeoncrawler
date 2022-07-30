@@ -182,6 +182,10 @@ public class DungeonMap {
     public JSONObject getJSONGoals() {
         return goalsJSON;
     }
+
+    public String goalString() {
+        return goals.getGoalsAsString(this);
+    }
     
     /**
      * Method to spawn spider

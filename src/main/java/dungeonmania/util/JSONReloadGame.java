@@ -1,5 +1,6 @@
 package dungeonmania.util;
 
+import dungeonmania.DungeonGame;
 import dungeonmania.DungeonManiaController;
 import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
@@ -96,13 +97,25 @@ import org.json.JSONTokener;
  *              "x": ,
  *              "y": ,
  *              "colour":
+ *          }, { 
+ *              "type": <switch>,
+ *              "id": ,
+ *              "x": ,
+ *              "y": ,
+ *              "is_triggered":
  *          }, {
- *              "type": <swamp-tile>,
+ *              "type": <swamp_tile>,
  *              "id": ,
  *              "x": ,
  *              "y": ,
  *              "movement_factor": <int>
- *          },
+ *          }, {
+ *              "type": <light_bulb_on / light_bulb_off>,
+ *              "id": ,
+ *              "x": ,
+ *              "y": ,
+ *              "movement_factor": <int>
+ *          }
  *      ], 
  *      "goal-condition": {
  *          "goal": 
@@ -153,9 +166,12 @@ import org.json.JSONTokener;
  *          }, {
  *          }
  *      ],
- *      
+ *      "dungeon": [
+ *          {"dungeon_id": <String>}, 
+ *          {"dungeon_name": <String>}
+ *      ],
  *      "config-file": {"file_name": },
- *      "remaining-goal-conditions": {"remains": <int>},
+ *      "remaining-goal-conditions": <int>,
  *      
  * }
  */
@@ -165,11 +181,13 @@ public class JSONReloadGame {
 
     private Player player;
     private List<Entity> mapEntities = new ArrayList<Entity>();
+    private List<Battle> battles = new ArrayList<Battle>();
     private List<Item> inventory = new ArrayList<Item>();
     private PotionQueue potions = new PotionQueue();
     private JSONObject JSONgoals;
     private Goals goals; 
     private DungeonMap newMap;
+    private DungeonGame newGame;
 
     public List<Entity> getMapEntities() {
         return mapEntities;
@@ -187,11 +205,19 @@ public class JSONReloadGame {
         return newMap;
     }
 
+    public DungeonGame getReloadedGame() {
+        return newGame;
+    }
+
     public JSONReloadGame(InputStream is, String name) {
         JSONTokener tokener = new JSONTokener(is);
         JSONObject object = new JSONObject(tokener);
 
-        newMap = new DungeonMap(mapEntities, name);
+        JSONObject dungeon = object.getJSONObject("dungeon");
+        String dungeonName = dungeon.getString("dungeon_name");
+        String dungeonId = dungeon.getString("dungeon_id");
+
+        newMap = new DungeonMap(mapEntities, dungeonName);
         newMap = resetGame(object, newMap);
 
         // restore inventory 
@@ -209,29 +235,44 @@ public class JSONReloadGame {
             JSONObject obj = potionsJSON.getJSONObject(i);
             setPotionQueue(obj);
         }
-        player.setPotionQueue(potions);
-        if (potions.potionInUse() == null) { // no potion in use right now
-            player.setInvincible(false);
-            player.setInvisible(false);
-        } else if (potions.potionInUse() instanceof InvincibilityPotion) {
-            player.setInvincible(true);
-            player.setInvisible(false);
-        } else {
-            player.setInvincible(false);
-            player.setInvisible(true);
+        if (potions.queueSize() != 0) {
+            player.setPotionQueue(potions);
+            if (potions.potionInUse() == null) { // no potion in use right now
+                player.setInvincible(false);
+                player.setInvisible(false);
+            } else if (potions.potionInUse() instanceof InvincibilityPotion) {
+                player.setInvincible(true);
+                player.setInvisible(false);
+            } else {
+                player.setInvincible(false);
+                player.setInvisible(true);
+            }
         }
-
-        // restore battle queue
+        // reset battle responses
         JSONArray battlesJSON = object.getJSONArray("battle-queue");
+        for (int i = 0; i < battlesJSON.length(); i++) {
+            JSONObject obj = battlesJSON.getJSONObject(i);
+            setBattles(obj);
+        }
+        // reset game 
+        newGame = new DungeonGame(newMap.goalString(), inventory, battles, player.getBuildables(newMap), newMap);
+        newGame.setDungeonId(dungeonId);
 
         // reset current tick
-        int tickJSON = object.getJSONObject("tick").getInt("current_tick");
-        // game.setCurrtick
+        int tick = object.getJSONObject("tick").getInt("current_tick");
+        newGame.setCurrentTick(tick);
 
         // restore time travel memories
         JSONObject timeTravelJSON = object.getJSONObject("time-travel");
         int timeTravelTick = timeTravelJSON.getInt("time_travel_tick");  
-        JSONArray histories = timeTravelJSON.getJSONArray("tick_histories");
+        JSONArray historyJSON = timeTravelJSON.getJSONArray("tick_histories");
+        newGame.setTimeTravelTick(timeTravelTick);
+        List<JSONObject> historyList = new ArrayList<JSONObject>();
+        for (int i = 0; i < historyJSON.length(); i++) {
+            JSONObject obj = historyJSON.getJSONObject(i);
+            historyList.add(obj);
+        }
+        newGame.resetTickHistory(historyList);
 
         // restore config file
         String configFile = object.getJSONObject("config-file").getString("file_name");
@@ -241,7 +282,7 @@ public class JSONReloadGame {
     public DungeonMap resetGame(JSONObject object, DungeonMap map) {
         JSONArray entitiesJSON = object.getJSONArray("entities");
         JSONgoals = object.getJSONObject("goal-condition");
-        int remaingingGoalConditions = object.getJSONObject("remaining-goal-conditions").getInt("remains");
+        int remaingingGoalConditions = object.getInt("remaining-goal-conditions");
         
         // initialise entities 
         for (int i = 0; i < entitiesJSON.length(); i++) {
@@ -249,11 +290,12 @@ public class JSONReloadGame {
             String type = obj.getString("type");
             initialiseMapEntities(type, obj);
         } 
+        map.setMapEntities(mapEntities);
         // reset remaining goal conditions 
         map.setRemainingConditions(remaingingGoalConditions);
         // reset goals at current tick 
         map.resetGoals(JSONgoals, map);
-        
+
         return map;
     }
 
@@ -265,7 +307,7 @@ public class JSONReloadGame {
         Position position = new Position(x,y);
         Entity entity = null;
 
-        switch(type) { // assumption: id of entities will change
+        switch(type) {
             case "player":
                 player = new Player(type, position, obj.getBoolean("interactable")); 
                 player.setSlayedEnemy(obj.getInt("slayed-enemies"));
@@ -358,17 +400,17 @@ public class JSONReloadGame {
     }
 
     private void initialiseState(String state, Entity e) {
-        switch(state) {
-            case "PlayerDefaultDtate":
-                ((Player) e).setState(new PlayerDefaultState());
-            case "InvisibleState":
-                ((Player) e).setState(new InvisibleState());
-            case "InvincibleState":
-                ((Player) e).setState(new InvisibleState());
-            case "MercBribedState":
-                ((Mercenary) e).setState(new MercBribedState());
-            case "MercViciousState":
-                ((Mercenary) e).setState(new MercViciousState());
+        
+        if (state.contains("PlayerDefaultDtate")) {
+            ((Player) e).setState(new PlayerDefaultState());
+        } else if (state.contains("InvisibleState")) {
+            ((Player) e).setState(new InvisibleState());
+        } else if (state.contains("InvincibleState")) {
+            ((Player) e).setState(new InvisibleState());
+        } else if (state.contains("MercBribedState")) {
+            ((Mercenary) e).setState(new MercBribedState());
+        } else if (state.contains("MercViciousState")) {
+            ((Mercenary) e).setState(new MercViciousState());
         }
     }
 
@@ -411,8 +453,7 @@ public class JSONReloadGame {
                 (bow).setDurability(durability); break;
             case "midnight_armour":
                 MidnightArmour armour = new MidnightArmour(type);
-                inventory.add(armour);
-                (armour).setDurability(durability); break;
+                inventory.add(armour); break;
             case "scepture":
                 Sceptre sceptre = new Sceptre(type);
                 inventory.add(sceptre);
@@ -438,4 +479,34 @@ public class JSONReloadGame {
         }
     }
 
+    private void setBattles(JSONObject obj) {
+        JSONArray roundsJSON = obj.getJSONArray("rounds");
+        List<Round> rounds = new ArrayList<Round>();
+        for (int i = 0; i < roundsJSON.length(); i++) {
+            JSONObject r = roundsJSON.getJSONObject(i);
+            JSONArray weapons = r.getJSONArray("weaponry_used");
+            List<Item> weaponryUsed = getWeaponsUsed(weapons);
+            Round round = new Round(r.getInt("get_delta_player_health"), r.getInt("get_delta_enemy_health"), weaponryUsed);
+            rounds.add(round);
+        }
+        Battle b = new Battle(obj.getString("enemy"), rounds, obj.getInt("intial_player_health"), obj.getInt("initial_enemy_health"));
+        battles.add(b);
+    }
+
+    private List<Item> getWeaponsUsed(JSONArray weapons) {
+        List<Item> wUsed = new ArrayList<Item>();
+        for (int i = 0; i < weapons.length(); i++) {
+            JSONObject w = weapons.getJSONObject(i);
+            String id = w.getString("id");
+            Item item = getItemFromInventory(id);
+            if (item != null) {
+                wUsed.add((Item) item);
+            }
+        }
+        return wUsed;
+    }
+
+    private Item getItemFromInventory(String id) {
+        return inventory.stream().filter(e -> e.getId().equals(id)).findAny().orElse(null);
+    }
 }

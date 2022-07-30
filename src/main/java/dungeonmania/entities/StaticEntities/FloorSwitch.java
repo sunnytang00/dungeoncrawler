@@ -1,5 +1,7 @@
 package dungeonmania.entities.StaticEntities;
 
+import org.json.JSONObject;
+
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.util.Position;
 
@@ -23,6 +25,13 @@ public class FloorSwitch extends StaticEntity {
 
     public void setTriggered(boolean state) {
         this.isTriggered = state;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = super.toJSON();
+        obj.put("is_triggered", isTriggered);
+        return obj;
     }
     
 }

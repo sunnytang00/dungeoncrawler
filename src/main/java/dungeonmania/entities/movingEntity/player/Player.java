@@ -546,7 +546,6 @@ public class Player extends MovingEntity {
                 merc.bribe();
                 merc.setBribedByTreasure(true);
                 consumeInventory("treasure", merc.getBribeAmount());
-                System.out.println(merc.getState());
             }
         }
         
