@@ -15,9 +15,10 @@ public class DestroyEnemy extends LeafGoal {
 
     @Override
     public boolean isAchieved(DungeonMap map) {
-        int numOfEnemies = map.getPlayer().getSlayedEnemy();  
+        int numOfEnemies = map.getPlayer().getSlayedEnemy();
+        Boolean spawnerLeft = map.getMapEntities().stream().anyMatch(entity -> entity.getType().equals("zombie_toast_spawner"));
 
-        if (numOfEnemies >= JSONConfig.getConfig("enemy_goal")) {
+        if (numOfEnemies >= JSONConfig.getConfig("enemy_goal") && !spawnerLeft) {
             prevIsAchieved = true;
             map.setRemainingConditions(-1);
             return true;

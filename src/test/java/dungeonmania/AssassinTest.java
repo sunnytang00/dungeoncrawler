@@ -471,4 +471,40 @@ public class AssassinTest {
         
     }
     
+
+    @Test
+    @DisplayName("Test assassin bribe fail no refund")
+    public void testAssassinBribeFailNoRefund() throws IllegalArgumentException, InvalidActionException {
+
+        for (int i = 0; i < 50; i++) {
+            
+            DungeonManiaController dmc = new DungeonManiaController();
+            // bribe radius and amount are 1
+            DungeonResponse intialResponse = dmc.newGame("d_basicAssassin", "M3_config");
+
+            DungeonResponse move = dmc.tick(Direction.RIGHT);
+            move = dmc.tick(Direction.RIGHT);
+            move = dmc.tick(Direction.RIGHT);
+            assertEquals(3, getInventory(move, "treasure").size());
+            
+            Position mercP = getEntities(move, "assassin").get(0).getPosition();
+            assertTrue(getEntities(move, "assassin").get(0).isInteractable());
+            Position playerP = getEntities(move, "player").get(0).getPosition();
+            if (mercP.getDistanceBetween(playerP) == 1) {
+                
+                assertEquals(3, getInventory(move, "treasure").size());
+                String mercId = getEntities(move, "assassin").get(0).getId();
+                assertDoesNotThrow(() -> dmc.interact(mercId));
+
+                move = dmc.tick(Direction.UP);
+                boolean curr = getEntities(move, "assassin").get(0).isInteractable();
+                if (curr == true) {
+                    System.out.println("failed to bribe");
+                    assertEquals(2, getInventory(move, "treasure").size());
+                }
+                    
+            }
+
+        }
+    }
 }
