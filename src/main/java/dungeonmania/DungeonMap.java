@@ -11,6 +11,9 @@ import dungeonmania.response.models.*;
 import dungeonmania.util.*;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.StaticEntities.*;
+import dungeonmania.entities.StaticEntities.logicSwitches.LogicItem;
+import dungeonmania.entities.StaticEntities.logicSwitches.Wire;
+import dungeonmania.entities.collectableEntities.Bomb;
 import dungeonmania.entities.movingEntity.enemies.*;
 import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.goals.Goals;
@@ -247,10 +250,10 @@ public class DungeonMap {
                 List<Entity> eList = getEntityFromPos(floorSwitch.getPosition());
                 for (Entity e : eList) {
                     if (e instanceof Boulder) {
-                        floorSwitch.setTriggered(true);
+                        floorSwitch.setActivated(true);
                         break;
                     } else {
-                        floorSwitch.setTriggered(false);
+                        floorSwitch.setActivated(false);
                     }
                 } 
             }
@@ -294,8 +297,6 @@ public class DungeonMap {
         }
         return null;
     }
-
-    
     
 }
 

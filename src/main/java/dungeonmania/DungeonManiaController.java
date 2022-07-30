@@ -11,6 +11,7 @@ import dungeonmania.entities.collectableEntities.potions.*;
 import dungeonmania.entities.*;
 import dungeonmania.entities.StaticEntities.TimeTravellingPortal;
 import dungeonmania.entities.StaticEntities.ZombieToastSpawner;
+import dungeonmania.entities.StaticEntities.logicSwitches.LogicItem;
 import dungeonmania.entities.movingEntity.enemies.*;
 import dungeonmania.entities.movingEntity.player.*;
 
@@ -147,6 +148,8 @@ public class DungeonManiaController {
         targetItem.tick(game);
         player.playerPotionQueueUpdateTick();
 
+        map.BoulderSwitchOverlap();
+        game.updateLogicSwitches();
         for (Entity entity : map.getMapEntities()) {
             if (entity instanceof Enemy || entity instanceof ZombieToastSpawner) {
                 entity.tick(game);
@@ -163,8 +166,6 @@ public class DungeonManiaController {
         }
 
         map.setEnemiesToSpawn(new ArrayList<Entity>());
-
-        map.BoulderSwitchOverlap();
 
         saveTickToHistory();
         return getDungeonResponseModel();
@@ -189,6 +190,8 @@ public class DungeonManiaController {
         player.move(game, map, movementDirection);
         if (map.getPlayer() == null) { return getDungeonResponseModel();}
         
+        map.BoulderSwitchOverlap();
+        game.updateLogicSwitches();
         for (Entity entity : map.getMapEntities()) {
             if (entity instanceof Enemy || entity instanceof ZombieToastSpawner) {
                 entity.tick(game);
@@ -205,8 +208,6 @@ public class DungeonManiaController {
         }
 
         map.setEnemiesToSpawn(new ArrayList<Entity>());
-
-        map.BoulderSwitchOverlap();
 
         saveTickToHistory();
         return getDungeonResponseModel();

@@ -57,7 +57,7 @@
         "light_bulb_off":"images/tileset/entities/lightbulboff.png",
         "wire":"images/tileset/entities/wire.png",
         "switch_door": "images/tileset/entities/door.png",
-        "older_player": "images/tileset/entities/older_player.png"
+        "older_player": "images/tileset/entities/entity.png"
 
     }
 }

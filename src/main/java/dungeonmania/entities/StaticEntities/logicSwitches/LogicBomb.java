@@ -1,4 +1,4 @@
-package dungeonmania.entities.collectableEntities;
+package dungeonmania.entities.StaticEntities.logicSwitches;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,35 +16,22 @@ import dungeonmania.util.Position;
 
 import org.json.JSONObject;
 
-public class Bomb extends Item {
+public class LogicBomb extends LogicItem {
 
-    private boolean isActivated;
     private boolean pickable;
+    private int activationTick;
 
-    public Bomb(String type, Position position) {
-        super(type, position);
-        pickable = true;
+    public LogicBomb(String type, Position position, LogicEnum logic) {
+        super(type, position, logic);
     }
-
 
     public int getBombRadius() {
         return (int) JSONConfig.getConfig("bomb_radius");
     }
 
-    public boolean isActivated() {
-        return isActivated;
-    }
-
+    @Override
     public void setActivated(boolean activated) {
-        isActivated = activated;
-    }
-
-    public boolean isPickable() {
-        return pickable;
-    }
-
-    public void setPickable(boolean pickable) {
-        this.pickable = pickable;
+        this.isActivated = activated;
     }
 
 
@@ -65,25 +52,8 @@ public class Bomb extends Item {
             }
         }
         
-        List<Position> cardPosition = getPosition().getCardinallyAdjacentPositions();
-        
-        for (Position position : cardPosition) {
-            //Loop through each cardinally adjacent position
-            List<Entity> eList = map.getEntityFromPos(position);
-            //For each cardinally adj position, loop through the list of entities at that position
-            for (Entity entity : eList) {
-                //If there is a floorswitch entity and it is triggered, explode
-                if (entity instanceof FloorSwitch) {
-                    FloorSwitch floorSwitch = (FloorSwitch) entity;
-                    if (floorSwitch.isActivated()) {
-                        // remove all the entities destroyed by bomb in the range
-                        // of the bomb attacking radius
-                        removeEntityDestroyed(map, removable);
-                    }
-                }
-            }
-
-        }
+        List<Position> cardPosition = getPosition().getCardinallyAdjacentPositions();                
+        removeEntityDestroyed(map, removable);
         
     }
 
@@ -111,18 +81,6 @@ public class Bomb extends Item {
         obj.put("is_active", isActivated);
         obj.put("is_pickable", pickable);
         return obj;
-    }
-
-    @Override
-    public boolean interact(DungeonMap map, Player player) {
-        if (pickable) {
-            setPickable(false);
-        } else {
-            return false;
-        }
-        player.addToInventory(this);
-        map.removeEntityFromMap(this);
-        return false;
     }
 
 }

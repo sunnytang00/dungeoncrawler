@@ -6,32 +6,26 @@ import dungeonmania.util.Position;
 
 public class FloorSwitch extends StaticEntity {
 
-    private boolean isTriggered;
     private LogicEnum logic;
     private boolean isActivated;
+    private int activationTick;
 
     public FloorSwitch(String type, Position position) {
         super(type, position);
         this.isTraversable = true;
-        this.isTriggered = false;
+        this.isActivated = false;
     }
 
     public FloorSwitch(String type, Position position, LogicEnum logic) {
         super(type, position);
         this.isTraversable = true;
-        this.isTriggered = false;
+        this.isActivated = false;
         this.logic = logic;
+
     }
 
     public void switchState() {
-        this.isTriggered ^= true; 
-    }
-
-    public boolean isTriggered() {
-        return isTriggered;
-    }
-    public void setTriggered(boolean state) {
-        this.isTriggered = state;
+        this.isActivated ^= true; 
     }
 
     public LogicEnum getLogic() {
@@ -48,5 +42,13 @@ public class FloorSwitch extends StaticEntity {
 
     public void setActivated(boolean activated) {
         isActivated = activated;
+    }
+
+    public int getActivationTick() {
+        return activationTick;
+    }
+
+    public void setActivationTick(int activationTick) {
+        this.activationTick = activationTick;
     }
 }

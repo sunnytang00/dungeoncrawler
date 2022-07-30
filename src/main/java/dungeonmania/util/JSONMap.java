@@ -94,7 +94,7 @@ public class JSONMap {
                 entity = new Arrows(type, position); break;
             case "bomb":
                 if (obj.has("logic")) {
-                    entity = new Bomb(type, position, Helper.getLogic(obj.getString("logic")));break;
+                    entity = new LogicBomb(type, position, Helper.getLogic(obj.getString("logic")));break;
                 } else {
                     entity = new Bomb(type, position); break;
                 }
@@ -109,7 +109,7 @@ public class JSONMap {
             case "light_bulb_off":
                 entity = new LightBulb(type, position, Helper.getLogic(obj.getString("logic"))); break;
             case "wire":
-                entity = new Wire(type, position, Helper.getLogic(obj.getString("logic"))); break;
+                entity = new Wire(type, position, LogicEnum.OR); break;
             case "switch_door":
                 entity = new SwitchDoor(type, position, Helper.getLogic(obj.getString("logic")), obj.getInt("key")); break;
 

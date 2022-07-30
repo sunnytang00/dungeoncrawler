@@ -6,9 +6,15 @@ import java.util.UUID;
 
 import org.json.JSONObject;
 
+import dungeonmania.entities.Entity;
 import dungeonmania.entities.Item;
+import dungeonmania.entities.StaticEntities.FloorSwitch;
+import dungeonmania.entities.StaticEntities.logicSwitches.LogicBomb;
+import dungeonmania.entities.StaticEntities.logicSwitches.LogicItem;
+import dungeonmania.entities.StaticEntities.logicSwitches.Wire;
 import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.Battle;
+import dungeonmania.util.Position;
 
 public class DungeonGame {
 
@@ -109,6 +115,61 @@ public class DungeonGame {
 
     public Player getPlayer() {
         return map.getPlayer();
+    }
+
+    public void updateLogicSwitches() {
+
+        LogicBomb logicBomb = null;
+    
+        for (Entity e : map.getMapEntities()) {
+            if (e instanceof FloorSwitch) {
+                Position switchPos = e.getPosition();
+                if (((FloorSwitch) e).isActivated()) {
+                    changeCircuit(null, switchPos, true);
+                } else {
+                    changeCircuit(null, switchPos, false);
+                }
+            }
+
+            if (e instanceof LogicItem && !(e instanceof Wire)) {
+                LogicItem logic = (LogicItem) e;
+                logic.updateStatus(this);
+                if (e instanceof LogicBomb && ((LogicBomb) e).isActivated()) {
+                    logicBomb = (LogicBomb) e;
+                }
+            }
+        }
+
+        if (logicBomb != null) {
+            logicBomb.explode(this.getMap());
+        }
+
+    }
+    
+    public void changeCircuit(Position prevPos, Position pos, boolean activate) {
+        // If a switch cardinally adjacent to a wire is activated, all the other interactable entities cardinally adjacent to the wire are activated.
+        List<Position> adjacentPositions = pos.getCardinallyAdjacentPositions();
+        adjacentPositions.remove(prevPos);
+        List<Entity> allEntities = new ArrayList<Entity>();
+        for (Position position : adjacentPositions) {
+            allEntities.addAll(map.getEntityFromPos(position));
+        }
+
+        List<Entity> list = map.getEntitiesFromType(allEntities, "wire");
+
+        if (list == null || list.size() == 0) {
+            return;
+        } 
+
+        for (Entity entity : list) {
+            Wire wire = (Wire) entity;
+            wire.setActivated(activate);
+            if (activate) {
+                wire.setActivationTick(currentTick);
+            }
+            Position newPos = wire.getPosition();
+            changeCircuit(pos, newPos, activate);
+        }
     }
 
 }

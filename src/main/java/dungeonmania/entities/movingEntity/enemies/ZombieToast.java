@@ -15,7 +15,7 @@ public class ZombieToast extends Enemy {
         this.setMovingStrategy(new RandomSpawn());
         // assume enemy could not push boulder here but can go pass it, can pass through exit but no effect to goal, can pass through open door
         // assume player, thus zombie, are not blocked by zombie toast spawner
-        this.setNonTraversibles(Arrays.asList("wall", "door"));
+        this.setNonTraversibles(Arrays.asList("wall", "door", "switch_door"));
     }
 
     @Override

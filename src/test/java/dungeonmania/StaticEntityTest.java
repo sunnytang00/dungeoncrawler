@@ -76,17 +76,18 @@ public class StaticEntityTest {
         assertEquals(boulder.getPosition(), new Position(-1, -1));
 
     }
-       
+
+    
     @Test 
     public void FloorSwitchTest() {
 
         FloorSwitch floorswitch = new FloorSwitch("floorswitch", new Position(0, 0));
 
-        assertEquals(floorswitch.isTriggered(), false);
+        assertEquals(floorswitch.isActivated(), false);
         floorswitch.switchState();
-        assertEquals(floorswitch.isTriggered(), true);
+        assertEquals(floorswitch.isActivated(), true);
         floorswitch.switchState();
-        assertEquals(floorswitch.isTriggered(), false);
+        assertEquals(floorswitch.isActivated(), false);
 
     }
 
