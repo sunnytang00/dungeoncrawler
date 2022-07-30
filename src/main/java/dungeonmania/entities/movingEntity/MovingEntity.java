@@ -1,6 +1,5 @@
 package dungeonmania.entities.movingEntity;
 
-import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;

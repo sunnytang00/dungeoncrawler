@@ -2,13 +2,8 @@ package dungeonmania.util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONString;
 
 import dungeonmania.DungeonMap;
-import dungeonmania.entities.Entity;
-import dungeonmania.entities.Item;
-import dungeonmania.entities.collectableEntities.potions.Potion;
-import dungeonmania.goals.Goals;
 
 public class JSONSaveGame {
     // save files to "./bin/saved_games/" + <fileName> + ".json" 
@@ -44,5 +39,4 @@ public class JSONSaveGame {
 
         return gameJSON; 
     }
-   
 }

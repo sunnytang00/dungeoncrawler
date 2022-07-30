@@ -6,10 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Random;
 
 import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.StaticEntities.Portal;
 import dungeonmania.entities.StaticEntities.SwampTile;
 import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.Position;
@@ -88,7 +88,7 @@ public class MoveTowardsPlayer implements MovingStrategy {
     */
 
     //  swamp tile is taken into acount
-    //! but portal is not, remember now mercenary and assassin can choose to move through protal if portal move is beneficial
+    // mercenary and assassin can choose to move through protal if portal move is beneficial
 
     public Map<Position, Position> Dijkstras(List<Position> gridPositions, Position src, Enemy movingEntity, DungeonMap map){
 
@@ -113,8 +113,12 @@ public class MoveTowardsPlayer implements MovingStrategy {
                 List<Entity> atAdj = map.getEntityFromPos(pos);
                 if (atAdj == null || atAdj.size() == 0|| !movingEntity.blockedBy(atAdj)) {
                     moveableAdj.add(pos);
-                } 
-                
+                }
+                Portal portal = map.getPortalAtPos(pos);
+                if (portal != null) {
+                    List<Position> positions =portal.getTeleportPositions(portal, map);
+                    moveableAdj.addAll(positions);
+                }
             }
 
             for (Position v : moveableAdj) {

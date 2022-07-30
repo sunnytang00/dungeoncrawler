@@ -2,7 +2,6 @@ package dungeonmania.entities.buildableEntities;
 
 import dungeonmania.DungeonMap;
 import dungeonmania.entities.Item;
-import dungeonmania.entities.movingEntity.*;
 import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.exceptions.InvalidActionException;
 

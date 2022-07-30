@@ -1,6 +1,5 @@
 package dungeonmania.entities.collectableEntities;
 
-import dungeonmania.DungeonMap;
 import dungeonmania.entities.Item;
 import dungeonmania.util.Position;
 

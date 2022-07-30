@@ -153,10 +153,11 @@ public class DungeonManiaController {
         }
 
         List<Enemy> enemies = map.getEnemies();
-        for (Enemy enemy : enemies) {
-            player.interactWithEnemies(enemy, map);
-            player.battleWithEnemies(map, game);
-
+        if (!player.isInvisible()) {
+            for (Enemy enemy : enemies) {
+                player.interactWithEnemies(enemy, map);
+                player.battleWithEnemies(map, game);
+            }
         }
 
         map.spawnSpider(game);
@@ -201,10 +202,11 @@ public class DungeonManiaController {
         }
 
         List<Enemy> enemies = map.getEnemies();
-        for (Enemy enemy : enemies) {
-            player.interactWithEnemies(enemy, map);
-            player.battleWithEnemies(map, game);
-
+        if (!player.isInvisible()) {
+            for (Enemy enemy : enemies) {
+                player.interactWithEnemies(enemy, map);
+                player.battleWithEnemies(map, game);
+            }
         }
         
 
@@ -339,7 +341,7 @@ public class DungeonManiaController {
 
     /**
      * Rewind
-     * @param ticks<
+     * @param ticks
      * @return
      * @throws IllegalArgumentException
      */
@@ -378,6 +380,10 @@ public class DungeonManiaController {
 
         // map.addEntityToMap(new Player("player", playerPosition, false));
         // return getDungeonResponseModel();
+        return null;
+    }
+
+    public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String configName) {
         return null;
     }
 

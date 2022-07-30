@@ -168,7 +168,6 @@ public class PotionTest {
         move = dmc.tick(Direction.RIGHT);
         move = dmc.tick(Direction.RIGHT);
 
-
     }
     
     
