@@ -172,4 +172,52 @@ public class AdvanceMoveTest {
 
     }
 
+    @Test
+    @DisplayName("Test avoid swamp tile with large movement factor")
+    public void testAvoidTile() {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse intialResponse = dmc.newGame("dijkstra_swamp_largeFactor", "M3_config");
+
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+        Position playerPos = getEntities(move, "player").get(0).getPosition();
+        Position mercPos = getEntities(move, "assassin").get(0).getPosition();
+        
+        assertEquals(playerPos.getX(), 1);
+        assertEquals(playerPos.getY(), 0);
+        // assertEquals(mercPos.getX(), 2);
+        // assertEquals(mercPos.getY(), 1);
+
+        // move = dmc.tick(Direction.LEFT);
+        // playerPos = getEntities(move, "player").get(0).getPosition();
+        // mercPos = getEntities(move, "mercenary").get(0).getPosition();
+
+        // assertEquals(playerPos.getX(), 0);
+        // assertEquals(playerPos.getY(), 1);
+        // assertEquals(mercPos.getX(), 2);
+        // assertEquals(mercPos.getY(), 1);
+
+        // move = dmc.tick(Direction.RIGHT);
+        // playerPos = getEntities(move, "player").get(0).getPosition();
+        // mercPos = getEntities(move, "mercenary").get(0).getPosition();
+
+        // assertEquals(playerPos.getX(), 1);
+        // assertEquals(playerPos.getY(), 1);
+        // assertEquals(mercPos.getX(), 2);
+        // assertEquals(mercPos.getY(), 1);
+
+        // move = dmc.tick(Direction.LEFT);
+        // playerPos = getEntities(move, "player").get(0).getPosition();
+        // mercPos = getEntities(move, "mercenary").get(0).getPosition();
+
+        // assertEquals(playerPos.getX(), 0);
+        // assertEquals(playerPos.getY(), 1);
+        // assertEquals(mercPos.getX(), 1);
+        // assertEquals(mercPos.getY(), 1);
+
+
+
+    }
+
 }
