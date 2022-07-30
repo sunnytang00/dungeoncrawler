@@ -174,7 +174,7 @@ public class Player extends MovingEntity {
         for (Entity encounter : encounters) {
 
             if (!isInvisible() && !(encounter instanceof Enemy)) {
-                blocked = interactWithEntities(encounter, map, direction);
+                blocked = interactWithEntities(encounter, map);
             }
             if (getNonTraversibles().contains(encounter.getType())) {
                 blocked = true;
@@ -187,31 +187,10 @@ public class Player extends MovingEntity {
     }
 
 
-    public boolean interactWithEntities(Entity entity, DungeonMap map, Direction direction) {
+    public boolean interactWithEntities(Entity entity, DungeonMap map) {
         boolean interfereByEntity = false;
         // create interact method in each entity
-        if (entity instanceof Boulder) {
-            interfereByEntity = pushBoulder(map, direction);
-        } else if (entity instanceof Item) {
-            collectToInventory((Item) entity, map);
-        } else if (entity instanceof Door) {
-            // check if door is already opened 
-            // check if corresponding key is in inventory 
-            Door door = (Door) entity;
-            int doorKeyId = door.getKeyID();
-            currKey = getCurrKey();
-            int totalSunstone = (int) inventory.stream().filter(i -> i instanceof SunStone).count();
-
-            // assume sunstone always used first when it comes to open doors
-            if (totalSunstone > 0) {
-                door.unlockDoorThroughSunstone();
-            } else if (currKey != null && (currKey.getDoorKeyId() == doorKeyId)) {
-                door.unlockDoor(currKey);
-                inventory.remove(currKey);
-            } 
-        } else if (entity instanceof Portal) {
-            interfereByEntity = teleportThroughPortal(entity, map);
-        }
+        interfereByEntity = entity.interact(map, this);
         return interfereByEntity;
     }
 
@@ -340,45 +319,6 @@ public class Player extends MovingEntity {
         return usableWeapon;
     }
 
-    public boolean pushBoulder(DungeonMap map, Direction direction) {
-        
-        boolean blockedBy = false;
-        List<Entity> entitiesAtPosition = map.getEntityFromPos(getPosition().translateBy(direction));
-        
-        for (Entity entity : entitiesAtPosition) {
-            if (entity instanceof Boulder) {
-                //Check if there is no entity in the direction that the builder is being pushed
-                if (map.checkIfEntityAdjacentIsPushable(entity, direction)) {
-                    entity.setPosition(entity.getPosition().translateBy(direction));
-                } else {
-                    blockedBy = true;
-                }
-                
-                break;
-            }
-        }
-        return blockedBy;
-    }
-
-    public void collectToInventory(Item item, DungeonMap map) {
-        if ((item instanceof Key )&& hasKey()) {
-            return;
-        }
-
-        if (item instanceof Key) {
-            setCurrKey((Key) item);
-        } else if (item instanceof Bomb) {
-            Bomb bomb = (Bomb) item;
-            if (bomb.isPickable()) {
-                bomb.setPickable(false);
-            } else {
-                return;
-            }
-        }
-        inventory.add(item);
-        map.removeEntityFromMap(item);
-        
-    }
 
     // may need to debug later, update potion queue etc, turn currPotion to null whenever ticks over
     public void consumePotion(Potion item) { 
@@ -400,6 +340,9 @@ public class Player extends MovingEntity {
         state.playerStateChange(this);
     }
 
+    public void addToInventory(Item item) {
+        inventory.add(item);
+    }
     
     public void consumeInventory(String type, int amount) {
         int count = 0;
@@ -574,43 +517,6 @@ public class Player extends MovingEntity {
         }
         return false;
     }
-
-    public boolean teleportThroughPortal(Entity entity, DungeonMap map) {
-        boolean teleportByPortal = false;
-        Portal portal = (Portal) entity;
-        portal.linkPortals(map.getMapEntities());
-        Position teleport = portal.getPairPosition();
-        if (teleport == null) { return teleportByPortal; }
-
-        List<Position> telePositions = teleport.getCardinallyAdjacentPositions();
-        List<Position> possiblePos = new ArrayList<Position>();
-        Position followDir = teleport.translateBy(getDirection());
-        if (telePositions != null && telePositions.size() > 0) {
-            for (Position pos : telePositions) {
-                List<Entity> entitiesAtPos = map.getEntityFromPos(pos);
-                if (entitiesAtPos == null || (!map.containsType(entitiesAtPos,"wall") &&
-                    !map.containsType(entitiesAtPos,"door"))) {
-                        possiblePos.add(pos);
-                }
-            }
-        }
-        if (possiblePos != null && possiblePos.size() != 0) {
-            if (possiblePos.contains(followDir)) {
-                this.setPosition(followDir);
-            } else {
-                this.setPosition(possiblePos.get(0));
-            }
-            teleportByPortal = true;
-            Position teleportedP = this.getPosition();
-            
-            Entity newPortal = map.getPortalAtPos(teleportedP);
-            if (newPortal == null) { return teleportByPortal; }
-
-            return teleportThroughPortal(newPortal, map);
-        }
-        return teleportByPortal;
-    }
-
 
     public void interactWithSpawner(ZombieToastSpawner spawner, DungeonMap map) throws InvalidActionException {
         Position spawnerPos = spawner.getPosition();

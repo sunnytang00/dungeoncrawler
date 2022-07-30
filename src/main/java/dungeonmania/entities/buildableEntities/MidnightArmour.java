@@ -45,7 +45,7 @@ public class MidnightArmour extends Weapon implements ItemBuildable {
     
             if ((sunStone == 1) && (swordNum == 1)) {
                 removingPosition.forEach(i -> inventory.remove(i));
-                player.collectToInventory(new MidnightArmour(BUILDABLE_TYPE_MIDNIGHT_ARMOUR), map);
+                player.addToInventory(new MidnightArmour(BUILDABLE_TYPE_MIDNIGHT_ARMOUR));
             } else {
                 throw new InvalidActionException("Player cannot build midnight armour");
             }

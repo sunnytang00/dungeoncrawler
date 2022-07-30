@@ -113,5 +113,17 @@ public class Bomb extends Item {
         return obj;
     }
 
+    @Override
+    public boolean interact(DungeonMap map, Player player) {
+        if (pickable) {
+            setPickable(false);
+        } else {
+            return false;
+        }
+        player.addToInventory(this);
+        map.removeEntityFromMap(this);
+        return false;
+    }
+
 }
 

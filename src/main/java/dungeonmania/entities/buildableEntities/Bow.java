@@ -36,12 +36,12 @@ public class Bow extends Weapon implements ItemBuildable {
                     removingPosition.add(item);
                 }
             }
- 
+
             if (1 == woodNumber && 3 == arrowsNumber) {
                 // remove all the items used to craft the buildable item
                 // if it could be crafted by the items in the inventory
                 removingPosition.forEach(i -> inventory.remove(i));
-                player.collectToInventory(new Bow(BUILDABLE_TYPE_BOW), map);
+                player.addToInventory(new Bow(BUILDABLE_TYPE_BOW));
             } else {
                 throw new InvalidActionException("Player does not have sufficient items to build bow");
             }

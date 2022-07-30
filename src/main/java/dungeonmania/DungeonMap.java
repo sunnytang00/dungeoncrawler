@@ -53,11 +53,11 @@ public class DungeonMap {
         return anyMatch;
     }
 
-    public Entity getPortalAtPos(Position position) {
+    public Portal getPortalAtPos(Position position) {
         List<Entity> entitiesAtPos = this.getEntityFromPos(position);
         for (Entity entity : entitiesAtPos) {
             if (entity instanceof Portal) {
-                return entity;
+                return (Portal) entity;
             }
         }
         return null;

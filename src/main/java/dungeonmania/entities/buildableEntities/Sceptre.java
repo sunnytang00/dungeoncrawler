@@ -47,7 +47,7 @@ public class Sceptre extends Item implements ItemBuildable {
     
             if ((sunStone == 1) && (treasureOrKeyNum == 1) && ((arrowNum == 2)||(woodNum == 1))) {
                 removingPosition.forEach(i -> inventory.remove(i));
-                player.collectToInventory(new Sceptre(BUILDABLE_TYPE_SCEPTRE), map);
+                player.addToInventory(new Sceptre(BUILDABLE_TYPE_SCEPTRE));
             } else {
                 throw new InvalidActionException("Player does not have sufficient items to build sceptre");
             }

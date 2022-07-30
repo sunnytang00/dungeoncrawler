@@ -1,5 +1,7 @@
 package dungeonmania.entities;
 
+import java.util.List;
+
 import org.json.JSONObject;
 
 import dungeonmania.DungeonMap;
@@ -62,8 +64,11 @@ public abstract class Item extends Entity {
         return null;
     }
 
-    public void playerInteract(DungeonMap map, Player player) {
-        
+    @Override
+    public boolean interact(DungeonMap map, Player player) {
+        player.addToInventory(this);
+        map.removeEntityFromMap(this);
+        return false;
     }
 
 }

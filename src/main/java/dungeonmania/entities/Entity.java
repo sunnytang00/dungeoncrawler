@@ -5,6 +5,8 @@ import java.util.UUID;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonGame;
+import dungeonmania.DungeonMap;
+import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Position;
 
@@ -102,7 +104,10 @@ public abstract class Entity {
     }
 
     public void tick(DungeonGame game) {
-    
+    }
+
+    public boolean interact(DungeonMap map, Player player) {
+        return false;   
     }
 
 }

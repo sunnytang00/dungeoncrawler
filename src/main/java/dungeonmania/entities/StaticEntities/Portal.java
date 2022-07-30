@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Helper;
 import dungeonmania.util.Position;
@@ -62,6 +64,46 @@ public class Portal extends StaticEntity {
         JSONObject obj = super.toJSON();
         obj.put("colour", getColour());
         return obj;
+    }
+
+    @Override
+    public boolean interact(DungeonMap map, Player player) {
+        return teleportThroughPortal(this, map, player);
+    }
+
+    public boolean teleportThroughPortal(Portal portal, DungeonMap map, Player player) {
+        boolean teleportByPortal = false;
+        portal.linkPortals(map.getMapEntities());
+        Position teleport = portal.getPairPosition();
+        if (teleport == null) { return teleportByPortal; }
+
+        List<Position> telePositions = teleport.getCardinallyAdjacentPositions();
+        List<Position> possiblePos = new ArrayList<Position>();
+        Position followDir = teleport.translateBy(player.getDirection());
+        if (telePositions != null && telePositions.size() > 0) {
+            for (Position pos : telePositions) {
+                List<Entity> entitiesAtPos = map.getEntityFromPos(pos);
+                if (entitiesAtPos == null || (!map.containsType(entitiesAtPos,"wall") &&
+                    !map.containsType(entitiesAtPos,"door"))) {
+                        possiblePos.add(pos);
+                }
+            }
+        }
+        if (possiblePos != null && possiblePos.size() != 0) {
+            if (possiblePos.contains(followDir)) {
+                player.setPosition(followDir);
+            } else {
+                player.setPosition(possiblePos.get(0));
+            }
+            teleportByPortal = true;
+            Position teleportedP = player.getPosition();
+            
+            Portal newPortal = map.getPortalAtPos(teleportedP);
+            if (newPortal == null) { return teleportByPortal; }
+
+            return teleportThroughPortal(newPortal, map, player);
+        }
+        return teleportByPortal;
     }
     
 }
