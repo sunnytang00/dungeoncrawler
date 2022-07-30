@@ -57,7 +57,11 @@ public class JSONMap {
             case "boulder":
                 entity = new Boulder(type, position); break;
             case "switch":
-                entity = new FloorSwitch(type, position); break;
+                if (obj.has("logic")) {
+                    entity = new FloorSwitch(type, position, Helper.getLogic(obj.getString("logic"))); break;
+                } else {
+                    entity = new FloorSwitch(type, position); break;
+                }
             case "door":
                 entity = new Door(type, position, obj.getInt("key")); break;
             case "portal":
@@ -89,7 +93,11 @@ public class JSONMap {
             case "arrow":
                 entity = new Arrows(type, position); break;
             case "bomb":
-                entity = new Bomb(type, position); break;
+                if (obj.has("logic")) {
+                    entity = new Bomb(type, position, Helper.getLogic(obj.getString("logic")));break;
+                } else {
+                    entity = new Bomb(type, position); break;
+                }
             case "sword":
                 entity = new Sword(type, position); break;
             case "swamp_tile":

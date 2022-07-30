@@ -8,6 +8,7 @@ import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Item;
 import dungeonmania.entities.StaticEntities.FloorSwitch;
+import dungeonmania.entities.StaticEntities.logicSwitches.LogicEnum;
 import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
@@ -19,10 +20,17 @@ public class Bomb extends Item {
 
     private boolean isActivated;
     private boolean pickable;
+    private LogicEnum logic;
 
     public Bomb(String type, Position position) {
         super(type, position);
         pickable = true;
+    }
+
+    public Bomb(String type, Position position, LogicEnum logic) {
+        super(type, position);
+        pickable = true;
+        this.logic = logic;
     }
 
     public int getBombRadius() {
@@ -43,6 +51,14 @@ public class Bomb extends Item {
 
     public void setPickable(boolean pickable) {
         this.pickable = pickable;
+    }
+
+    public LogicEnum getLogic() {
+        return logic;
+    }
+
+    public void setLogic(LogicEnum logic) {
+        this.logic = logic;
     }
 
     public void explode(DungeonMap map) {
@@ -89,6 +105,7 @@ public class Bomb extends Item {
             map.removeEntityFromMap(entity);
         }
     }
+
 
     @Override
     public void tick(DungeonGame game) {

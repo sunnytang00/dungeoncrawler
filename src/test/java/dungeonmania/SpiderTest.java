@@ -316,7 +316,7 @@ public class SpiderTest {
         movementTrajectory.add(new Position(x-1, y-1));
 
         // Assert Circular Movement of Spider
-        for (int i = 0; i <= 10; ++i) {
+        for (int i = 0; i <= 2; ++i) {
             if (getEntities(move, "player").size() == 1) {
                 move = dmc.tick(Direction.UP);
                 assertEquals(movementTrajectory.get(nextPositionElement), getEntities(move, "spider").get(1).getPosition());
