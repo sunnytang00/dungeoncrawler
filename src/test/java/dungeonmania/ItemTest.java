@@ -9,10 +9,10 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-import dungeonmania.StaticEntities.*;
+import dungeonmania.entities.StaticEntities.*;
 import dungeonmania.entities.collectableEntities.Key;
+import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.movingEntity.Player;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
@@ -23,6 +23,7 @@ import static dungeonmania.TestUtils.getEntities;
 import static dungeonmania.TestUtils.countEntityOfType;
 import static dungeonmania.TestUtils.getInventory;
 import static dungeonmania.TestHelpers.assertListAreEqualIgnoringOrder;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class ItemTest {
@@ -255,6 +256,37 @@ public class ItemTest {
         assertListAreEqualIgnoringOrder(buildables, move.getBuildables());
 
     }
+
+    @Test
+    public void TestNoMaterialsArmour() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse initialResponse = dmc.newGame("test_build_sceptre_and_armour", "c_testConfigSceptreArmour");
+
+        DungeonResponse move = dmc.tick(Direction.LEFT);
+
+        assertThrows(InvalidActionException.class, () -> {
+            dmc.build("midnight_armour");
+        });
+    }
+
+    @Test
+    public void TestZombiesCannotBuildArmour() throws IllegalArgumentException, InvalidActionException {
+
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse initialResponse = dmc.newGame("test_build_sceptre_and_armour", "c_testArmourSpawnZombie");
+
+        for (int i = 0; i < 10; i++) {//tick some bit to spawn zombies
+            DungeonResponse move = dmc.tick(Direction.LEFT);
+        }
+
+        assertThrows(InvalidActionException.class, () -> {
+            dmc.build("midnight_armour");
+        });
+    }
+
 
 
 

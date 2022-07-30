@@ -9,9 +9,10 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-import dungeonmania.StaticEntities.*;
+import dungeonmania.entities.Entity;
+import dungeonmania.entities.StaticEntities.*;
 import dungeonmania.entities.collectableEntities.Key;
-import dungeonmania.movingEntity.Player;
+import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;

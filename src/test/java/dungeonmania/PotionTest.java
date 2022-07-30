@@ -10,10 +10,11 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import dungeonmania.StaticEntities.*;
+import dungeonmania.entities.Entity;
+import dungeonmania.entities.StaticEntities.*;
 import dungeonmania.entities.collectableEntities.Key;
+import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.movingEntity.Player;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
@@ -148,7 +149,7 @@ public class PotionTest {
 
         //PLAYER    BOULDER
 
-        DungeonResponse intialResponse = dmc.newGame("advanced", "simple");
+        DungeonResponse intialResponse = dmc.newGame("d_twoPotion", "c_testPotion");
 
         DungeonResponse move = dmc.tick(Direction.RIGHT);
         DungeonResponse move2 = dmc.tick(Direction.RIGHT);
@@ -161,6 +162,11 @@ public class PotionTest {
         assertEquals(0, getEntities(consume2, "invincibility_potion").size());
         assertEquals(0, getInventory(consume2, "invisibility_potion").size());
         assertEquals(0, getEntities(consume2, "invisibility_potion").size());
+
+        move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.RIGHT);
 
 
     }

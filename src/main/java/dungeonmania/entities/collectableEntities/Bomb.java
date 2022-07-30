@@ -1,27 +1,52 @@
 package dungeonmania.entities.collectableEntities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
-import dungeonmania.Entity;
-import dungeonmania.StaticEntities.FloorSwitch;
+import dungeonmania.entities.Entity;
 import dungeonmania.entities.Item;
-import dungeonmania.movingEntity.*;
+import dungeonmania.entities.StaticEntities.FloorSwitch;
+import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageTypeSpecifier;
+
+import org.json.JSONObject;
+
 public class Bomb extends Item {
 
     private boolean isActivated;
-
+    private boolean pickable;
 
     public Bomb(String type, Position position) {
         super(type, position);
+        pickable = true;
     }
 
     public int getBombRadius() {
         return (int) JSONConfig.getConfig("bomb_radius");
+    }
+
+    public boolean isActivated() {
+        return isActivated;
+    }
+
+    public void setActivated(boolean activated) {
+        isActivated = activated;
+    }
+
+    public boolean isPickable() {
+        return pickable;
+    }
+
+    public void setPickable(boolean pickable) {
+        this.pickable = pickable;
     }
 
     public void explode(DungeonMap map) {
@@ -69,12 +94,36 @@ public class Bomb extends Item {
         }
     }
 
-    public boolean isActivated() {
-        return isActivated;
+    @Override
+    public void tick(DungeonGame game) {
+        Player player = game.getPlayer();
+        DungeonMap map = game.getMap();
+        Position newPosition = player.getPosition();
+        setPosition(newPosition);
+        map.addEntityToMap(this);
+        explode(map);
+
     }
 
-    public void setActivated(boolean activated) {
-        isActivated = activated;
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = super.toJSON();
+        obj.put("is_active", isActivated);
+        obj.put("is_pickable", pickable);
+        return obj;
     }
+
+    @Override
+    public boolean interact(DungeonMap map, Player player) {
+        if (pickable) {
+            setPickable(false);
+        } else {
+            return false;
+        }
+        player.addToInventory(this);
+        map.removeEntityFromMap(this);
+        return false;
+    }
+
 }
 

@@ -3,7 +3,11 @@ package dungeonmania.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import dungeonmania.entities.collectableEntities.*;
+import dungeonmania.entities.collectableEntities.potions.Potion;
 
 public class PotionQueue {
     
@@ -19,12 +23,31 @@ public class PotionQueue {
         }
         
         Potion currentPotion = potionQueue.get(0);
-        currentPotion.updateTicks();
-        if (currentPotion.getTicks() == 0) {
+        currentPotion.setDurability(currentPotion.getDurability() - 1);
+        if (currentPotion.getDurability() == 0) {
             potionQueue.remove(currentPotion);
         }
 
         return currentPotion;
+    }
+
+    public int queueSize() {
+        return potionQueue.size();
+    }
+
+    public Potion potionInUse() {
+        if (queueSize() == 1) { // no potion in use
+            return null;
+        }
+        return potionQueue.get(0);
+    }
+
+    public JSONArray toJSON(String mode) {
+        JSONArray arr = new JSONArray();
+        for (Potion p : potionQueue) {
+            arr.put(p.toJSON(mode));
+        }
+        return arr;
     }
 
 }

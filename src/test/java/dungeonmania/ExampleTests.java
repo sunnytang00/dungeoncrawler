@@ -116,6 +116,11 @@ public class ExampleTests {
         String bombId = getInventory(res, "bomb").get(0).getId();
         res = assertDoesNotThrow(() -> dmc.tick(bombId));
 
+        assertEquals(0, getInventory(res, "bomb").size());
+
+        DungeonResponse move = dmc.tick(Direction.UP);
+        assertEquals(0, getInventory(move, "bomb").size());
+
         // Check Bomb exploded with radius 2
         //
         //              Boulder/Switch      Wall            Wall

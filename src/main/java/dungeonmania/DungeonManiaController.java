@@ -7,14 +7,18 @@ import dungeonmania.util.*;
 import dungeonmania.util.JSONMap;
 import dungeonmania.entities.buildableEntities.*;
 import dungeonmania.entities.collectableEntities.*;
-import dungeonmania.movingEntity.*;
-import dungeonmania.StaticEntities.TimeTravellingPortal;
-import dungeonmania.StaticEntities.ZombieToastSpawner;
+import dungeonmania.entities.collectableEntities.potions.*;
 import dungeonmania.entities.*;
+import dungeonmania.entities.StaticEntities.TimeTravellingPortal;
+import dungeonmania.entities.StaticEntities.ZombieToastSpawner;
+import dungeonmania.entities.movingEntity.enemies.*;
+import dungeonmania.entities.movingEntity.player.*;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONObject;
 
 public class DungeonManiaController {
 
@@ -25,9 +29,8 @@ public class DungeonManiaController {
     private ArrayList<DungeonMap> mapsToPlayOut = new ArrayList<DungeonMap>();
     private ArrayList<DungeonGame> gamesToPlayOut = new ArrayList<DungeonGame>();
     private boolean timeTravelled = false;
-
-
     private Goals goals;
+    private List<JSONObject> tickHistory = new ArrayList<JSONObject>();
 
     public String getSkin() {
         return "default";
@@ -67,7 +70,8 @@ public class DungeonManiaController {
 
         List<Entity> entities = jMap.getInitialMapEntities();
         map = new DungeonMap(entities, dungeonName);
-        goals = jMap.getComposedGoals(jMap.getGoals(), map);
+        goals = JSONLoadGoals.getComposedGoals(jMap.getGoals(), map);
+        map.setJSONGoals(jMap.getGoals());
 
         List<EntityResponse> entityResponses = map.getEntityResponses();
         List<Item> inventoryItems = new ArrayList<Item>();
@@ -76,7 +80,7 @@ public class DungeonManiaController {
         List<BattleResponse> battleResponses = new ArrayList<BattleResponse>();
         List<String> buildableItems = new ArrayList<String>();
 
-        game = new DungeonGame(goals.getGoalsAsString(map), inventoryItems, battles, buildableItems);
+        game = new DungeonGame(goals.getGoalsAsString(map), inventoryItems, battles, buildableItems, map);
         
         gameList.add(game);
         mapList.add(map);
@@ -92,7 +96,7 @@ public class DungeonManiaController {
     public DungeonResponse getDungeonResponseModel() {
 
         Player player = map.getPlayer();
-        
+        // System.out.println("dungeonresponse" + goals.getGoalsAsString(map));
         List<BattleResponse> battles = map.getBattleResponses(game.getBattles());
         if (player == null) {
             
@@ -139,66 +143,36 @@ public class DungeonManiaController {
         inventory.remove(targetItem);
         player.setInventory(inventory);
 
-        if (targetItem instanceof Bomb) {
-            Bomb bomb = (Bomb) targetItem;
-            Position newPosition = player.getPosition();
-            bomb.setPosition(newPosition);
-            map.addEntityToMap(bomb);
-            bomb.explode(map);
-        }
-
-        if (targetItem instanceof InvincibilityPotion) {
-            InvincibilityPotion invincibilityPotion = (InvincibilityPotion) targetItem;
-            player.consumePotion(invincibilityPotion);
-        }
-
-        if (targetItem instanceof InvisibilityPotion) {
-            InvisibilityPotion invisibilityPotion = (InvisibilityPotion) targetItem;
-            player.consumePotion(invisibilityPotion);
-        }
-
+        targetItem.tick(game);
         player.playerPotionQueueUpdateTick();
 
-        // List<EntityResponse> entityResponses = map.getEntityResponses();
-        // DungeonGame dDame = new DungeonGame(goals.getGoalsAsString(map), inventory, null, null);
-
-        // List<ItemResponse> itemResponses = Helper.convertFromItem(inventory);
-        List<Enemy> enemies = new ArrayList<>();
         for (Entity entity : map.getMapEntities()) {
-            if (entity instanceof Enemy) {
-                Enemy enemy = (Enemy) entity;
-                enemies.add(enemy);
-                enemy.move(enemy, map);
-            }
-            if (entity instanceof ZombieToastSpawner) {
-                ZombieToastSpawner ZTSpawner = (ZombieToastSpawner) entity;
-                ZombieToast zombie = ZTSpawner.spawnZombie(game.getCurrentTick(), map);
-                if (zombie != null) {
-                    zombiesToAdd.add(zombie);
-                }
+            if (entity instanceof Enemy || entity instanceof ZombieToastSpawner) {
+                entity.tick(game);
             }
         }
 
+        List<Enemy> enemies = map.getEnemies();
         for (Enemy enemy : enemies) {
-            if (enemy instanceof Mercenary) {
-                Mercenary mercenary = (Mercenary) enemy;
-                mercenary.updateMindControl();
-            }
             player.interactWithEnemies(enemy, map);
             player.battleWithEnemies(map, game);
+
         }
 
-        map.addEntitiesToMap(zombiesToAdd);
-        Spider spiderToAdd = map.spawnSpider(game.getCurrentTick(), map);
-
-        if (spiderToAdd != null) {
-            map.addEntityToMap(spiderToAdd);
+        map.spawnSpider(game);
+        List<Entity> enemiesToSpawn = map.getEnemiesToSpawn();
+        if (enemiesToSpawn != null && enemiesToSpawn.size() > 0) {
+            map.addEntitiesToMap(enemiesToSpawn);
         }
+
+        map.setEnemiesToSpawn(new ArrayList<Entity>());
+
         map.BoulderSwitchOverlap();
 
         gameList.add(game);
         mapList.add(map);
 
+        saveTickToHistory();
         return getDungeonResponseModel();
     }
 
@@ -217,50 +191,37 @@ public class DungeonManiaController {
             rewind(30);
         }
 
-
         player.move(game, map, movementDirection);
-        List<Enemy> enemies = new ArrayList<>();
-        List<ZombieToast> zombiesToAdd = new ArrayList<>();
 
+        
         for (Entity entity : map.getMapEntities()) {
-            if (entity instanceof Enemy) {
-                Enemy enemy = (Enemy) entity;
-                enemies.add(enemy);
-                enemy.move(enemy, map);
+            if (entity instanceof Enemy || entity instanceof ZombieToastSpawner) {
+                entity.tick(game);
             }
-
-            if (entity instanceof ZombieToastSpawner) {
-                ZombieToastSpawner ZTSpawner = (ZombieToastSpawner) entity;
-                ZombieToast zombie = ZTSpawner.spawnZombie(game.getCurrentTick(), map);
-                if (zombie != null) {
-                    zombiesToAdd.add(zombie);
-                }
-            }
-
         }
 
+        List<Enemy> enemies = map.getEnemies();
         for (Enemy enemy : enemies) {
-            if (enemy instanceof Mercenary) {
-                Mercenary mercenary = (Mercenary) enemy;
-                mercenary.updateMindControl();
-            }
             player.interactWithEnemies(enemy, map);
             player.battleWithEnemies(map, game);
 
         }
-        map.addEntitiesToMap(zombiesToAdd);
+        
 
-        Spider spiderToAdd = map.spawnSpider(game.getCurrentTick(), map);
-
-        if (spiderToAdd != null) {
-            map.addEntityToMap(spiderToAdd);
+        map.spawnSpider(game);
+        List<Entity> enemiesToSpawn = map.getEnemiesToSpawn();
+        if (enemiesToSpawn != null && enemiesToSpawn.size() > 0) {
+            map.addEntitiesToMap(enemiesToSpawn);
         }
+
+        map.setEnemiesToSpawn(new ArrayList<Entity>());
+
         map.BoulderSwitchOverlap();
 
         gameList.add(game);
         mapList.add(map);
 
-
+        saveTickToHistory();
         return getDungeonResponseModel();
 
     }
@@ -346,7 +307,16 @@ public class DungeonManiaController {
      * /game/load
      */
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
-        return null;
+        InputStream is = FileLoader.class.getResourceAsStream("bin/recourses/dungeons/" + name + ".json");
+        if (is == null) {
+            throw new IllegalArgumentException("Cannot find the game to load");
+        }
+        JSONReloadGame reloadGame = new JSONReloadGame(is, name);
+        map = new DungeonMap(reloadGame.getMapEntities(), name);
+        goals = JSONLoadGoals.getComposedGoals(reloadGame.getGoals(), map);
+        map.setJSONGoals(reloadGame.getGoals());
+
+        return getDungeonResponseModel();
     }
 
 
@@ -357,6 +327,16 @@ public class DungeonManiaController {
         return new ArrayList<>();
     }
 
+    public void saveTickToHistory() {
+        if (map.getPlayer() == null || goals.getGoalsAsString(map).equals("")) {
+            // player wins or loses
+            return;
+        }
+        JSONObject obj = JSONSaveGame.saveGame(map, map.getJSONGoals(), game.getCurrentTick());
+        // System.out.println(obj);
+        tickHistory.add(obj);
+    }
+
     /**
      * Rewind
      * @param ticks<
@@ -365,44 +345,40 @@ public class DungeonManiaController {
      */
 
     public DungeonResponse rewind(int ticks) throws IllegalArgumentException {
-        timeTravelled = true;
-        int gameSize = gameList.size();
-        int idx;
-        Position playerPosition = map.getPlayer().getPosition();
-        //arraylist of dungresponse should look like 0, 1, 2, 3, 4 so size = 5
-        if (ticks <= 0) {
-            throw new IllegalArgumentException("The number of ticks must be > 0");
-        }
+        // timeTravelled = true;
+        // int gameSize = gameList.size();
+        // int idx;
+        // Position playerPosition = map.getPlayer().getPosition();
+        // //arraylist of dungresponse should look like 0, 1, 2, 3, 4 so size = 5
+        // if (ticks <= 0) {
+        //     throw new IllegalArgumentException("The number of ticks must be > 0");
+        // }
 
-        if (ticks >= gameSize) {
-            throw new IllegalArgumentException("The number of ticks has not occured yet");
-        }
+        // if (ticks >= gameSize) {
+        //     throw new IllegalArgumentException("The number of ticks has not occured yet");
+        // }
 
-        for (DungeonMap map: mapList) {//Change all player entitys in previous states to type older_player
-            map.changePlayerToOlder();
-        }
+        // for (DungeonMap map: mapList) {//Change all player entitys in previous states to type older_player
+        //     map.changePlayerToOlder();
+        // }
         
-        for (idx = gameSize - ticks; idx < gameSize; idx++) {//Add the games that need to be played out to a new list
-            gamesToPlayOut.add(gameList.get(idx));
-            mapsToPlayOut.add(mapList.get(idx));
-        } 
+        // for (idx = gameSize - ticks; idx < gameSize; idx++) {//Add the games that need to be played out to a new list
+        //     gamesToPlayOut.add(gameList.get(idx));
+        //     mapsToPlayOut.add(mapList.get(idx));
+        // } 
 
-        if (ticks == 30 && (gameList.size() < 30)) {//If we go through portal and we have been through < 30 ticks, we go back to initial state
-            map = mapList.get(0);
-            game = gameList.get(0);
+        // if (ticks == 30 && (gameList.size() < 30)) {//If we go through portal and we have been through < 30 ticks, we go back to initial state
+        //     map = mapList.get(0);
+        //     game = gameList.get(0);
 
-        } else if (gameSize > ticks) {//We should be in here if there are no problems
-            game = gameList.get((gameSize - ticks) - 1);//Set the current game and map state to the rewinded one
-            map = mapList.get((gameSize - ticks) - 1);
-        }
+        // } else if (gameSize > ticks) {//We should be in here if there are no problems
+        //     game = gameList.get((gameSize - ticks) - 1);//Set the current game and map state to the rewinded one
+        //     map = mapList.get((gameSize - ticks) - 1);
+        // }
 
-        map.addEntityToMap(new Player("player", playerPosition, false));
-
-        
-
-        return getDungeonResponseModel();
-        
+        // map.addEntityToMap(new Player("player", playerPosition, false));
+        // return getDungeonResponseModel();
+        return null;
     }
-
 
 }

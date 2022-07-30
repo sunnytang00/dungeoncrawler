@@ -1,15 +1,10 @@
 package dungeonmania.entities.buildableEntities;
 
 import dungeonmania.DungeonMap;
-import dungeonmania.entities.Item;
 import dungeonmania.entities.collectableEntities.*;
+import dungeonmania.entities.movingEntity.player.Player;
+import dungeonmania.entities.Item;
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.movingEntity.Assassin;
-import dungeonmania.movingEntity.MercBribedState;
-import dungeonmania.movingEntity.Mercenary;
-import dungeonmania.movingEntity.MovingEntity;
-import dungeonmania.movingEntity.Player;
-import dungeonmania.util.JSONConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +47,7 @@ public class Sceptre extends Item implements ItemBuildable {
     
             if ((sunStone == 1) && (treasureOrKeyNum == 1) && ((arrowNum == 2)||(woodNum == 1))) {
                 removingPosition.forEach(i -> inventory.remove(i));
-                player.collectToInventory(new Sceptre(BUILDABLE_TYPE_SCEPTRE), map);
+                player.addToInventory(new Sceptre(BUILDABLE_TYPE_SCEPTRE));
             } else {
                 throw new InvalidActionException("Player does not have sufficient items to build sceptre");
             }

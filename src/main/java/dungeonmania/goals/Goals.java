@@ -1,5 +1,7 @@
 package dungeonmania.goals;
 
+import org.json.JSONObject;
+
 import dungeonmania.DungeonMap;
 
 /**
@@ -13,4 +15,6 @@ public interface Goals {
     public boolean isAchieved(DungeonMap map);
 
     public String getGoalsAsString(DungeonMap map);
+
+    public JSONObject toJSON();
 }
