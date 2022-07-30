@@ -30,7 +30,8 @@
         "x": 6,
         "y": 2,
         "type": "switch_door",
-        "logic": "xor"
+        "logic": "xor",
+        "key": 2
       },
       {
         "x": 6,
