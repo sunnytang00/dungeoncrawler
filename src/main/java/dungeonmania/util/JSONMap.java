@@ -1,10 +1,14 @@
 package dungeonmania.util;
 
 import dungeonmania.DungeonMap;
-import dungeonmania.Entity;
-import dungeonmania.StaticEntities.*;
-import dungeonmania.movingEntity.*;
+import dungeonmania.entities.Entity;
+import dungeonmania.entities.StaticEntities.*;
+import dungeonmania.entities.StaticEntities.logicSwitches.*;
 import dungeonmania.entities.collectableEntities.*;
+import dungeonmania.entities.collectableEntities.potions.InvincibilityPotion;
+import dungeonmania.entities.collectableEntities.potions.InvisibilityPotion;
+import dungeonmania.entities.movingEntity.enemies.*;
+import dungeonmania.entities.movingEntity.player.*;
 import dungeonmania.goals.*;
 
 import java.util.ArrayList;
@@ -14,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import java.io.InputStream;
+import java.security.cert.LDAPCertStoreParameters;
 
 public class JSONMap {
 
@@ -45,6 +50,8 @@ public class JSONMap {
         switch (type) {
             case "player":
                 entity = new Player(type, position, false); break;
+            case "old_player":
+                entity = new OlderPlayer(type, position, false); break;
             case "wall":
                 entity = new Wall(type, position); break;
             case "exit":
@@ -89,6 +96,17 @@ public class JSONMap {
                 entity = new Sword(type, position); break;
             case "swamp_tile":
                 entity = new SwampTile(type, position, obj.getInt("movement_factor")); break;
+            case "time_turner":
+                // entity = new TimeTurner(type, position); break;
+            case "time_travelling_portal":
+                entity = new TimeTravellingPortal(type, position); break;
+            case "light_bulb_off":
+                entity = new LightBulb(type, position, Helper.getLogic(obj.getString("logic"))); break;
+            case "wire":
+                entity = new Wire(type, position, Helper.getLogic(obj.getString("logic"))); break;
+            case "switch_door":
+                entity = new SwitchDoor(type, position, Helper.getLogic(obj.getString("logic")), obj.getInt("key")); break;
+
         }
         initialMapEntities.add(entity);
     }
@@ -99,30 +117,6 @@ public class JSONMap {
 
     public JSONObject getGoals() {
         return JSONgoals;
-    }
-
-    public Goals getComposedGoals(JSONObject goals, DungeonMap map) {
-        switch(goals.getString("goal")) {
-            case "AND":
-                JSONArray subgoalsAnd = goals.getJSONArray("subgoals");
-                CompositeGoal compositeAndGoal = new CompositeAnd(getComposedGoals(subgoalsAnd.getJSONObject(0), map),
-                                                                  getComposedGoals(subgoalsAnd.getJSONObject(1), map));
-                return compositeAndGoal;
-            case "OR":
-                JSONArray subgoalsOr = goals.getJSONArray("subgoals");
-                CompositeGoal compositeOrGoal = new CompositeOr(getComposedGoals(subgoalsOr.getJSONObject(0), map),
-                                                                 getComposedGoals(subgoalsOr.getJSONObject(1), map));
-                return compositeOrGoal;
-            case "exit":
-                return new GetExit(map);
-            case "enemies":
-                return new DestroyEnemy(map);
-            case "boulders":
-                return new BoulderOnSwitch(map);
-            case "treasure":
-                return new CollectTreasure(map);
-        }
-        return null;
     }
 
 }

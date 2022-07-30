@@ -185,29 +185,105 @@ public class GoalsTest {
         move = dmc.tick(Direction.RIGHT);
         assertEquals(3, getInventory(move, "treasure").size());
         assertTrue(getGoals(intialResponse).contains(":exit"));
+        // System.out.println("test returned: " + getGoals(intialResponse));
         // assertFalse(getGoals(intialResponse).contains(":treasure"));
         
-        Position mercP = getEntities(move, "mercenary").get(0).getPosition();
-        Position playerP = getEntities(move, "player").get(0).getPosition();
-        if (mercP.getDistanceBetween(playerP) == 1) {
-            assertEquals(3, getInventory(move, "treasure").size());
-            String mercId = getEntities(move, "mercenary").get(0).getId();
-            assertDoesNotThrow(() -> dmc.interact(mercId));
-        }
+        // Position mercP = getEntities(move, "mercenary").get(0).getPosition();
+        // Position playerP = getEntities(move, "player").get(0).getPosition();
+        // if (mercP.getDistanceBetween(playerP) == 1) {
+        //     assertEquals(3, getInventory(move, "treasure").size());
+        //     String mercId = getEntities(move, "mercenary").get(0).getId();
+        //     assertDoesNotThrow(() -> dmc.interact(mercId));
+        // }
 
-        move = dmc.tick(Direction.UP);
-        mercP = getEntities(move, "mercenary").get(0).getPosition();
-        Position newP = getEntities(move, "player").get(0).getPosition();
-        assertEquals(2, getInventory(move, "treasure").size());
-        assertEquals(mercP, playerP);
-        assertTrue(getGoals(intialResponse).contains(":exit"));
-        assertTrue(getGoals(intialResponse).contains(":treasure"));
+        // move = dmc.tick(Direction.UP);
+        // mercP = getEntities(move, "mercenary").get(0).getPosition();
+        // Position newP = getEntities(move, "player").get(0).getPosition();
+        // assertEquals(2, getInventory(move, "treasure").size());
+        // assertEquals(mercP, playerP);
+        // assertTrue(getGoals(intialResponse).contains(":exit"));
+        // assertTrue(getGoals(intialResponse).contains(":treasure"));
 
-        move = dmc.tick(Direction.UP);
-        mercP = getEntities(move, "mercenary").get(0).getPosition();
-        assertEquals(mercP, newP);
-        assertTrue(getGoals(intialResponse).contains(":exit"));
-        assertTrue(getGoals(intialResponse).contains(":treasure"));
+        // move = dmc.tick(Direction.UP);
+        // mercP = getEntities(move, "mercenary").get(0).getPosition();
+        // assertEquals(mercP, newP);
+        // assertTrue(getGoals(intialResponse).contains(":exit"));
+        // assertTrue(getGoals(intialResponse).contains(":treasure"));
+    }
+
+
+    @Test
+    @DisplayName("Testing a map with 4 disjunction goal - enemy goal")
+    public void fourDisjunction1() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_fourDisjunctionGoals", "c_complexGoalsTest_andAll");
+
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":treasure"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
+
+        // kill spider
+        res = dmc.tick(Direction.RIGHT);
+        assertFalse(getGoals(res).contains(":exit"));
+        assertFalse(getGoals(res).contains(":treasure"));
+        assertFalse(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
+
+        assertEquals("", getGoals(res));
+    }
+
+    
+    @Test
+    @DisplayName("Testing a map with 4 conjunction goal - boulder goal")
+    public void fourDisjunction2() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_fourDisjunctionGoals1", "c_complexGoalsTest_andAll");
+
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":treasure"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
+
+        // nothing happends
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":treasure"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
+
+        // move boulder onto switch
+        res = dmc.tick(Direction.RIGHT);
+        assertFalse(getGoals(res).contains(":exit"));
+        assertFalse(getGoals(res).contains(":treasure"));
+        assertFalse(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
+        assertEquals("", getGoals(res));
+
+        // the game will technically win already from the front-end
+        // but for testing purposes we carry on 
+        // move boulder off switch 
+        res = dmc.tick(Direction.RIGHT);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":treasure"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
+
+        // pick up down and left to pick up treasure 
+        res = dmc.tick(Direction.DOWN);
+        assertTrue(getGoals(res).contains(":exit"));
+        assertTrue(getGoals(res).contains(":treasure"));
+        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(res).contains(":enemies"));
+        res = dmc.tick(Direction.LEFT);
+        assertFalse(getGoals(res).contains(":exit"));
+        assertFalse(getGoals(res).contains(":treasure"));
+        assertFalse(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(res).contains(":enemies"));
+        assertEquals("", getGoals(res));
+
     }
 
 }

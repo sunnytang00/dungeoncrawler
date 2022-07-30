@@ -8,6 +8,10 @@ public class JSONConfig {
 
     private static String fileName; 
 
+    public static String getConfigName() {
+        return fileName;
+    }
+
     public static void setConfig(String fileName) {
         JSONConfig.fileName = fileName;
     }

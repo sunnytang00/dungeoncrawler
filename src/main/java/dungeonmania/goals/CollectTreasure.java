@@ -1,5 +1,7 @@
 package dungeonmania.goals;
 
+import org.json.JSONObject;
+
 import dungeonmania.DungeonMap;
 import dungeonmania.util.JSONConfig;
 
@@ -14,6 +16,7 @@ public class CollectTreasure extends LeafGoal {
     @Override
     public boolean isAchieved(DungeonMap map) {
         int numOfTreasure = map.getPlayer().getWealth();
+        // System.out.println(numOfTreasure);
         if (numOfTreasure >= JSONConfig.getConfig("treasure_goal")) {
             prevIsAchieved = true;
             map.setRemainingConditions(-1);
@@ -31,4 +34,12 @@ public class CollectTreasure extends LeafGoal {
         if (isAchieved(map)) { return ""; }
         return ":treasure ";
     }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("goal", "treasure");
+        return obj;
+    }
+
 }

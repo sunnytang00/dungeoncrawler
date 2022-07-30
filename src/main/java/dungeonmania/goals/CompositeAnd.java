@@ -1,5 +1,7 @@
 package dungeonmania.goals;
 
+import org.json.JSONObject;
+
 import dungeonmania.DungeonMap;
 
 public class CompositeAnd extends CompositeGoal{
@@ -12,6 +14,7 @@ public class CompositeAnd extends CompositeGoal{
     public boolean isAchieved(DungeonMap map) {
         boolean achieved1 = getSubgoal1().isAchieved(map);
         boolean achieved2 = getSubgoal2().isAchieved(map);
+        // System.out.println(achieved1 && achieved2);
         return (achieved1 && achieved2);
     }
 
@@ -22,7 +25,15 @@ public class CompositeAnd extends CompositeGoal{
         String subgoal1 = getSubgoal1().getGoalsAsString(map);
         String subgoal2 = getSubgoal2().getGoalsAsString(map);
         String str = "(" + subgoal1 + " AND " + subgoal2 + ")";
+        // System.out.println("AND str: " + str);
 
         return str;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = new JSONObject();
+        
+        return obj;
     }
 }

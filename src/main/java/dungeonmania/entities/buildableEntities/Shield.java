@@ -1,10 +1,10 @@
 package dungeonmania.entities.buildableEntities;
 
 import dungeonmania.DungeonMap;
-import dungeonmania.entities.Item;
 import dungeonmania.entities.collectableEntities.*;
+import dungeonmania.entities.movingEntity.player.Player;
+import dungeonmania.entities.Item;
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.movingEntity.Player;
 import dungeonmania.util.JSONConfig;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class Shield extends Weapon implements ItemBuildable {
                 // remove all the items used to craft the buildable item
                 // if it could be crafted by the items in the inventory
                 removingPosition.forEach(i -> inventory.remove(i));
-                player.collectToInventory(new Shield(BUILDABLE_TYPE_SHIELD), map);
+                player.addToInventory(new Shield(BUILDABLE_TYPE_SHIELD));
             } else {
                 throw new InvalidActionException("Player does not have sufficient items to build shield");
             }

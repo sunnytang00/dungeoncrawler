@@ -1,10 +1,12 @@
 package dungeonmania.goals;
 
 import dungeonmania.DungeonMap;
-import dungeonmania.Entity;
-import dungeonmania.StaticEntities.FloorSwitch;
+import dungeonmania.entities.Entity;
+import dungeonmania.entities.StaticEntities.FloorSwitch;
 
 import java.util.List;
+
+import org.json.JSONObject;
 
 public class BoulderOnSwitch extends LeafGoal {
 
@@ -33,6 +35,13 @@ public class BoulderOnSwitch extends LeafGoal {
     public String getGoalsAsString(DungeonMap map) {
         if (isAchieved(map)) { return ""; }
         return ":boulders ";
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("goal", "boulders");
+        return obj;
     }
     
 }

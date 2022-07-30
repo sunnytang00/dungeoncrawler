@@ -1,10 +1,10 @@
 package dungeonmania.entities.buildableEntities;
 
 import dungeonmania.DungeonMap;
-import dungeonmania.entities.Item;
 import dungeonmania.entities.collectableEntities.*;
+import dungeonmania.entities.movingEntity.player.Player;
+import dungeonmania.entities.Item;
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.movingEntity.Player;
 import dungeonmania.util.JSONConfig;
 
 import java.util.ArrayList;
@@ -19,9 +19,8 @@ public class MidnightArmour extends Weapon implements ItemBuildable {
     }
     
     public void build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException {
-        boolean zombies = map.getEntitiesFromType(map.getMapEntities(), "zombie").isEmpty();//If any zombies in map
 
-        if (!zombies) {
+        if (map.hasZombies()) {
             throw new InvalidActionException("There are zombies in map");
         }
 
@@ -44,9 +43,9 @@ public class MidnightArmour extends Weapon implements ItemBuildable {
                 }
             }
     
-            if ((sunStone == 1) && (swordNum == 1) && zombies) {
+            if ((sunStone == 1) && (swordNum == 1)) {
                 removingPosition.forEach(i -> inventory.remove(i));
-                player.collectToInventory(new MidnightArmour(BUILDABLE_TYPE_MIDNIGHT_ARMOUR), map);
+                player.addToInventory(new MidnightArmour(BUILDABLE_TYPE_MIDNIGHT_ARMOUR));
             } else {
                 throw new InvalidActionException("Player cannot build midnight armour");
             }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import dungeonmania.entities.Item;
+import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.Battle;
 
 public class DungeonGame {
@@ -14,12 +15,14 @@ public class DungeonGame {
     private List<Item> inventories;
     private List<Battle> battles = new ArrayList<Battle>();
     private List<String> buildables;
+    private DungeonMap map;
 
 
-    public DungeonGame(String goals, List<Item> inventories, List<Battle> battles, List<String> buildables) {
+    public DungeonGame(String goals, List<Item> inventories, List<Battle> battles, List<String> buildables, DungeonMap map) {
         this.dungeonId = UUID.randomUUID().toString();
         this.inventories = inventories;
         this.buildables = buildables;
+        this.map = map;
     }
 
     public String getDungeonId() {
@@ -67,5 +70,18 @@ public class DungeonGame {
         currentTick += 1;
     }
 
+    public DungeonMap getMap() {
+        return map;
+    }
+
+    public void setMap(DungeonMap map) {
+        this.map = map;
+    }
+
+    public Player getPlayer() {
+        return map.getPlayer();
+    }
+
+    
     
 }

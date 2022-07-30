@@ -7,7 +7,7 @@ public class Arrows extends Item {
     public Arrows(String type, Position position) {
         super(type, position);
         // the arrow just could be used one time
-        setUsedTimes(1);
+        setDurability(1);
     }
 }
 
