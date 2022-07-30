@@ -63,11 +63,11 @@ public class DungeonMap {
         return null;
     }
 
-    public Entity getSwampAtPos(Position position) {
+    public SwampTile getSwampAtPos(Position position) {
         List<Entity> entitiesAtPos = this.getEntityFromPos(position);
         for (Entity entity : entitiesAtPos) {
             if (entity instanceof SwampTile) {
-                return entity;
+                return (SwampTile) entity;
             }
         }
         return null;
