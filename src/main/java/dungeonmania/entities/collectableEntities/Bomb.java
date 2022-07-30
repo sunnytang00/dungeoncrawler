@@ -15,10 +15,6 @@ import dungeonmania.util.Position;
 
 import org.json.JSONObject;
 
-import javax.imageio.ImageTypeSpecifier;
-
-import org.json.JSONObject;
-
 public class Bomb extends Item {
 
     private boolean isActivated;
