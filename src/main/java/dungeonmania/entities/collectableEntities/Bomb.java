@@ -4,6 +4,7 @@ import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
 import dungeonmania.StaticEntities.FloorSwitch;
 import dungeonmania.entities.Item;
+import dungeonmania.entities.logicSwitches.LogicEnum;
 import dungeonmania.movingEntity.*;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
@@ -14,6 +15,7 @@ import java.util.List;
 public class Bomb extends Item {
 
     private boolean isActivated;
+    private LogicEnum logic;
 
 
     public Bomb(String type, Position position) {
@@ -75,6 +77,14 @@ public class Bomb extends Item {
 
     public void setActivated(boolean activated) {
         isActivated = activated;
+    }
+
+    public LogicEnum getLogic() {
+        return logic;
+    }
+
+    public void setLogic(LogicEnum logic) {
+        this.logic = logic;
     }
 }
 
