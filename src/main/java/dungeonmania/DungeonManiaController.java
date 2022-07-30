@@ -30,7 +30,6 @@ public class DungeonManiaController {
     private ArrayList<DungeonGame> gamesToPlayOut = new ArrayList<DungeonGame>();
     private boolean timeTravelled = false;
     private Goals goals;
-    private List<JSONObject> tickHistory = new ArrayList<JSONObject>();
 
     public String getSkin() {
         return "default";
@@ -302,6 +301,10 @@ public class DungeonManiaController {
      * /game/save
      */
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
+        // save files to "./bin/saved_games/" + <fileName> + ".json" 
+        int currTick = game.getCurrentTick();
+        JSONObject currGame = game.getGameFromTickHistory(currTick);
+        
         return null;
     }
 
@@ -334,9 +337,12 @@ public class DungeonManiaController {
             // player wins or loses
             return;
         }
-        JSONObject obj = JSONSaveGame.saveGame(map, map.getJSONGoals(), game.getCurrentTick());
+        JSONObject obj = JSONSaveGame.saveGame(map, map.getJSONGoals(), game);
         // System.out.println(obj);
-        tickHistory.add(obj);
+        game.addToTickHistory(obj);
+        // System.out.println(tickHistory);
+        // System.out.println(tickHistory.size());
+        // System.out.println("tick: " + game.getCurrentTick());
     }
 
     /**

@@ -218,7 +218,8 @@ public class JSONReloadGame {
 
 
         // restore time travel memories
-        JSONArray timeTravelJSON = object.getJSONArray("time-travel");
+        JSONObject timeTravelJSON = object.getJSONObject("time-travel");
+        
 
 
         // restore config file
