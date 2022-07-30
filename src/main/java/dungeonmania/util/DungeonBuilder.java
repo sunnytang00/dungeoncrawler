@@ -2,9 +2,9 @@ package dungeonmania.util;
 
 
 import dungeonmania.DungeonMap;
-import dungeonmania.Entity;
-import dungeonmania.StaticEntities.Exit;
-import dungeonmania.StaticEntities.Wall;
+import dungeonmania.entities.Entity;
+import dungeonmania.entities.StaticEntities.Exit;
+import dungeonmania.entities.StaticEntities.Wall;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
