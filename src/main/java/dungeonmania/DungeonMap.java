@@ -231,6 +231,14 @@ public class DungeonMap {
         return found;    
     }
 
+    public void changePlayerToOlder() {
+        for (Entity e : mapEntities) {
+            if (e instanceof Player) {
+                e.setType("older_player");
+            }
+        }
+    }
+
     public void BoulderSwitchOverlap() {
 
         for (Entity entity : mapEntities) {
@@ -276,6 +284,15 @@ public class DungeonMap {
 
     public void setEnemiesToSpawn(List<Entity> enemiesToSpawn) {
         this.enemiesToSpawn = enemiesToSpawn;
+    }
+
+    public Position returnPlayerPosition() {
+        for (Entity e : mapEntities) {
+            if (e instanceof Player && e.getType().equals("player")) {
+                return e.getPosition();
+            }
+        }
+        return null;
     }
 
     
