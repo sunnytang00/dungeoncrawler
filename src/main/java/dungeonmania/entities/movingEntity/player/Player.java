@@ -256,7 +256,6 @@ public class Player extends MovingEntity {
 
                 if (newHealth <= 0) {
                     game.addToBattles(currBattle);
-                    // map.removeEntityFromMap(this);
                     map.removePlayerFromMap(false);
                     return;
                     // return battles;
