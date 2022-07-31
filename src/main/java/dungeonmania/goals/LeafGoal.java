@@ -6,6 +6,9 @@ import dungeonmania.DungeonMap;
 public abstract class LeafGoal implements Goals {
     private boolean prevIsAchieved;
 
+    public LeafGoal() {
+    }
+
     public LeafGoal(DungeonMap map, boolean prevIsAchieved) {
         this.prevIsAchieved = prevIsAchieved;
     }

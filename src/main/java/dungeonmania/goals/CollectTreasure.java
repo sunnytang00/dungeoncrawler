@@ -19,6 +19,9 @@ public class CollectTreasure extends LeafGoal {
         map.setRemainingConditions(1);
     }
 
+    public CollectTreasure() {
+    }
+
     @Override
     public boolean isAchieved(DungeonMap map) {
         Player player = map.getPlayer();

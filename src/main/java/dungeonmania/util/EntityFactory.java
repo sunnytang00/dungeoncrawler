@@ -135,13 +135,13 @@ public class EntityFactory {
     public static final Goals doExtractGoal(JSONObject json) {
         switch (json.getString("goal")) {
             case "enemies":
-                return new DestroyEnemy(null, false);
+                return new DestroyEnemy();
             case "treasure":
-                return new CollectTreasure(null, false);
+                return new CollectTreasure();
             case "exit":
-                return new GetExit(null, false);
+                return new GetExit();
             case "boulders":
-                return new BoulderOnSwitch(null, false);
+                return new BoulderOnSwitch();
             case "AND":
                 CompositeGoal and = new CompositeAnd();
                 JSONArray andSubgoals = json.getJSONArray("subgoals");
