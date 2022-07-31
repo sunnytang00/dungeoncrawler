@@ -81,9 +81,7 @@ public class DungeonManiaController {
         List<Entity> entities = jMap.getInitialMapEntities();
         map = new DungeonMap(entities, dungeonName);
         goals = JSONLoadGoals.getComposedGoals(jMap.getGoals(), map);
-        // initialGoal = jMap.getGoals();
         map.setJSONGoals(jMap.getGoals());
-        // JSONLoadGoals.setJSONGoals(jMap.getGoals());
 
         List<EntityResponse> entityResponses = map.getEntityResponses();
 

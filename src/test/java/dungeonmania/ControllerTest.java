@@ -56,6 +56,15 @@ public class ControllerTest {
     }
 
     @Test
+    @DisplayName("Test tick item id empty") 
+    public void testtickItemEmpty() throws InvalidActionException {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_movementTest_testMovementDown", "c_movementTest_testMovementDown");
+        assertThrows(InvalidActionException.class, () -> dmc.tick(""));
+        
+    }
+
+    @Test
     @DisplayName("Test tick item incorrect type") 
     public void testtickItem2() throws IllegalArgumentException {
         DungeonManiaController dmc = new DungeonManiaController();
@@ -83,5 +92,79 @@ public class ControllerTest {
         assertThrows(InvalidActionException.class, () -> dmc.interact("wohoooo"));
         
     }
+
+    @Test
+    @DisplayName("Test interact bribed") 
+    public void testInteractBribed() throws InvalidActionException {
+        DungeonManiaController dmc = new DungeonManiaController();
+        // bribe radius and amount are 1
+        DungeonResponse intialResponse = dmc.newGame("mercenary", "simple");
+
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.RIGHT);
+        assertEquals(3, getInventory(move, "treasure").size());
+        
+        Position mercP = getEntities(move, "mercenary").get(0).getPosition();
+        Position playerP = getEntities(move, "player").get(0).getPosition();
+        if (mercP.getDistanceBetween(playerP) == 1) {
+            
+            assertEquals(3, getInventory(move, "treasure").size());
+            String mercId = getEntities(move, "mercenary").get(0).getId();
+            assertDoesNotThrow(() -> dmc.interact(mercId));
+            
+        }
+        String mercId = getEntities(move, "mercenary").get(0).getId();
+        assertThrows(IllegalArgumentException.class, () -> dmc.interact(mercId));
+           
+    }
+
+    @Test
+    @DisplayName("Test getskin") 
+    public void testGetskin() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        assertEquals(dmc.getSkin(), "default");
+
+        
+    }
+
+    @Test
+    @DisplayName("Test getLocalisation() ") 
+    public void testgetLocalisation()  {
+        DungeonManiaController dmc = new DungeonManiaController();
+        assertEquals(dmc.getLocalisation() , "en_US");
+
+        
+    }
+
+    @Test
+    @DisplayName("Test getdungeons ") 
+    public void testgetdungeons()  {
+        DungeonManiaController dmc = new DungeonManiaController();
+        assertTrue(dmc.dungeons() != null);
+
+        
+    }
+
+    @Test
+    @DisplayName("Test getdungeons ") 
+    public void testgetconfigs() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        assertTrue(dmc.configs() != null);
+
+        
+    }
+
+    @Test
+    @DisplayName("Test tick item incorrect type") 
+    public void testtickItem3() throws IllegalArgumentException {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_movementTest_testMovementDown", "c_movementTest_testMovementDown");
+        String exitId = getEntities(initDungonRes, "exit").get(0).getId(); 
+        assertThrows(InvalidActionException.class, () -> dmc.tick(exitId));
+        
+    }
+
+
     
 }

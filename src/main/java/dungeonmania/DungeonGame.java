@@ -69,10 +69,6 @@ public class DungeonGame {
         battles.add(battle);
     }
 
-    public void setBuildables(List<String> buildables) {
-        this.buildables = buildables;
-    }
-
     // assuming game starts with tick 0
     public int getCurrentTick() {
         return currentTick;
@@ -130,10 +126,6 @@ public class DungeonGame {
 
     public DungeonMap getMap() {
         return map;
-    }
-
-    public void setMap(DungeonMap map) {
-        this.map = map;
     }
 
     public Player getPlayer() {

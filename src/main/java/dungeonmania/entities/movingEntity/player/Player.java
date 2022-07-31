@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.KeyStroke;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 

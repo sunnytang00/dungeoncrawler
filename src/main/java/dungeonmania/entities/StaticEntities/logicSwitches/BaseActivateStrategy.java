@@ -19,8 +19,7 @@ public abstract class BaseActivateStrategy implements ActivateStrategy {
         for (Position position : adjacentPositions) {
             List<Entity> entities = map.getEntityFromPos(position);
             for (Entity entity : entities) {
-                if ((entity instanceof Bomb && ((Bomb)entity).isActivated()) 
-                || (entity instanceof LogicItem && ((LogicItem)entity).isActivated()) 
+                if ((entity instanceof LogicItem && ((LogicItem)entity).isActivated()) 
                 || (entity instanceof FloorSwitch && ((FloorSwitch)entity).isActivated())) {
                     activatedCount++;
                 }
@@ -38,10 +37,6 @@ public abstract class BaseActivateStrategy implements ActivateStrategy {
         for (Position position : adjacentPositions) {
             List<Entity> entities = map.getEntityFromPos(position);
             for (Entity entity : entities) {
-                if (entity instanceof Bomb && ((Bomb)entity).isActivated()) {
-                    int tick = ((LogicBomb)entity).getActivationTick();
-                    ticks.add(tick);
-                }
                 if (entity instanceof LogicItem && ((LogicItem)entity).isActivated()) {
                     int tick = ((LogicItem)entity).getActivationTick();
                     ticks.add(tick);

@@ -120,7 +120,6 @@ public class DungeonMap {
     public int getNumOfAlly() {
         int count = 0;
         for (Entity entity : mapEntities) {
-            // do we need assassin as well here
             if (entity instanceof Mercenary) {
                 Mercenary merc = (Mercenary) entity;
                 if (merc.isBribed()) {
@@ -153,10 +152,6 @@ public class DungeonMap {
         gameWin = wins;
     }
 
-    public boolean gameResult() {
-        return gameWin;
-    }
-
     public boolean checkIfEntityAdjacentIsPushable(Entity entity, Direction direction) {
 
         List<Entity> entityList = getEntityFromPos(entity.getPosition().translateBy(direction));
@@ -183,9 +178,6 @@ public class DungeonMap {
         this.goalsJSON = goalsJSON;
     }
 
-    public JSONObject getJSONGoals() {
-        return goalsJSON;
-    }
 
     public String goalString() {
         return goals.getGoalsAsString(this);
@@ -205,7 +197,7 @@ public class DungeonMap {
         Position playerPos = getPlayer().getPosition();
         List<Position> adjPos = playerPos.getPositionsWithInBox(7);
         List<Position> possiblePos = new ArrayList<Position>();
-        if (adjPos != null && adjPos.size() != 0) {
+        if (adjPos != null) {
             for (Position pos : adjPos) {
                 List<Entity> atAdj = getEntityFromPos(pos);
                 if (atAdj == null || !containsType(atAdj, "boulder")) {
@@ -214,7 +206,7 @@ public class DungeonMap {
             }
         }
 
-        if (possiblePos != null && possiblePos.size() > 0) {
+        if (possiblePos != null) {
             Spider spider = new Spider("spider", getRandomPosition(possiblePos), false);
             addEnemyToSpawn(spider);
         }
@@ -285,18 +277,9 @@ public class DungeonMap {
         return entitiesJSON;
     }
 
-    // public void resetGoals(JSONObject JSONgoals, DungeonMap map) {
-    //     goals = JSONLoadGoals.getComposedGoals(JSONgoals, map);
-    // }
-
     public void resetGoals(Goals goals) {
         this.goals = goals;
     }
-
-    public Goals getResetGoals() {
-        return goals;
-    }
-
     public void addEnemyToSpawn(Enemy entity) {
         enemiesToSpawn.add(entity);
     }

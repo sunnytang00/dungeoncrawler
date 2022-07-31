@@ -21,7 +21,6 @@ public class FloorSwitch extends StaticEntity {
     public FloorSwitch(String type, Position position, LogicEnum logic) {
         this(type, position);
         this.logic = logic;
-
     }
 
     public void switchState() {
