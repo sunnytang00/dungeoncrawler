@@ -3,6 +3,7 @@ package dungeonmania.goals;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonMap;
+import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.JSONConfig;
 
 public class DestroyEnemy extends LeafGoal {
@@ -19,7 +20,9 @@ public class DestroyEnemy extends LeafGoal {
 
     @Override
     public boolean isAchieved(DungeonMap map) {
-        int numOfEnemies = map.getPlayer().getSlayedEnemy();
+        Player player = map.getPlayer();
+        if (player == null) {return false; }
+        int numOfEnemies = player.getSlayedEnemy();
         Boolean spawnerLeft = map.getMapEntities().stream().anyMatch(entity -> entity.getType().equals("zombie_toast_spawner"));
 
         if (numOfEnemies >= JSONConfig.getConfig("enemy_goal") && !spawnerLeft) {

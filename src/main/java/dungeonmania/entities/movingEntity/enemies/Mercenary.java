@@ -25,7 +25,7 @@ public class Mercenary extends BribableEnemy {
         setState(new MercViciousState());
         getState().currentState(this);
         this.setBribeAmount((int) JSONConfig.getConfig("bribe_amount"));
-        this.setNonTraversibles(Arrays.asList("wall", "door"));
+        this.setNonTraversibles(Arrays.asList("wall", "door", "switch_door"));
         mindControlTicks = 0;
         bribedByTreasure = false;
     }

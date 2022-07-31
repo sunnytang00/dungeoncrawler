@@ -2,6 +2,10 @@ package dungeonmania.entities.StaticEntities.logicSwitches;
 
 import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.Item;
+import dungeonmania.entities.collectableEntities.Key;
+import dungeonmania.entities.collectableEntities.SunStone;
+import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.Position;
 
 import java.util.List;
@@ -19,28 +23,40 @@ public class SwitchDoor extends LogicItem {
         return keyID;
     }
 
+    public void unlockDoor(Key key) {  
+        setTraversable(true);
+        setType("door_open");
+    }
+
+    public void unlockDoorThroughSunstone() {
+        setTraversable(true);
+        setType("door_open");
+    }
+
     @Override
-    public void updateStatus(DungeonMap map) {
-        List<Position> adjacentPositions = getPosition().getCardinallyAdjacentPositions();
-        for (Position position : adjacentPositions) {
-            List<Entity> entities = map.getEntityFromPos(position);
-            for (Entity entity : entities) {
-                if (entity instanceof Wire) {
-                    Wire wire = (Wire)entity;
-                    if (wire.isActivated()) {
-                        this.isActivated = true;
-                        break;
-                    }
-                }
-                if (entity instanceof LightBulb) {
-                    LightBulb lightBulb = (LightBulb)entity;
-                    if (lightBulb.isActivated()) {
-                        this.isActivated = true;
-                        break;
-                    }
-                }
-            }
+    public void setActivated(boolean activated) {
+        this.isActivated = activated;
+        if (activated) {
+            setType("door_open");
+        } else {
+            setType("switch_door");
         }
-        getActivateStrategy().activate(map, this);
+    }
+    
+    @Override
+    public boolean interact(DungeonMap map, Player player) {
+        Key currKey = player.getCurrKey();
+        List<Item> inventory = player.getInventory();
+        int totalSunstone = (int) inventory.stream().filter(i -> i instanceof SunStone).count();
+
+        // assume sunstone always used first when it comes to open doors
+        if (totalSunstone > 0) {
+            this.unlockDoorThroughSunstone();
+        } else if (currKey != null && (currKey.getDoorKeyId() == keyID)) {
+            this.unlockDoor(currKey);
+            inventory.remove(currKey);
+            player.setInventory(inventory);
+        } 
+        return false;
     }
 }

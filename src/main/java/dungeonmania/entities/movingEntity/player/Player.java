@@ -184,6 +184,7 @@ public class Player extends MovingEntity {
         if (!blocked) {
             this.setPosition(newPos);
         }
+        battle(map, game);
     }
 
 
@@ -193,6 +194,17 @@ public class Player extends MovingEntity {
         interfereByEntity = entity.interact(map, this);
         return interfereByEntity;
     }
+
+    public void battle(DungeonMap map, DungeonGame game) {
+        List<Enemy> enemies = map.getEnemies();
+        if (!isInvisible()) {
+            for (Enemy enemy : enemies) {
+                interactWithEnemies(enemy, map);
+                battleWithEnemies(map, game);
+            }
+        }
+    }
+
 
     public void interactWithEnemies(Enemy enemy, DungeonMap map) {
         if (enemy.getPosition().equals(this.getPosition()) && !enemy.becomeAlly()) {

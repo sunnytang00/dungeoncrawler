@@ -43,6 +43,7 @@ public class MoveTowardsPlayer implements MovingStrategy {
         } else {
             while (newPos != null && !currPos.equals(newPos)) {
                 nextPos = newPos;
+                // System.out.println("nextPos" + nextPos);
                 newPos = prev.get(newPos);
             }
         }
@@ -57,8 +58,8 @@ public class MoveTowardsPlayer implements MovingStrategy {
         int eY = enemyPos.getY();
         List<Position> grid = new ArrayList<Position>();
 
-        for (int x = Math.min(pX, eX); x <= Math.max(pX,eX); x++) {
-            for (int y = Math.min(pY, eY); y <= Math.max(pY,eY); y++) {
+        for (int x = Math.min(pX, eX) - 10 ; x <= Math.max(pX,eX) + 10; x++) {
+            for (int y = Math.min(pY, eY) - 10; y <= Math.max(pY,eY) + 10; y++) {
                 grid.add(new Position(x, y));
             }
         }
@@ -116,7 +117,7 @@ public class MoveTowardsPlayer implements MovingStrategy {
                 }
                 Portal portal = map.getPortalAtPos(pos);
                 if (portal != null) {
-                    List<Position> positions =portal.getTeleportPositions(portal, map);
+                    List<Position> positions = portal.getTeleportPositions(portal, map);
                     moveableAdj.addAll(positions);
                 }
             }
@@ -124,14 +125,16 @@ public class MoveTowardsPlayer implements MovingStrategy {
             for (Position v : moveableAdj) {
                 if (dist.get(u) != null && dist.get(v) != null) {
                     int cost = 1;
-                    if (map.getSwampAtPos(v) != null) {
-                        SwampTile swamp = (SwampTile) map.getSwampAtPos(v);
+                    Portal portal = map.getPortalAtPos(v);
+                    SwampTile swamp = (SwampTile) map.getSwampAtPos(v);
+                    if (swamp != null) {
                         cost = swamp.getMovementFactor();
+                    } if (portal != null) {
+                        Position pair = portal.getPairPosition();
+                        cost = (int) v.getDistanceBetween(pair);
                     }
 
                     if (dist.get(u) + cost < dist.get(v)) {
-                        double newCost = dist.get(u) + cost;
-
                         dist.put(v, dist.get(u) + cost);
                         prev.put(v, u);
                         queue.add(v);

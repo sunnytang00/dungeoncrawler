@@ -352,7 +352,7 @@ public class AssassinTest {
         int total = 0;
         int fail = 0;
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
             
             DungeonManiaController dmc = new DungeonManiaController();
             // bribe radius and amount are 1

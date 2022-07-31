@@ -11,6 +11,9 @@ import dungeonmania.response.models.*;
 import dungeonmania.util.*;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.StaticEntities.*;
+import dungeonmania.entities.StaticEntities.logicSwitches.LogicItem;
+import dungeonmania.entities.StaticEntities.logicSwitches.Wire;
+import dungeonmania.entities.collectableEntities.Bomb;
 import dungeonmania.entities.movingEntity.enemies.*;
 import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.goals.Goals;
@@ -63,11 +66,11 @@ public class DungeonMap {
         return null;
     }
 
-    public Entity getSwampAtPos(Position position) {
+    public SwampTile getSwampAtPos(Position position) {
         List<Entity> entitiesAtPos = this.getEntityFromPos(position);
         for (Entity entity : entitiesAtPos) {
             if (entity instanceof SwampTile) {
-                return entity;
+                return (SwampTile) entity;
             }
         }
         return null;
@@ -93,8 +96,8 @@ public class DungeonMap {
 
     public List<Entity> getEntitiesFromType(List<Entity> list, String type) {
         return list.stream()
-                   .filter(entity -> entity.getType().equals(type))
-                   .collect(Collectors.toList ());
+                    .filter(entity -> entity.getType().equals(type))
+                    .collect(Collectors.toList ());
     }
 
     public Entity getEntityFromID(String id) {
@@ -235,6 +238,14 @@ public class DungeonMap {
         return found;    
     }
 
+    public void changePlayerToOlder() {
+        for (Entity e : mapEntities) {
+            if (e instanceof Player) {
+                e.setType("older_player");
+            }
+        }
+    }
+
     public void BoulderSwitchOverlap() {
 
         for (Entity entity : mapEntities) {
@@ -243,10 +254,10 @@ public class DungeonMap {
                 List<Entity> eList = getEntityFromPos(floorSwitch.getPosition());
                 for (Entity e : eList) {
                     if (e instanceof Boulder) {
-                        floorSwitch.setTriggered(true);
+                        floorSwitch.setActivated(true);
                         break;
                     } else {
-                        floorSwitch.setTriggered(false);
+                        floorSwitch.setActivated(false);
                     }
                 } 
             }
@@ -286,7 +297,14 @@ public class DungeonMap {
         this.enemiesToSpawn = enemiesToSpawn;
     }
 
-    
+    public Position returnPlayerPosition() {
+        for (Entity e : mapEntities) {
+            if (e instanceof Player && e.getType().equals("player")) {
+                return e.getPosition();
+            }
+        }
+        return null;
+    }
     
 }
 

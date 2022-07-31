@@ -288,6 +288,8 @@ public class JSONReloadGame {
             historyList.add(obj);
         }
         newGame.resetTickHistory(historyList);
+        
+
 
         // restore config file
         String configFile = object.getJSONObject("config-file").getString("file_name");
@@ -336,7 +338,7 @@ public class JSONReloadGame {
                 entity = new Boulder(type, position); break;
             case "switch":
                 FloorSwitch floorSwitch = new FloorSwitch(type, position); 
-                floorSwitch.setTriggered(obj.getBoolean("is_triggered"));
+                floorSwitch.setActivated(obj.getBoolean("is_activated"));
                 entity = floorSwitch; break;
             case "door":
                 entity = new Door(type, position, obj.getInt("key")); break;
@@ -403,7 +405,7 @@ public class JSONReloadGame {
             case "swamp_tile":
                 entity = new SwampTile(type, position, obj.getInt("movement_factor")); break;
             case "time_turner":
-                // entity = new TimeTurner(type, position); break;
+                entity = new TimeTurner(type, position); break;
             case "time_travelling_portal":
                 entity = new TimeTravellingPortal(type, position); break;
             case "light_bulb_off":
@@ -478,7 +480,7 @@ public class JSONReloadGame {
                 inventory.add(sceptre);
                 (sceptre).setDurability(durability); break;
             case "time_turner":
-                // inventory.add((TimeTurner) entity); break;
+                inventory.add((TimeTurner) entity); break;
         }
     }
 
