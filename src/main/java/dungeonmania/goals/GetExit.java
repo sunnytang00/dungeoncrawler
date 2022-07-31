@@ -13,6 +13,10 @@ public class GetExit extends LeafGoal {
     // public GetExit(DungeonMap map) {
     //     map.setRemainingConditions(1);
     // }
+
+    public GetExit() {
+    }
+    
     public GetExit(DungeonMap map, boolean prevIsAchieved) {
         super(map, prevIsAchieved);
         map.setRemainingConditions(1);

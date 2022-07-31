@@ -14,6 +14,9 @@ public class DestroyEnemy extends LeafGoal {
     //     map.setRemainingConditions(1);
     // }
 
+    public DestroyEnemy() {
+    }
+
     public DestroyEnemy(DungeonMap map, boolean prevIsAchieved) {
         super(map, prevIsAchieved);
         map.setRemainingConditions(1);

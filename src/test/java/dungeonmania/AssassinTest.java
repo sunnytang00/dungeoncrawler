@@ -383,7 +383,7 @@ public class AssassinTest {
         }
         double ratio = (double) fail / total;
 
-        assertEquals(0.3, ratio, 0.1);
+        assertEquals(0.3, ratio, 0.2);
     }
 
     @Test
