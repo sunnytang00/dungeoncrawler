@@ -227,9 +227,8 @@ public class Player extends MovingEntity {
             List<Round> rounds = new ArrayList<Round>();
             double iniEnemyHealth = enemy.getHealth();
             currBattle = new Battle(enemy.getType(), rounds, iniPlayerHealth, iniEnemyHealth);
-
+            List<Item> weaponryUsed = checkBattleBonuses(map);
             while (this.getHealth() > 0 && enemy.getHealth() > 0) {
-                List<Item> weaponryUsed = checkBattleBonuses(map);
                 boolean hasBow = false;
                 if (weaponryUsed != null) {
                     for (Item weapon : weaponryUsed) {
@@ -258,13 +257,6 @@ public class Player extends MovingEntity {
                 Round currRound = new Round(deltaPlayerHealth, deltaEnemyHealth, weaponryUsed);
                 rounds.add(currRound);
                 currBattle.setRounds(rounds);
-                
-                for (Item weapon : weaponryUsed) {
-                    if (weapon != null) {
-                        Weapon w = (Weapon) weapon;
-                        w.useWeapon();
-                    }
-                }
 
                 if (newHealth <= 0) {
                     game.addToBattles(currBattle);
@@ -283,6 +275,12 @@ public class Player extends MovingEntity {
                     battles.add(currBattle);
                     game.addToBattles(currBattle);
                     return;
+                }
+            }
+            for (Item weapon : weaponryUsed) {
+                if (weapon != null) {
+                    Weapon w = (Weapon) weapon;
+                    w.useWeapon();
                 }
             }
         }

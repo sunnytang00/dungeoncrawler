@@ -213,6 +213,68 @@ public class BattleTest {
         deltaE = round.getDeltaEnemyHealth();
         weapons = round.getWeaponryUsed();
         assertEquals(deltaC, -0.1);
+        assertEquals(deltaE, -0.6);
+        assertEquals(1, weapons.size());
+
+        round = rounds.get(2);
+        deltaC = round.getDeltaCharacterHealth();
+        deltaE = round.getDeltaEnemyHealth();
+        weapons = round.getWeaponryUsed();
+        assertEquals(deltaC, -0.1);
+        assertEquals(deltaE, -0.6);
+        assertEquals(1, weapons.size());
+    }
+
+    @Test
+    @DisplayName("Test battle with 3 merc using weapon")
+    public void testBattle3Weapon() throws IllegalArgumentException, InvalidActionException  {
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse intialResponse = dmc.newGame("3merc", "no_spider_spawning");
+
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.RIGHT);
+        assertEquals(1, getInventory(move, "sword").size());
+        assertEquals(1, getInventory(move, "invincibility_potion").size());
+        move = dmc.tick(Direction.LEFT);
+        move = dmc.tick(Direction.LEFT);
+        BattleResponse battle = move.getBattles().get(0);
+        assertEquals("mercenary", battle.getEnemy());
+        List<RoundResponse> rounds = battle.getRounds();
+        RoundResponse round = rounds.get(0);
+        double deltaC = round.getDeltaCharacterHealth();
+        double deltaE = round.getDeltaEnemyHealth();
+        List<ItemResponse> weapons = round.getWeaponryUsed();
+        assertEquals(deltaC, -0.1);
+        assertEquals(deltaE, -0.6);
+        assertEquals("sword", weapons.get(0).getType());
+
+        round = rounds.get(1);
+        deltaC = round.getDeltaCharacterHealth();
+        deltaE = round.getDeltaEnemyHealth();
+        weapons = round.getWeaponryUsed();
+        assertEquals(deltaC, -0.1);
+        assertEquals(deltaE, -0.6);
+        assertEquals(1, weapons.size());
+
+        round = rounds.get(2);
+        deltaC = round.getDeltaCharacterHealth();
+        deltaE = round.getDeltaEnemyHealth();
+        weapons = round.getWeaponryUsed();
+        assertEquals(deltaC, -0.1);
+        assertEquals(deltaE, -0.6);
+        assertEquals(1, weapons.size());
+
+        battle = move.getBattles().get(1);
+        rounds = battle.getRounds();
+        round = rounds.get(0);
+        deltaC = round.getDeltaCharacterHealth();
+        deltaE = round.getDeltaEnemyHealth();
+        weapons = round.getWeaponryUsed();
+        assertEquals(deltaC, -0.1);
         assertEquals(deltaE, -0.2);
         assertEquals(0, weapons.size());
     }
