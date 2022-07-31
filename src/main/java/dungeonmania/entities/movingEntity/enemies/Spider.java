@@ -47,6 +47,9 @@ public class Spider extends Enemy {
     public JSONObject toJSON() {
         JSONObject obj = super.toJSON();
         obj.put("movement", getMovementPosition());
+        obj.put("initial_position_x", getInitialPosition().getX());
+        obj.put("initial_position_y", getInitialPosition().getY());
+        obj.put("is_clockwise_move", isClockwiseMove);
         return obj;
     }
     

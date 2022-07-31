@@ -10,13 +10,16 @@ import org.json.JSONObject;
 
 public class GetExit extends LeafGoal {
 
-    public GetExit(DungeonMap map) {
+    // public GetExit(DungeonMap map) {
+    //     map.setRemainingConditions(1);
+    // }
+    public GetExit(DungeonMap map, boolean prevIsAchieved) {
+        super(map, prevIsAchieved);
         map.setRemainingConditions(1);
     }
 
     @Override
     public boolean isAchieved(DungeonMap map) {
-        // System.out.println("Exit");
         if (map.getRemainingConditions() > 1 || map.getPlayer() == null) { 
             return false; 
         }
@@ -44,6 +47,7 @@ public class GetExit extends LeafGoal {
     public JSONObject toJSON() {
         JSONObject obj = new JSONObject();
         obj.put("goal", "exit");
+        obj.put("prev_is_achieved", getPrevIsAchieved());
         return obj;
     }
 

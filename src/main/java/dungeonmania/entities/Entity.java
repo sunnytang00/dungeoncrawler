@@ -42,6 +42,10 @@ public abstract class Entity {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getType() {
         return type;
     }
@@ -97,9 +101,7 @@ public abstract class Entity {
     }
 
     public JSONObject toJSON(String mode) {
-        JSONObject entity = new JSONObject();
-        entity.put("type", getType());
-        entity.put("id", getId());
+        JSONObject entity = this.toJSON();
         return entity;
     }
 

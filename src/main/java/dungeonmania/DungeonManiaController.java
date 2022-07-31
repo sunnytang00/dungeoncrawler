@@ -15,9 +15,18 @@ import dungeonmania.entities.StaticEntities.logicSwitches.LogicItem;
 import dungeonmania.entities.movingEntity.enemies.*;
 import dungeonmania.entities.movingEntity.player.*;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.json.JSONObject;
 
@@ -72,7 +81,9 @@ public class DungeonManiaController {
         List<Entity> entities = jMap.getInitialMapEntities();
         map = new DungeonMap(entities, dungeonName);
         goals = JSONLoadGoals.getComposedGoals(jMap.getGoals(), map);
+        // initialGoal = jMap.getGoals();
         map.setJSONGoals(jMap.getGoals());
+        JSONLoadGoals.setJSONGoals(jMap.getGoals());
 
         List<EntityResponse> entityResponses = map.getEntityResponses();
 
@@ -83,7 +94,7 @@ public class DungeonManiaController {
         List<String> buildableItems = new ArrayList<String>();
 
         game = new DungeonGame(goals.getGoalsAsString(map), inventoryItems, battles, buildableItems, map);
-
+        
         saveTickToHistory();
 
         return new DungeonResponse(game.getDungeonId(), dungeonName, entityResponses, inventoryResponses,
@@ -97,7 +108,6 @@ public class DungeonManiaController {
     public DungeonResponse getDungeonResponseModel() {
 
         Player player = map.getPlayer();
-        // System.out.println("dungeonresponse" + goals.getGoalsAsString(map));
         List<BattleResponse> battles = map.getBattleResponses(game.getBattles());
         if (player == null) {
 
@@ -159,7 +169,6 @@ public class DungeonManiaController {
 
         player.battle(map, game);
         if (map.getPlayer() == null) { return getDungeonResponseModel();}
-
         map.spawnSpider(game);
         List<Entity> enemiesToSpawn = map.getEnemiesToSpawn();
         if (enemiesToSpawn != null && enemiesToSpawn.size() > 0) {
@@ -201,7 +210,6 @@ public class DungeonManiaController {
 
         player.battle(map, game);
         if (map.getPlayer() == null) { return getDungeonResponseModel();}
-
         map.spawnSpider(game);
         List<Entity> enemiesToSpawn = map.getEnemiesToSpawn();
         if (enemiesToSpawn != null && enemiesToSpawn.size() > 0) {
@@ -289,25 +297,53 @@ public class DungeonManiaController {
      * /game/save
      */
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
+        DungeonResponse res = getDungeonResponseModel();
         // save files to "./bin/saved_games/" + <fileName> + ".json" 
+        if (name.length() == 0) {
+            throw new IllegalArgumentException("please provide a name");
+        }
+        File pathAsFile = new File("./bin/");
+        if (!pathAsFile.exists()) {
+            pathAsFile.mkdir();
+        }
+        String path = "./bin/" + name + ".json";
         int currTick = game.getCurrentTick();
         JSONObject currGame = game.getGameFromTickHistory(currTick);
-        return null;
+        try {
+            PrintWriter out = new PrintWriter(new FileWriter(path));
+            out.write(currGame.toString());
+            out.close();
+        } catch (Exception e) {
+            return null;
+        }
+        return res;
     }
 
     /**
      * /game/load
      */
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
-        InputStream is = FileLoader.class.getResourceAsStream("bin/recourses/dungeons/" + name + ".json");
-        if (is == null) {
-            throw new IllegalArgumentException("Cannot find the game to load");
+        if (name.length() == 0) {
+            throw new IllegalArgumentException("please provide a name");
         }
-        JSONReloadGame reloadGame = new JSONReloadGame(is, name);
-        map = new DungeonMap(reloadGame.getMapEntities(), name);
-        goals = JSONLoadGoals.getComposedGoals(reloadGame.getGoals(), map);
-        map.setJSONGoals(reloadGame.getGoals());
+        JSONReloadGame reloadGame = null;
+        // File pathAsFile = new File("./bin/");
+        // if (!pathAsFile.exists()) {
+        //     pathAsFile.mkdir();
+        // }
+        // // add a stub file to ensure the path exist for reading 
 
+        try (InputStream is = new FileInputStream("./bin/" + name + ".json")) {
+            reloadGame = new JSONReloadGame(is, name);
+            map = new DungeonMap(reloadGame.getMapEntities(), name);
+            goals = reloadGame.getGoals();
+            map.resetGoals(goals);
+            map.setJSONGoals(reloadGame.getJSONGoals());
+        } catch (IOException e) {
+            throw new IllegalArgumentException("cannot find such file");
+        }
+        map = reloadGame.getReloadedMap();
+        game = reloadGame.getReloadedGame();
         return getDungeonResponseModel();
     }
 
@@ -315,7 +351,22 @@ public class DungeonManiaController {
      * /games/all
      */
     public List<String> allGames() {
-        return new ArrayList<>();
+        File pathAsFile = new File("./bin/");
+        if (!pathAsFile.exists()) {
+            pathAsFile.mkdir();
+        }
+        Path files = Paths.get("bin/");
+        try {
+            return Files.walk(files)
+                        .filter(Files::isRegularFile)
+                        .map(x -> {String name = x.toFile().getName();
+                                   int i = name.lastIndexOf('.');
+                                   return name.substring(0, i > -1 ? i : name.length());
+                            })
+                        .collect(Collectors.toList());
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     public void saveTickToHistory() {
@@ -323,10 +374,8 @@ public class DungeonManiaController {
             // player wins or loses
             return;
         }
-        JSONObject obj = JSONSaveGame.saveGame(map, map.getJSONGoals(), game);
-        // System.out.println(obj);
+        JSONObject obj = JSONSaveGame.saveGame(map, goals, game);
         game.addToTickHistory(obj);
-
     }
 
     /**
