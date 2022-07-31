@@ -172,6 +172,13 @@ public class ControllerTest {
         dmc.generateDungeon(1, 1, 10, 10, "M3_config");
     }
 
+    @Test
+    @DisplayName("all game")
+    public void testallGame() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        dmc.allGames();
+    }
+
 
     
 }
