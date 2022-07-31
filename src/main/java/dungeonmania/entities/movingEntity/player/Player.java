@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.KeyStroke;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -591,14 +593,15 @@ public class Player extends MovingEntity {
         return inventoryJSON;
     }
 
-    // public JSONArray battlesToJSON() {
-    //     JSONArray battlesJSON = new JSONArray();
-    //     for (Enemy enemy : battleQueue) {
-            
-    //         JSONObject obj = enemy.toJSON("battles");
-    //         battlesJSON.put(obj);
-    //     }
-    //     return battlesJSON;
-    // }
+    public JSONObject currKeyToJSON() {
+        JSONObject hasKey = new JSONObject();
+        if (currKey == null) {
+            hasKey.put("hasKey", false);
+        } else {
+            hasKey = currKey.toJSON();
+            hasKey.put("hasKey", true);
+        }
+        return hasKey;
+    }
 
 }

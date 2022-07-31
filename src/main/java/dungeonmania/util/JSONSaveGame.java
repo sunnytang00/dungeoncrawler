@@ -23,6 +23,7 @@ public class JSONSaveGame {
         JSONArray battles = new JSONArray();
         JSONObject dungeonJSON = new JSONObject();
         JSONObject goalsJSON = goals.toJSON();
+        JSONObject currKeyJSON = map.getPlayer().currKeyToJSON();
 
         config.put("file_name", JSONConfig.getConfigName());
         int currTick = game.getCurrentTick();
@@ -60,6 +61,7 @@ public class JSONSaveGame {
         gameJSON.put("dungeon", dungeonJSON);
         gameJSON.put("config-file", config);
         gameJSON.put("remaining-goal-conditions", map.getRemainingConditions());
+        gameJSON.put("curr_key", currKeyJSON);
 
         return gameJSON; 
     }

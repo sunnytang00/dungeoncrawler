@@ -301,6 +301,10 @@ public class DungeonManiaController {
         if (name.length() == 0) {
             throw new IllegalArgumentException("please provide a name");
         }
+        File pathAsFile = new File("./bin/");
+        if (!pathAsFile.exists()) {
+            pathAsFile.mkdir();
+        }
         String path = "./bin/" + name + ".json";
         int currTick = game.getCurrentTick();
         JSONObject currGame = game.getGameFromTickHistory(currTick);
@@ -322,11 +326,11 @@ public class DungeonManiaController {
             throw new IllegalArgumentException("please provide a name");
         }
         JSONReloadGame reloadGame = null;
-        File pathAsFile = new File("./bin/");
-        if (!pathAsFile.exists()) {
-            pathAsFile.mkdir();
-        }
-        // add a stub file to ensure the path exist for reading 
+        // File pathAsFile = new File("./bin/");
+        // if (!pathAsFile.exists()) {
+        //     pathAsFile.mkdir();
+        // }
+        // // add a stub file to ensure the path exist for reading 
 
         try (InputStream is = new FileInputStream("./bin/" + name + ".json")) {
             reloadGame = new JSONReloadGame(is, name);

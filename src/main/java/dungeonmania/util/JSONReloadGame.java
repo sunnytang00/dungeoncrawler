@@ -178,7 +178,13 @@ import org.json.JSONTokener;
  *      ],
  *      "config-file": {"file_name": },
  *      "remaining-goal-conditions": <int>,
- *      
+ *      "curr_key": {
+ *                      "type": <key / door / door_open>,
+ *                      "id": ,
+ *                      "x": ,
+ *                      "y": ,
+ *                      "key": ,
+ *                  }
  * }
  */
 
@@ -310,6 +316,17 @@ public class JSONReloadGame {
             initialiseMapEntities(type, obj);
         } 
         map.setMapEntities(mapEntities);
+
+        // current key player is holding
+        Player player = map.getPlayer();
+        JSONObject currKeyJSON = object.getJSONObject("curr_key");
+        if (player != null && currKeyJSON.getBoolean("hasKey")) {
+            String type = currKeyJSON.getString("type");
+            Position position = new Position(currKeyJSON.getInt("x"), currKeyJSON.getInt("y")); 
+            Key currKey = new Key(type, position, currKeyJSON.getInt("key"));
+            currKey.setId(currKeyJSON.getString("id"));
+            player.setCurrKey(currKey);
+        }
 
         return map;
     }
