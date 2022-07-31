@@ -244,7 +244,6 @@ public class Player extends MovingEntity {
                 }
                 
                 if (isInvincible()) {
-                    // map.setGameWin(true);
                     battles.add(currBattle);
                     game.addToBattles(currBattle);
                     return;
@@ -258,7 +257,7 @@ public class Player extends MovingEntity {
             }
         }
         game.addToBattles(currBattle);
-        // map.setGameWin(true);
+        
     }
 
     public List<Item> checkBattleBonuses(DungeonMap map) {
