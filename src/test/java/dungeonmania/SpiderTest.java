@@ -269,6 +269,7 @@ public class SpiderTest {
         assertEquals(0, countEntityOfType(move, "spider"));
 
         for (int i = 0; i < 8; i++) {
+            System.out.println("entered");
             move = dmc.tick(Direction.DOWN); //Tick 2
             assertEquals(0, countEntityOfType(move, "spider"));
         }

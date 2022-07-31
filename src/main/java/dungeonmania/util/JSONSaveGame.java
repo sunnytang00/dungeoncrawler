@@ -26,6 +26,7 @@ public class JSONSaveGame {
 
         config.put("file_name", JSONConfig.getConfigName());
         int currTick = game.getCurrentTick();
+        System.out.println("currTick: " + currTick);
         tick.put("current_tick", currTick);
 
         // dungeon info 

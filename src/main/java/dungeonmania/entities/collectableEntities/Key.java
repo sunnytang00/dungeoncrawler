@@ -30,7 +30,7 @@ public class Key extends Item {
     @Override
     public JSONObject toJSON() {
         JSONObject obj = super.toJSON();
-        obj.put("key", getDoorKeyId());
+        obj.put("key_id", getDoorKeyId());
         return obj;
     }
 

@@ -130,6 +130,8 @@ import org.json.JSONTokener;
  *          {
  *              "type": , 
  *              "id": ,
+ *              "x": ,
+ *              "y": , 
  *              "durability": <shield/ sword/ bow/ sceptre>, 
  *          }, {
  *              
@@ -438,32 +440,44 @@ public class JSONReloadGame {
     private void setInventory(JSONObject obj) {
         String type = obj.getString("type");
         String id = obj.getString("id");
+        int x = obj.getInt("x");
+        int y = obj.getInt("y");
+        Position position = new Position(x, y);
         Integer durability = obj.getInt("durability");
-        Entity entity = mapEntities.stream().filter(e -> e.getId().equals(id)).findAny().orElse(null);
 
         switch(type) {
             case "treasure":
-                inventory.add((Treasure) entity); break;
+                Treasure treasure = new Treasure(type, position);
+                inventory.add(treasure); break;
             case "sun_stone":
-                inventory.add((SunStone) entity); break; 
+                SunStone sunStone = new SunStone(type, position);
+                inventory.add(sunStone); break; 
             case "key":
-                inventory.add((Item) entity); break;
+                Key key = new Key(type, position, obj.getInt("key_id"));
+                inventory.add(key); break;
             case "invincibility_potion":
-                inventory.add((InvincibilityPotion) entity); 
-                ((InvincibilityPotion) entity).setDurability(durability); break;
+                InvincibilityPotion invincibilityPotion = new InvincibilityPotion(type, position);
+                invincibilityPotion.setDurability(durability);
+                inventory.add(invincibilityPotion); break;
             case "invisibility_potion":
-                inventory.add((InvisibilityPotion) entity);  
-                ((InvisibilityPotion) entity).setDurability(durability); break;
+                InvisibilityPotion invisibilityPotion = new InvisibilityPotion(type, position);
+                invisibilityPotion.setDurability(durability);
+                inventory.add(invisibilityPotion); break;
             case "wood":
-                inventory.add((Wood) entity); break;
+                Wood wood = new Wood(type, position);
+                inventory.add(wood); break;
             case "arrow":
-                inventory.add((Arrows) entity);  
-                ((Arrows) entity).setDurability(durability); break;
+                Arrows arrow = new Arrows(type, position);  
+                arrow.setDurability(durability); 
+                inventory.add(arrow); break;
             case "bomb":
-                inventory.add((Bomb) entity); break;
+                Bomb bomb = new Bomb(type, position);
+                inventory.add(bomb); break;
             case "sword":
-                inventory.add((Sword) entity);
-                ((Sword) entity).setDurability(durability); break;
+                Sword sword = new Sword(type, position);
+                sword.setDurability(durability);
+                inventory.add(sword);
+                break;
             case "shield":
                 Shield shield = new Shield(type);
                 inventory.add(shield);
@@ -480,7 +494,8 @@ public class JSONReloadGame {
                 inventory.add(sceptre);
                 (sceptre).setDurability(durability); break;
             case "time_turner":
-                inventory.add((TimeTurner) entity); break;
+                TimeTurner timeTurner = new TimeTurner(type, position);
+                inventory.add(timeTurner); break;
         }
     }
 

@@ -15,6 +15,7 @@ import dungeonmania.entities.StaticEntities.logicSwitches.LogicItem;
 import dungeonmania.entities.movingEntity.enemies.*;
 import dungeonmania.entities.movingEntity.player.*;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -167,7 +168,6 @@ public class DungeonManiaController {
 
         player.battle(map, game);
         if (map.getPlayer() == null) { return getDungeonResponseModel();}
-
         map.spawnSpider(game);
         List<Entity> enemiesToSpawn = map.getEnemiesToSpawn();
         if (enemiesToSpawn != null && enemiesToSpawn.size() > 0) {
@@ -209,7 +209,6 @@ public class DungeonManiaController {
 
         player.battle(map, game);
         if (map.getPlayer() == null) { return getDungeonResponseModel();}
-
         map.spawnSpider(game);
         List<Entity> enemiesToSpawn = map.getEnemiesToSpawn();
         if (enemiesToSpawn != null && enemiesToSpawn.size() > 0) {
@@ -323,7 +322,11 @@ public class DungeonManiaController {
             throw new IllegalArgumentException("please provide a name");
         }
         JSONReloadGame reloadGame = null;
-        try (InputStream is = new FileInputStream("bin/" + name + ".json")) {
+        File pathAsFile = new File("./bin/");
+        if (!pathAsFile.exists()) {
+            pathAsFile.mkdir();
+        }
+        try (InputStream is = new FileInputStream("./bin/" + name + ".json")) {
             reloadGame = new JSONReloadGame(is, name);
             map = new DungeonMap(reloadGame.getMapEntities(), name);
             goals = reloadGame.getGoals();

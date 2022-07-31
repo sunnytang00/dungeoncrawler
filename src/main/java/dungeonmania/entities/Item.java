@@ -20,7 +20,7 @@ public abstract class Item extends Entity {
     /**
      * Record the durability times of the sword
      */
-    private int durability;
+    private int durability = 0;
 
     public Item(String type) {
         super(type);

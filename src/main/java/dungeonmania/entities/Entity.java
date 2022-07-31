@@ -101,9 +101,7 @@ public abstract class Entity {
     }
 
     public JSONObject toJSON(String mode) {
-        JSONObject entity = new JSONObject();
-        entity.put("type", getType());
-        entity.put("id", getId());
+        JSONObject entity = this.toJSON();
         return entity;
     }
 

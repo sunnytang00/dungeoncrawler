@@ -165,4 +165,35 @@ public class PersistenceTest {
         assertFalse(getGoals(reloadRes).contains(":boulders"));
         assertFalse(getGoals(reloadRes).contains(":enemies"));
     }
+
+    @Test
+    @DisplayName("Test persisting spider spawns")
+    public void spawnSpiderRateTenPersistence() {
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse intialResponse = dmc.newGame("zombieSpiderSpawn", "simple");
+
+        DungeonResponse move = dmc.tick(Direction.UP); //Tick 1
+        assertEquals(0, countEntityOfType(move, "spider"));
+
+        for (int i = 0; i < 7; i++) {
+            move = dmc.tick(Direction.DOWN); //Tick 2
+            assertEquals(0, countEntityOfType(move, "spider"));
+        }
+
+        // save game 
+        intialResponse = dmc.saveGame("persistSpawnRate");
+
+        // reload game 
+        DungeonManiaController dmc1 = new DungeonManiaController();
+        DungeonResponse reloadRes = dmc1.loadGame("persistSpawnRate");
+        assertEquals(0, countEntityOfType(move, "spider"));
+
+        DungeonResponse move1 = dmc1.tick(Direction.UP);
+        assertEquals(0, countEntityOfType(move1, "spider"));
+        move1 = dmc1.tick(Direction.UP);
+        countEntityOfType(move1, "spider");
+        assertEquals(1, countEntityOfType(move1, "spider"));
+
+    }
 }
