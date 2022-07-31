@@ -575,4 +575,13 @@ public class Player extends MovingEntity {
         return hasKey;
     }
 
+    public boolean checkBuildable(DungeonMap map, ItemBuildable itemBuildable) {
+        try {
+            return itemBuildable.build(inventory, this, map);
+        } catch (InvalidActionException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

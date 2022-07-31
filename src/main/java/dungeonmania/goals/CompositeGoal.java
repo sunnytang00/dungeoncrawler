@@ -1,11 +1,14 @@
 package dungeonmania.goals;
 
+import java.util.List;
+
 import dungeonmania.DungeonMap;
 
 public abstract class CompositeGoal implements Goals {
 
     private Goals subgoal1;
     private Goals subgoal2;
+    private List<Goals> goalsList;
 
     public CompositeGoal(Goals subgoal1, Goals subgoal2) {
         this.subgoal1 = subgoal1;
@@ -25,5 +28,9 @@ public abstract class CompositeGoal implements Goals {
 
     @Override
     public abstract String getGoalsAsString(DungeonMap map);
+
+    public void addGoal(Goals goals) {
+        goalsList.add(goals);
+    }
 
 }

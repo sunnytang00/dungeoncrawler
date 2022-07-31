@@ -2,6 +2,8 @@ package dungeonmania;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.json.JSONArray;
@@ -10,6 +12,7 @@ import org.json.JSONObject;
 import dungeonmania.response.models.*;
 import dungeonmania.util.*;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.Item;
 import dungeonmania.entities.StaticEntities.*;
 import dungeonmania.entities.StaticEntities.logicSwitches.LogicItem;
 import dungeonmania.entities.StaticEntities.logicSwitches.Wire;
@@ -19,6 +22,8 @@ import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.goals.Goals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
 public class DungeonMap {
     // assume mapEntities contain all current entities on the map
@@ -269,9 +274,40 @@ public class DungeonMap {
     //     goals = JSONLoadGoals.getComposedGoals(JSONgoals, map);
     // }
 
+    public Goals getGoals() {
+        return goals;
+    }
+
     public void resetGoals(Goals goals) {
         this.goals = goals;
     }
+
+    public final DungeonResponse getDungeonResponse() {
+        Player player = getPlayer();
+        return new DungeonResponse(
+                UUID.randomUUID().toString(),
+                dungeonName,
+                mapEntities.stream().map(Entity::getEntityResponse).collect(Collectors.toList()),
+                (player != null) ? player.getInventoryResponses() : new ArrayList<ItemResponse>(),
+                new ArrayList<>(),
+                this.getBuildables(),
+                goals.toString()
+        );
+    }
+
+    private final List<String> getBuildables() {
+        Player player = getPlayer();
+        if (player == null) return new ArrayList<String>();
+        return EntityFactory
+                .allBuildables()
+                .stream()
+                .filter(item -> item instanceof Item && player.checkBuildable(this, item))
+                .map(item -> ((Item) item).getType())
+                .collect(Collectors.toList());
+    }
+
+    
+
 
     public void addEnemyToSpawn(Enemy entity) {
         enemiesToSpawn.add(entity);

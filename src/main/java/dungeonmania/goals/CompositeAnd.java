@@ -6,6 +6,10 @@ import org.json.JSONObject;
 import dungeonmania.DungeonMap;
 
 public class CompositeAnd extends CompositeGoal{
+
+    public CompositeAnd() {
+        super(null, null);
+    }
     
     public CompositeAnd(Goals subgoal1, Goals subgoal2) {
         super(subgoal1, subgoal2);

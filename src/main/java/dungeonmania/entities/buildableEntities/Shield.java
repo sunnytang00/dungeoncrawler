@@ -20,7 +20,7 @@ public class Shield extends Weapon implements ItemBuildable {
         setDefence((int) JSONConfig.getConfig("shield_defence"));
     }
     
-    public void build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException {
+    public boolean build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException {
         // Record all the removing items
         List<Item> removingPosition = new ArrayList<>();
     
@@ -48,6 +48,7 @@ public class Shield extends Weapon implements ItemBuildable {
                 // if it could be crafted by the items in the inventory
                 removingPosition.forEach(i -> inventory.remove(i));
                 player.addToInventory(new Shield(BUILDABLE_TYPE_SHIELD));
+                return true;
             } else {
                 throw new InvalidActionException("Player does not have sufficient items to build shield");
             }

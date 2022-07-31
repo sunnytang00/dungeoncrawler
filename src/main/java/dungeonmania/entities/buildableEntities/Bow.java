@@ -20,7 +20,7 @@ public class Bow extends Weapon implements ItemBuildable {
         setDefence(0);
     }
 
-    public void build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException {
+    public boolean build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException {
         List<Item> removingPosition = new ArrayList<>();
 
         if (!inventory.isEmpty()) {
@@ -42,6 +42,7 @@ public class Bow extends Weapon implements ItemBuildable {
                 // if it could be crafted by the items in the inventory
                 removingPosition.forEach(i -> inventory.remove(i));
                 player.addToInventory(new Bow(BUILDABLE_TYPE_BOW));
+                return true;
             } else {
                 throw new InvalidActionException("Player does not have sufficient items to build bow");
             }

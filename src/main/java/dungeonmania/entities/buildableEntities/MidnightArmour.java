@@ -18,7 +18,7 @@ public class MidnightArmour extends Weapon implements ItemBuildable {
         setDefence((int)JSONConfig.getConfig("midnight_armour_defence"));
     }
     
-    public void build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException {
+    public boolean build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException {
 
         if (map.hasZombies()) {
             throw new InvalidActionException("There are zombies in map");
@@ -46,6 +46,7 @@ public class MidnightArmour extends Weapon implements ItemBuildable {
             if ((sunStone == 1) && (swordNum == 1)) {
                 removingPosition.forEach(i -> inventory.remove(i));
                 player.addToInventory(new MidnightArmour(BUILDABLE_TYPE_MIDNIGHT_ARMOUR));
+                return true;
             } else {
                 throw new InvalidActionException("Player cannot build midnight armour");
             }
