@@ -165,6 +165,13 @@ public class ControllerTest {
         
     }
 
+    @Test
+    @DisplayName("Generate dungeon")
+    public void testgenerateDungeon() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        dmc.generateDungeon(1, 1, 10, 10, "M3_config");
+    }
+
 
     
 }
