@@ -119,7 +119,6 @@ public class DungeonMap {
     public int getNumOfAlly() {
         int count = 0;
         for (Entity entity : mapEntities) {
-            // do we need assassin as well here
             if (entity instanceof Mercenary) {
                 Mercenary merc = (Mercenary) entity;
                 if (merc.isBribed()) {
@@ -197,7 +196,7 @@ public class DungeonMap {
         Position playerPos = getPlayer().getPosition();
         List<Position> adjPos = playerPos.getPositionsWithInBox(7);
         List<Position> possiblePos = new ArrayList<Position>();
-        if (adjPos != null && adjPos.size() != 0) {
+        if (adjPos != null) {
             for (Position pos : adjPos) {
                 List<Entity> atAdj = getEntityFromPos(pos);
                 if (atAdj == null || !containsType(atAdj, "boulder")) {
@@ -206,7 +205,7 @@ public class DungeonMap {
             }
         }
 
-        if (possiblePos != null && possiblePos.size() > 0) {
+        if (possiblePos != null) {
             Spider spider = new Spider("spider", getRandomPosition(possiblePos), false);
             addEnemyToSpawn(spider);
         }
