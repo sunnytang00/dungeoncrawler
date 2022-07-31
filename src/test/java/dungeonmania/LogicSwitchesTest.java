@@ -135,7 +135,7 @@ public class LogicSwitchesTest {
     public void testOpenSwitchDoorSS() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_DoorsKeysTest_useKeyWalkThroughSwitchDoor2", "M3_config");
+        DungeonResponse res = dmc.newGame("d_DoorsKeysTest_useKeyWalkThroughOpenDoor2", "M3_config");
 
         // pick up key
         res = dmc.tick(Direction.RIGHT);
@@ -144,7 +144,7 @@ public class LogicSwitchesTest {
 
         // walk through door and check key is gone
         res = dmc.tick(Direction.RIGHT);
-        assertEquals(0, getInventory(res, "sun_stone").size());
+        assertEquals(1, getInventory(res, "sun_stone").size());
         assertNotEquals(pos, getEntities(res, "player").get(0).getPosition());
     }
 
