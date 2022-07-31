@@ -77,7 +77,6 @@ public class Player extends MovingEntity {
 
     }
 
-    
 
     public Potion getCurrPotion() {
         return currPotion;
@@ -162,28 +161,8 @@ public class Player extends MovingEntity {
     }
 
     public void move(DungeonGame game, DungeonMap map, Direction direction) {
-
-
-        boolean blocked = false;
-
-        this.setDirection(direction);
-        Position newPos = getPosition().translateBy(direction);
-        List<Entity> encounters = map.getEntityFromPos(newPos);
-
-        // interact with non-moving entities 
-        for (Entity encounter : encounters) {
-
-            if (!isInvisible() && !(encounter instanceof Enemy)) {
-                blocked = interactWithEntities(encounter, map);
-            }
-            if (getNonTraversibles().contains(encounter.getType())) {
-                blocked = true;
-            }
-        }
-
-        if (!blocked) {
-            this.setPosition(newPos);
-        }
+        
+        state.move(this, direction, map);
         battle(map, game);
     }
 
@@ -196,13 +175,7 @@ public class Player extends MovingEntity {
     }
 
     public void battle(DungeonMap map, DungeonGame game) {
-        List<Enemy> enemies = map.getEnemies();
-        if (!isInvisible()) {
-            for (Enemy enemy : enemies) {
-                interactWithEnemies(enemy, map);
-                battleWithEnemies(map, game);
-            }
-        }
+        state.battle(this, map, game);
     }
 
 
@@ -271,7 +244,6 @@ public class Player extends MovingEntity {
                 }
                 
                 if (isInvincible()) {
-                    // map.setGameWin(true);
                     battles.add(currBattle);
                     game.addToBattles(currBattle);
                     return;
@@ -285,7 +257,7 @@ public class Player extends MovingEntity {
             }
         }
         game.addToBattles(currBattle);
-        // map.setGameWin(true);
+        
     }
 
     public List<Item> checkBattleBonuses(DungeonMap map) {

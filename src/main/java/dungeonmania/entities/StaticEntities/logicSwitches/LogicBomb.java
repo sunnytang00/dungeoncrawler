@@ -26,11 +26,6 @@ public class LogicBomb extends LogicItem {
         return (int) JSONConfig.getConfig("bomb_radius");
     }
 
-    @Override
-    public void setActivated(boolean activated) {
-        this.isActivated = activated;
-    }
-
 
     public void explode(DungeonMap map) {
         List<Entity> mapEntities = map.getMapEntities();
@@ -75,7 +70,7 @@ public class LogicBomb extends LogicItem {
     @Override
     public JSONObject toJSON() {
         JSONObject obj = super.toJSON();
-        obj.put("is_active", isActivated);
+        obj.put("is_active", isActivated());
         obj.put("is_pickable", pickable);
         return obj;
     }

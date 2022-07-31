@@ -4,7 +4,7 @@ import dungeonmania.util.Position;
 
 public class StaticEntity extends Entity {
 
-    protected boolean isTraversable;
+    private boolean isTraversable;
 
     public StaticEntity(String type, Position position) {
         super(type, position);
