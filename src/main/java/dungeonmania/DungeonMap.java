@@ -96,8 +96,8 @@ public class DungeonMap {
 
     public List<Entity> getEntitiesFromType(List<Entity> list, String type) {
         return list.stream()
-                   .filter(entity -> entity.getType().equals(type))
-                   .collect(Collectors.toList ());
+                    .filter(entity -> entity.getType().equals(type))
+                    .collect(Collectors.toList ());
     }
 
     public Entity getEntityFromID(String id) {

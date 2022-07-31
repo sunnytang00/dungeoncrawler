@@ -43,6 +43,7 @@ public class JSONMap {
     private void initialiseMapEntities(String type, JSONObject obj) {
         int x = obj.getInt("x");
         int y = obj.getInt("y");
+        
         Position position = new Position(x,y);
         Entity entity = null;
         switch (type) {
