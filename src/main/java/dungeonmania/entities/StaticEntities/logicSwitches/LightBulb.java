@@ -7,7 +7,6 @@ import dungeonmania.entities.StaticEntities.Boulder;
 import dungeonmania.util.Helper;
 import dungeonmania.util.Position;
 
-import java.util.List;
 
 import org.json.JSONObject;
 
@@ -20,7 +19,7 @@ public class LightBulb extends LogicItem {
 
     @Override
     public void setActivated(boolean activated) {
-        this.isActivated = activated;
+        super.setActivated(activated);
         if (activated) {
             setType("light_bulb_on");
         } else {

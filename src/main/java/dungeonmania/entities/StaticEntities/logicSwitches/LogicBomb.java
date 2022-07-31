@@ -6,9 +6,6 @@ import java.util.List;
 import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
-import dungeonmania.entities.Item;
-import dungeonmania.entities.StaticEntities.FloorSwitch;
-import dungeonmania.entities.StaticEntities.logicSwitches.LogicEnum;
 import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
@@ -27,11 +24,6 @@ public class LogicBomb extends LogicItem {
 
     public int getBombRadius() {
         return (int) JSONConfig.getConfig("bomb_radius");
-    }
-
-    @Override
-    public void setActivated(boolean activated) {
-        this.isActivated = activated;
     }
 
 
@@ -78,7 +70,7 @@ public class LogicBomb extends LogicItem {
     @Override
     public JSONObject toJSON() {
         JSONObject obj = super.toJSON();
-        obj.put("is_active", isActivated);
+        obj.put("is_active", isActivated());
         obj.put("is_pickable", pickable);
         return obj;
     }

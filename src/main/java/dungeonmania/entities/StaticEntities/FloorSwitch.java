@@ -14,14 +14,12 @@ public class FloorSwitch extends StaticEntity {
 
     public FloorSwitch(String type, Position position) {
         super(type, position);
-        this.isTraversable = true;
+        setTraversable(true);
         this.isActivated = false;
     }
 
     public FloorSwitch(String type, Position position, LogicEnum logic) {
-        super(type, position);
-        this.isTraversable = true;
-        this.isActivated = false;
+        this(type, position);
         this.logic = logic;
 
     }
