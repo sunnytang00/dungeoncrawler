@@ -181,7 +181,42 @@ public class BattleTest {
     }
 
 
+    @Test
+    @DisplayName("Test battle when player have weapon")
+    public void testBattleWeapon() throws IllegalArgumentException, InvalidActionException  {
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse intialResponse = dmc.newGame("advanced", "no_spider_spawning");
+
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.RIGHT);
+        move = dmc.tick(Direction.RIGHT);
+        assertEquals(1, getInventory(move, "sword").size());
+        assertEquals(1, getInventory(move, "invincibility_potion").size());
+        move = dmc.tick(Direction.LEFT);
+        move = dmc.tick(Direction.LEFT);
+        BattleResponse battle = move.getBattles().get(0);
+        assertEquals("mercenary", battle.getEnemy());
+        List<RoundResponse> rounds = battle.getRounds();
+        RoundResponse round = rounds.get(0);
+        double deltaC = round.getDeltaCharacterHealth();
+        double deltaE = round.getDeltaEnemyHealth();
+        List<ItemResponse> weapons = round.getWeaponryUsed();
+        assertEquals(deltaC, -0.1);
+        assertEquals(deltaE, -0.6);
+        assertEquals("sword", weapons.get(0).getType());
+
+        round = rounds.get(1);
+        deltaC = round.getDeltaCharacterHealth();
+        deltaE = round.getDeltaEnemyHealth();
+        weapons = round.getWeaponryUsed();
+        assertEquals(deltaC, -0.1);
+        assertEquals(deltaE, -0.2);
+        assertEquals(0, weapons.size());
+    }
 
 
-    
+
 }

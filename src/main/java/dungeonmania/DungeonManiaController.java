@@ -11,7 +11,6 @@ import dungeonmania.entities.collectableEntities.potions.*;
 import dungeonmania.entities.*;
 import dungeonmania.entities.StaticEntities.TimeTravellingPortal;
 import dungeonmania.entities.StaticEntities.ZombieToastSpawner;
-import dungeonmania.entities.StaticEntities.logicSwitches.LogicItem;
 import dungeonmania.entities.movingEntity.enemies.*;
 import dungeonmania.entities.movingEntity.player.*;
 

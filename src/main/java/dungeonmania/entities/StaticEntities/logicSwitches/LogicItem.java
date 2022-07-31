@@ -1,8 +1,6 @@
 package dungeonmania.entities.StaticEntities.logicSwitches;
 
 import dungeonmania.DungeonGame;
-import dungeonmania.DungeonMap;
-import dungeonmania.entities.Item;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.util.Position;
 

@@ -292,13 +292,15 @@ public class Player extends MovingEntity {
 
     public List<Item> checkBattleBonuses(DungeonMap map) {
 
+        this.setAttack(JSONConfig.getConfig("player_attack"));
+        this.setDefence(0);
+
         List<Item> weaponryUsed = new ArrayList<Item>();
         double attackBonus = 0;
         double defenceBonus = 0;
         int numAlly = map.getNumOfAlly();
         List<Weapon> usableWeapon = getUsableWeapon();
         for (Weapon weapon: usableWeapon) {
-            
             attackBonus += weapon.getDamageValue();
             defenceBonus += weapon.getDefence();
             weaponryUsed.add(weapon);

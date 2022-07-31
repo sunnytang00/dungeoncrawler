@@ -1,7 +1,6 @@
 package dungeonmania.entities.StaticEntities.logicSwitches;
 
 import dungeonmania.DungeonGame;
-import dungeonmania.DungeonMap;
 
 public class CO_ANDActivateStrategy extends BaseActivateStrategy {
     @Override
