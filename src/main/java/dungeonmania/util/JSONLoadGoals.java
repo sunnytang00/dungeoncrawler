@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class JSONLoadGoals {
+    private static JSONObject goalsJSON;
+
     public static Goals getComposedGoals(JSONObject goals, DungeonMap map) {
         switch(goals.getString("goal")) {
             case "AND":
@@ -20,14 +22,22 @@ public class JSONLoadGoals {
                                                                  getComposedGoals(subgoalsOr.getJSONObject(1), map));
                 return compositeOrGoal;
             case "exit":
-                return new GetExit(map);
+                return new GetExit(map, false);
             case "enemies":
-                return new DestroyEnemy(map);
+                return new DestroyEnemy(map, false);
             case "boulders":
-                return new BoulderOnSwitch(map);
+                return new BoulderOnSwitch(map, false);
             case "treasure":
-                return new CollectTreasure(map);
+                return new CollectTreasure(map, false);
         }
         return null;
+    }
+
+    public static JSONObject getJSONGoals() {
+        return goalsJSON;
+    }
+
+    public static void setJSONGoals(JSONObject goal) {
+        goalsJSON = goal;
     }
 }

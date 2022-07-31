@@ -8,9 +8,13 @@ import dungeonmania.util.JSONConfig;
 
 public class CollectTreasure extends LeafGoal {
 
-    private boolean prevIsAchieved = false;
+    // private boolean prevIsAchieved = false;
 
-    public CollectTreasure(DungeonMap map) {
+    // public CollectTreasure(DungeonMap map) {
+    //     map.setRemainingConditions(1);
+    // }
+    public CollectTreasure(DungeonMap map, boolean prevIsAchieved) {
+        super(map, prevIsAchieved);
         map.setRemainingConditions(1);
     }
 
@@ -19,14 +23,13 @@ public class CollectTreasure extends LeafGoal {
         Player player = map.getPlayer();
         if (player == null) {return false; }
         int numOfTreasure = player.getWealth();
-        // System.out.println(numOfTreasure);
         if (numOfTreasure >= JSONConfig.getConfig("treasure_goal")) {
-            prevIsAchieved = true;
+            setPrevIsAchieved(true);
             map.setRemainingConditions(-1);
             return true;
         }              
-        if (prevIsAchieved) {
-            prevIsAchieved = false;
+        if (getPrevIsAchieved()) {
+            setPrevIsAchieved(false);
             map.setRemainingConditions(1);
         }
         return false;
@@ -42,6 +45,7 @@ public class CollectTreasure extends LeafGoal {
     public JSONObject toJSON() {
         JSONObject obj = new JSONObject();
         obj.put("goal", "treasure");
+        obj.put("prev_is_achieved", getPrevIsAchieved());
         return obj;
     }
 

@@ -34,4 +34,18 @@ public final class Helper {
         }
         return null;
     }
+
+    public static String logicToJSON(LogicEnum logic) {
+        switch(logic) {
+            case AND:
+                return "and";
+            case OR:
+                return "or";
+            case XOR:
+                return "xor";
+            case CO_AND:
+                return "co_and";
+        }
+        return null;
+    }
 }

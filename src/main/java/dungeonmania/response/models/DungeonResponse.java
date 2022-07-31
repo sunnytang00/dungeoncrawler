@@ -52,7 +52,6 @@ public final class DungeonResponse {
     }
 
     public final String getGoals() {
-        // System.out.println("WITHIN" + goals);
         return goals;
     }
 
