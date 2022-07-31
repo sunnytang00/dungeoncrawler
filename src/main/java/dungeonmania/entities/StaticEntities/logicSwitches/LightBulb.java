@@ -12,7 +12,7 @@ public class LightBulb extends LogicItem {
 
     @Override
     public void setActivated(boolean activated) {
-        this.isActivated = activated;
+        super.setActivated(activated);
         if (activated) {
             setType("light_bulb_on");
         } else {

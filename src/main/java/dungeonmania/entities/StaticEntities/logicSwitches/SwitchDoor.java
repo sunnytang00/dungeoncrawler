@@ -34,7 +34,7 @@ public class SwitchDoor extends LogicItem {
 
     @Override
     public void setActivated(boolean activated) {
-        this.isActivated = activated;
+        super.setActivated(activated);
         if (activated) {
             setType("door_open");
         } else {
