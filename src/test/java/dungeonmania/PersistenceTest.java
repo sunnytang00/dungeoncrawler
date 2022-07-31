@@ -46,6 +46,7 @@ public class PersistenceTest {
         EntityResponse reloadPlayer = getPlayer(res).get();
         assertEquals(initPlayer, reloadPlayer);
         assertEquals(savedPlayer, reloadPlayer);
+        assertEquals(savedPlayer.getId(), reloadPlayer.getId());
 
         assertEquals(res.getDungeonName() , reloadRes.getDungeonName());
         assertEquals(res.getDungeonId() , reloadRes.getDungeonId());

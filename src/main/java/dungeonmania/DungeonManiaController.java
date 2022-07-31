@@ -326,6 +326,8 @@ public class DungeonManiaController {
         if (!pathAsFile.exists()) {
             pathAsFile.mkdir();
         }
+        // add a stub file to ensure the path exist for reading 
+
         try (InputStream is = new FileInputStream("./bin/" + name + ".json")) {
             reloadGame = new JSONReloadGame(is, name);
             map = new DungeonMap(reloadGame.getMapEntities(), name);
@@ -344,6 +346,10 @@ public class DungeonManiaController {
      * /games/all
      */
     public List<String> allGames() {
+        File pathAsFile = new File("./bin/");
+        if (!pathAsFile.exists()) {
+            pathAsFile.mkdir();
+        }
         Path files = Paths.get("bin/");
         try {
             return Files.walk(files)

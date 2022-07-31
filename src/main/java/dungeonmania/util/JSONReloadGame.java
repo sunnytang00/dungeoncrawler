@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.plaf.metal.MetalBorders.ScrollPaneBorder;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -324,100 +326,131 @@ public class JSONReloadGame {
             case "player":
                 player = new Player(type, position, obj.getBoolean("interactable")); 
                 player.setSlayedEnemy(obj.getInt("slayed-enemies"));
+                player.setId(id);
                 entity = player;
                 initialiseState(obj.getString("state"), entity);
                 ((Player) entity).setHealth(obj.getInt("health")); break;
             case "older_player": 
                 entity = new OlderPlayer(type, position, obj.getBoolean("interactable")); 
+                ((OlderPlayer) entity).setId(id);
                 initialiseState(obj.getString("state"), entity);
-                ((Player) entity).setHealth(obj.getInt("health")); 
+                ((OlderPlayer) entity).setHealth(obj.getInt("health")); 
                 break;
             case "wall":
-                entity = new Wall(type, position); break;
+                entity = new Wall(type, position); 
+                ((Wall) entity).setId(id); break;
             case "exit":
-                entity = new Exit(type, position); break;
+                entity = new Exit(type, position); 
+                ((Exit) entity).setId(id); break;
             case "boulder":
-                entity = new Boulder(type, position); break;
+                entity = new Boulder(type, position);
+                ((Boulder) entity).setId(id); break;
             case "switch":
                 FloorSwitch floorSwitch = new FloorSwitch(type, position); 
                 floorSwitch.setActivated(obj.getBoolean("is_activated"));
+                floorSwitch.setId(id);
                 entity = floorSwitch; break;
             case "door":
-                entity = new Door(type, position, obj.getInt("key")); break;
+                entity = new Door(type, position, obj.getInt("key"));
+                ((Door) entity).setId(id); break;
             case "door_open":
-                entity = new Door(type, position, obj.getInt("key")); break;
+                entity = new Door(type, position, obj.getInt("key"));
+                ((Door) entity).setId(id); break;
             case "portal":
-                entity = new Portal(type, position, obj.getString("colour")); break;
+                entity = new Portal(type, position, obj.getString("colour"));
+                ((Portal) entity).setId(id); break;
             case "zombie_toast_spawner":
-                entity = new ZombieToastSpawner(type, position, obj.getBoolean("interactable")); break;
+                entity = new ZombieToastSpawner(type, position, obj.getBoolean("interactable"));
+                ((ZombieToastSpawner) entity).setId(id); break;
             case "spider":
                 int initX = obj.getInt("initial_position_x");
                 int initY = obj.getInt("initial_position_y");
                 Position initPosition = new Position(initX, initY);
                 Spider spider = new Spider(type, initPosition, obj.getBoolean("interactable"));
                 boolean isClockwiseMove = obj.getBoolean("is_clockwise_move");
+                spider.setId(id);
                 spider.setRemainingStuckTicks(obj.getInt("remaining_stuck_tick"));
                 spider.setHealth(obj.getInt("health")); 
                 spider.setPosition(position);
                 spider.setClockwiseMove(isClockwiseMove);
                 entity = spider; break;
             case "zombie_toast":
-                ZombieToast zt = new ZombieToast(type, position, obj.getBoolean("interactable")); 
+                ZombieToast zt = new ZombieToast(type, position, obj.getBoolean("interactable"));
+                zt.setId(id); 
                 zt.setRemainingStuckTicks(obj.getInt("remaining_stuck_tick"));
                 zt.setHealth(obj.getInt("health")); 
                 entity = zt; break;
             case "mercenary":
                 Mercenary merc = new Mercenary(type, position, obj.getBoolean("interactable")); 
+                merc.setId(id);
                 merc.setRemainingStuckTicks(obj.getInt("remaining_stuck_tick"));
                 merc.setHealth(obj.getInt("health"));  
                 entity = merc;
                 initialiseState(obj.getString("state"), entity); break;
             case "assassin":
                 Assassin assassin = new Assassin(type, position, obj.getBoolean("interactable")); 
+                assassin.setId(id);
                 assassin.setRemainingStuckTicks(obj.getInt("remaining_stuck_tick"));
                 assassin.setHealth(obj.getInt("health"));  
                 entity = assassin;
                 initialiseState(obj.getString("state"), entity); break;
             case "hydra":
                 Hydra hydra = new Hydra(type, position, obj.getBoolean("interactable")); 
+                hydra.setId(id);
                 hydra.setRemainingStuckTicks(obj.getInt("remaining_stuck_tick"));
                 hydra.setHealth(obj.getInt("health")); 
                 entity = hydra; break;
             case "treasure":
-                entity = new Treasure(type, position); break;
+                entity = new Treasure(type, position);
+                ((Treasure) entity).setId(id); break;
             case "sun_stone":
-                entity = new SunStone(type, position); break; 
+                entity = new SunStone(type, position);
+                ((SunStone) entity).setId(id); break; 
             case "key":
-                entity = new Key(type, position, obj.getInt("key")); break;
+                entity = new Key(type, position, obj.getInt("key"));
+                ((Key) entity).setId(id); break;
             case "invincibility_potion":
-                entity = new InvincibilityPotion(type, position); break;
+                entity = new InvincibilityPotion(type, position);
+                ((InvincibilityPotion) entity).setId(id); break;
             case "invisibility_potion":
-                entity = new InvisibilityPotion(type, position); break;
+                entity = new InvisibilityPotion(type, position);
+                ((InvisibilityPotion) entity).setId(id); break;
             case "wood":
-                entity = new Wood(type, position); break;
+                entity = new Wood(type, position);
+                ((Wood) entity).setId(id); break;
             case "arrow":
-                entity = new Arrows(type, position); break;
+                entity = new Arrows(type, position);
+                ((Arrows) entity).setId(id); break;
             case "bomb":
                 Bomb bomb = new Bomb(type, position); 
+                bomb.setId(id);
                 bomb.setActivated(obj.getBoolean("is_active"));
                 bomb.setPickable(obj.getBoolean("is_pickable"));
                 entity = bomb; break;
             case "sword":
-                entity = new Sword(type, position); break;
+                entity = new Sword(type, position);
+                ((Sword) entity).setId(id); break;
             case "swamp_tile":
-                entity = new SwampTile(type, position, obj.getInt("movement_factor")); break;
+                entity = new SwampTile(type, position, obj.getInt("movement_factor"));
+                ((SwampTile) entity).setId(id); break;
             case "time_turner":
-                entity = new TimeTurner(type, position); break;
+                entity = new TimeTurner(type, position);
+                ((TimeTurner) entity).setId(id); break;
             case "time_travelling_portal":
-                entity = new TimeTravellingPortal(type, position); break;
+                entity = new TimeTravellingPortal(type, position);
+                ((TimeTravellingPortal) entity).setId(id); break;
             case "light_bulb_off":
-                entity = new LightBulb(type, position, Helper.getLogic(obj.getString("logic"))); break;
+                entity = new LightBulb(type, position, Helper.getLogic(obj.getString("logic")));
+                ((LightBulb) entity).setId(id); break;
             case "light_bulb_on":
-                entity = new LightBulb(type, position, Helper.getLogic(obj.getString("logic"))); break;
+                entity = new LightBulb(type, position, Helper.getLogic(obj.getString("logic")));
+                ((LightBulb) entity).setId(id); break;
             case "wire":
-                entity = new Wire(type, position, Helper.getLogic(obj.getString("logic"))); break;
+                entity = new Wire(type, position, Helper.getLogic(obj.getString("logic")));
+                ((Wire) entity).setId(id); break;
             case "switch_door":
-                entity = new SwitchDoor(type, position, Helper.getLogic(obj.getString("logic")), obj.getInt("key")); break;
+                entity = new SwitchDoor(type, position, Helper.getLogic(obj.getString("logic")), obj.getInt("key"));
+                ((SwitchDoor) entity).setId(id); break;
         }
         mapEntities.add(entity);
     }
@@ -448,53 +481,67 @@ public class JSONReloadGame {
         switch(type) {
             case "treasure":
                 Treasure treasure = new Treasure(type, position);
+                treasure.setId(id);
                 inventory.add(treasure); break;
             case "sun_stone":
                 SunStone sunStone = new SunStone(type, position);
+                sunStone.setId(id);
                 inventory.add(sunStone); break; 
             case "key":
                 Key key = new Key(type, position, obj.getInt("key_id"));
+                key.setId(id);
                 inventory.add(key); break;
             case "invincibility_potion":
                 InvincibilityPotion invincibilityPotion = new InvincibilityPotion(type, position);
+                invincibilityPotion.setId(id);
                 invincibilityPotion.setDurability(durability);
                 inventory.add(invincibilityPotion); break;
             case "invisibility_potion":
                 InvisibilityPotion invisibilityPotion = new InvisibilityPotion(type, position);
+                invisibilityPotion.setId(id);
                 invisibilityPotion.setDurability(durability);
                 inventory.add(invisibilityPotion); break;
             case "wood":
                 Wood wood = new Wood(type, position);
+                wood.setId(id);
                 inventory.add(wood); break;
             case "arrow":
                 Arrows arrow = new Arrows(type, position);  
+                arrow.setId(id);
                 arrow.setDurability(durability); 
                 inventory.add(arrow); break;
             case "bomb":
                 Bomb bomb = new Bomb(type, position);
+                bomb.setId(id);
                 inventory.add(bomb); break;
             case "sword":
                 Sword sword = new Sword(type, position);
+                sword.setId(id);
                 sword.setDurability(durability);
                 inventory.add(sword);
                 break;
             case "shield":
                 Shield shield = new Shield(type);
+                shield.setId(id);
                 inventory.add(shield);
                 (shield).setDurability(durability); break;
             case "bow":
                 Bow bow = new Bow(type);
+                bow.setId(id);
                 inventory.add(bow);
                 (bow).setDurability(durability); break;
             case "midnight_armour":
                 MidnightArmour armour = new MidnightArmour(type);
+                armour.setId(id);
                 inventory.add(armour); break;
             case "scepture":
                 Sceptre sceptre = new Sceptre(type);
+                sceptre.setId(id);
                 inventory.add(sceptre);
                 (sceptre).setDurability(durability); break;
             case "time_turner":
                 TimeTurner timeTurner = new TimeTurner(type, position);
+                timeTurner.setId(id);
                 inventory.add(timeTurner); break;
         }
     }
