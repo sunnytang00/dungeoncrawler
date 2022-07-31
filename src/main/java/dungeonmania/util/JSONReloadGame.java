@@ -1,6 +1,5 @@
 package dungeonmania.util;
 
-import dungeonmania.DungeonManiaController;
 import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Item;

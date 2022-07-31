@@ -1,7 +1,6 @@
 package dungeonmania.entities.StaticEntities.logicSwitches;
 
 import dungeonmania.DungeonMap;
-import dungeonmania.entities.Entity;
 import dungeonmania.entities.Item;
 import dungeonmania.entities.collectableEntities.Key;
 import dungeonmania.entities.collectableEntities.SunStone;
