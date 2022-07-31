@@ -396,7 +396,7 @@ public class DungeonManiaController {
         int currTick = game.getCurrentTick();
         List<Position> olderPlayerMovements = new ArrayList<Position>();
         
-        if (ticks == 30) {
+        if (ticks == 30 && game.getTickHistorySize() < 30) {
             gameJSON = game.getGameFromTickHistory(0);
             olderPlayerMovements = game.getPlayerMovementsStartingFrom(0);
         } else {

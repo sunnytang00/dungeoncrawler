@@ -20,6 +20,8 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import dungeonmania.entities.Item;
+import dungeonmania.entities.collectableEntities.Treasure;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
@@ -195,6 +197,16 @@ public class PersistenceTest {
         move1 = dmc1.tick(Direction.UP);
         countEntityOfType(move1, "spider");
         assertEquals(1, countEntityOfType(move1, "spider"));
+
+    }
+
+    @Test
+    public void itemTick() {
+        Position position = new Position(0, 0);
+        Treasure i = new Treasure("treasure", position);
+
+        i.weaponryUsedToJSON() ;
+        
 
     }
 }
