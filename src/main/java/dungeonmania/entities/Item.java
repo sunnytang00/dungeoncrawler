@@ -11,11 +11,11 @@ public abstract class Item extends Entity {
     /**
      * Record the position of the item in the map
      */
-    protected Position position;
+    private Position position;
     /**
      * Indicate whether the current potion is activated
      */
-    protected boolean isTriggered;
+    private boolean isTriggered;
 
     /**
      * Record the durability times of the sword

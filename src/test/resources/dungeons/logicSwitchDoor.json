@@ -37,6 +37,12 @@
         "x": 6,
         "y": 7,
         "type": "switch"
+      },{
+        "x": 7,
+        "y": 2,
+        "type": "switch_door",
+        "logic": "co_and",
+        "key": 2
       },
       {
         "x": 5,

@@ -10,8 +10,6 @@ import dungeonmania.entities.Entity;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.entities.movingEntity.MovingEntity;
 import dungeonmania.entities.movingEntity.player.Player;
-import dungeonmania.util.Direction;
-import dungeonmania.util.Helper;
 import dungeonmania.util.Position;
 
 public class Portal extends StaticEntity {

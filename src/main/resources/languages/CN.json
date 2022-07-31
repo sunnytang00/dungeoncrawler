@@ -1,0 +1,27 @@
+{
+    "main_menu": {
+        "font": "alagard.ttf",
+        "title": "地下城大作战",
+        "subtitle_1": "前端开发:\n Braedon Wooding, George Litsas, Nick Patrikeos, Noa Challis",
+        "subtitle_2": "后端开发:\n Yuemeng Yin, Han Wang, Yi Yang, Yue Dai, Sunny Tang",
+        "buttons": {
+            "generate_game": "创建新游戏",
+            "new_game": "开始游戏",
+            "load_game": "加载游戏",
+            "quit_game": "退出当前游戏",
+            "credits": "积分"
+        },
+        "game_mode": "游戏模式",
+        "on_exit": {
+            "title": "您的电脑将在五秒钟后关机...",
+            "message": "你可以重新加载页面重启游戏啦，希望你玩的开心 :)"
+        }
+    },
+    "game": {
+        "font": "alagard.ttf",
+        "build": "建立",
+        "inventory": "仓库",
+        "main_menu": "主菜单",
+        "save": "保存游戏"
+    }
+}

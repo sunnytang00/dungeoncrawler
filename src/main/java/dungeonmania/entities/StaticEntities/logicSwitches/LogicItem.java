@@ -3,8 +3,6 @@ package dungeonmania.entities.StaticEntities.logicSwitches;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonGame;
-import dungeonmania.DungeonMap;
-import dungeonmania.entities.Item;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.util.Helper;
 import dungeonmania.util.Position;
@@ -20,7 +18,7 @@ public abstract class LogicItem extends StaticEntity {
     /**
      * Indicating whether the logic item is activated
      */
-    protected boolean isActivated;
+    private boolean isActivated;
 
     private ActivateStrategy activateStrategy;
 
@@ -28,6 +26,7 @@ public abstract class LogicItem extends StaticEntity {
 
     public LogicItem(String type, Position position, LogicEnum logic) {
         super(type, position);
+        this.setTraversable(true);
         this.logic = logic;
         this.activateStrategy = ActivateStrategyFactory.getActivateStrategyByLogic(logic);
     }

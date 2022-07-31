@@ -79,7 +79,6 @@ public class Player extends MovingEntity {
 
     }
 
-    
 
     public Potion getCurrPotion() {
         return currPotion;
@@ -164,28 +163,8 @@ public class Player extends MovingEntity {
     }
 
     public void move(DungeonGame game, DungeonMap map, Direction direction) {
-
-
-        boolean blocked = false;
-
-        this.setDirection(direction);
-        Position newPos = getPosition().translateBy(direction);
-        List<Entity> encounters = map.getEntityFromPos(newPos);
-
-        // interact with non-moving entities 
-        for (Entity encounter : encounters) {
-
-            if (!isInvisible() && !(encounter instanceof Enemy)) {
-                blocked = interactWithEntities(encounter, map);
-            }
-            if (getNonTraversibles().contains(encounter.getType())) {
-                blocked = true;
-            }
-        }
-
-        if (!blocked) {
-            this.setPosition(newPos);
-        }
+        
+        state.move(this, direction, map);
         battle(map, game);
     }
 
@@ -198,13 +177,7 @@ public class Player extends MovingEntity {
     }
 
     public void battle(DungeonMap map, DungeonGame game) {
-        List<Enemy> enemies = map.getEnemies();
-        if (!isInvisible()) {
-            for (Enemy enemy : enemies) {
-                interactWithEnemies(enemy, map);
-                battleWithEnemies(map, game);
-            }
-        }
+        state.battle(this, map, game);
     }
 
 
@@ -229,9 +202,8 @@ public class Player extends MovingEntity {
             List<Round> rounds = new ArrayList<Round>();
             double iniEnemyHealth = enemy.getHealth();
             currBattle = new Battle(enemy.getType(), rounds, iniPlayerHealth, iniEnemyHealth);
-
+            List<Item> weaponryUsed = checkBattleBonuses(map);
             while (this.getHealth() > 0 && enemy.getHealth() > 0) {
-                List<Item> weaponryUsed = checkBattleBonuses(map);
                 boolean hasBow = false;
                 if (weaponryUsed != null) {
                     for (Item weapon : weaponryUsed) {
@@ -260,13 +232,6 @@ public class Player extends MovingEntity {
                 Round currRound = new Round(deltaPlayerHealth, deltaEnemyHealth, weaponryUsed);
                 rounds.add(currRound);
                 currBattle.setRounds(rounds);
-                
-                for (Item weapon : weaponryUsed) {
-                    if (weapon != null) {
-                        Weapon w = (Weapon) weapon;
-                        w.useWeapon();
-                    }
-                }
 
                 if (newHealth <= 0) {
                     game.addToBattles(currBattle);
@@ -281,18 +246,26 @@ public class Player extends MovingEntity {
                 }
                 
                 if (isInvincible()) {
-                    // map.setGameWin(true);
                     battles.add(currBattle);
                     game.addToBattles(currBattle);
                     return;
                 }
             }
+            for (Item weapon : weaponryUsed) {
+                if (weapon != null) {
+                    Weapon w = (Weapon) weapon;
+                    w.useWeapon();
+                }
+            }
         }
         game.addToBattles(currBattle);
-        // map.setGameWin(true);
+        
     }
 
     public List<Item> checkBattleBonuses(DungeonMap map) {
+
+        this.setAttack(JSONConfig.getConfig("player_attack"));
+        this.setDefence(0);
 
         List<Item> weaponryUsed = new ArrayList<Item>();
         double attackBonus = 0;
@@ -300,7 +273,6 @@ public class Player extends MovingEntity {
         int numAlly = map.getNumOfAlly();
         List<Weapon> usableWeapon = getUsableWeapon();
         for (Weapon weapon: usableWeapon) {
-            
             attackBonus += weapon.getDamageValue();
             defenceBonus += weapon.getDefence();
             weaponryUsed.add(weapon);
