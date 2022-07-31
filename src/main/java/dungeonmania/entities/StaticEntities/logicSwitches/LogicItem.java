@@ -1,7 +1,10 @@
 package dungeonmania.entities.StaticEntities.logicSwitches;
 
+import org.json.JSONObject;
+
 import dungeonmania.DungeonGame;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.util.Helper;
 import dungeonmania.util.Position;
 
 public abstract class LogicItem extends StaticEntity {
@@ -60,6 +63,11 @@ public abstract class LogicItem extends StaticEntity {
         this.activationTick = activationTick;
     }
 
-    
+    public JSONObject toJSON() {
+        JSONObject obj = super.toJSON();
+        String logic = Helper.logicToJSON(getLogic());
+        obj.put("logic", logic);
+        return obj;
+    }
 
 }

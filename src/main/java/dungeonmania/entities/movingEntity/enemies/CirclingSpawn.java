@@ -57,7 +57,6 @@ public class CirclingSpawn implements MovingStrategy {
 
         // follow circular path
         } else {
-
             List<Position> bouldersPos = getAdjacentBoulderPositions(adjPos, map);
             // index of circular path position, from 0 to 7
             int circIndex = adjPos.indexOf(currPos);
