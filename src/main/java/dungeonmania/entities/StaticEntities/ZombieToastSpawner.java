@@ -16,7 +16,7 @@ public class ZombieToastSpawner extends StaticEntity {
 
     public ZombieToastSpawner(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
-        this.isTraversable = true;
+        setTraversable(true);
     }
     
     /**

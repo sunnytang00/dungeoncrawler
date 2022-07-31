@@ -15,7 +15,7 @@ public abstract class LogicItem extends StaticEntity {
     /**
      * Indicating whether the logic item is activated
      */
-    protected boolean isActivated;
+    private boolean isActivated;
 
     private ActivateStrategy activateStrategy;
 
@@ -23,6 +23,7 @@ public abstract class LogicItem extends StaticEntity {
 
     public LogicItem(String type, Position position, LogicEnum logic) {
         super(type, position);
+        this.setTraversable(true);
         this.logic = logic;
         this.activateStrategy = ActivateStrategyFactory.getActivateStrategyByLogic(logic);
     }

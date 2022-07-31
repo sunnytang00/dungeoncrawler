@@ -37,6 +37,7 @@ public class DungeonManiaController {
     }
 
     public String getLocalisation() {
+        // chinese version available "CN"
         return "en_US";
     }
 

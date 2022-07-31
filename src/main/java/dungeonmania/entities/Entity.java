@@ -14,7 +14,7 @@ public abstract class Entity {
     private String id;
     private String type;
     private Position position;
-    protected boolean isInteractable;
+    private boolean isInteractable;
     private String colour;
 
     public Entity(String type) {
