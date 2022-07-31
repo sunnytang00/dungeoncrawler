@@ -175,13 +175,6 @@ public class DungeonManiaController {
 
         map.setEnemiesToSpawn(new ArrayList<Entity>());
 
-        // OlderPlayer olderPlayer = (OlderPlayer) map.getEntitiesFromType(map.getMapEntities(), "older_player");
-        // if (olderPlayer != null) {
-        //     if (olderPlayer.remainingTimeTravel() == 0) {
-        //         map.removeEntityFromMap(olderPlayer);
-        //     }
-        // }
-
         saveTickToHistory();
         return getDungeonResponseModel();
     }
@@ -222,16 +215,6 @@ public class DungeonManiaController {
         }
 
         map.setEnemiesToSpawn(new ArrayList<Entity>());
-
-        // OlderPlayer olderPlayer = null;
-        // if (map.getEntitiesFromType(map.getMapEntities(), "older_player").size() != 0) {
-        //     olderPlayer = (OlderPlayer) map.getEntitiesFromType(map.getMapEntities(), "older_player").get(0);
-        // }
-        // if (olderPlayer != null) {
-        //     if (olderPlayer.remainingTimeTravel() == 0) {
-        //         map.removeEntityFromMap(olderPlayer);
-        //     }
-        // }
 
         saveTickToHistory();
         return getDungeonResponseModel();
@@ -342,11 +325,6 @@ public class DungeonManiaController {
             throw new IllegalArgumentException("please provide a name");
         }
         JSONReloadGame reloadGame = null;
-        // File pathAsFile = new File("./bin/");
-        // if (!pathAsFile.exists()) {
-        //     pathAsFile.mkdir();
-        // }
-        // // add a stub file to ensure the path exist for reading 
 
         try (InputStream is = new FileInputStream("./bin/" + name + ".json")) {
             reloadGame = new JSONReloadGame(is, name);
