@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,7 +26,6 @@ import static dungeonmania.TestUtils.getInventory;
 import static dungeonmania.TestHelpers.assertListAreEqualIgnoringOrder;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
 public class ItemTest {
 
     @Test
@@ -38,7 +38,8 @@ public class ItemTest {
         EntityResponse initPlayer = getPlayer(initialResponse).get();
 
         // create the expected result
-        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(0, 1), false);
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(0, 1),
+                false);
 
         // move player downward
         DungeonResponse actualDungeonRes = dmc.tick(Direction.DOWN);
@@ -55,7 +56,7 @@ public class ItemTest {
 
         // assert after movement
         assertEquals(expectedPlayer, actualPlayer);
-        
+
         expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(0, 3), false);
 
         // move player downward
@@ -64,9 +65,10 @@ public class ItemTest {
 
         // assert after movement
         assertEquals(expectedPlayer, actualPlayer);
-        //List<ItemResponse> itemList = new ArrayList<ItemResponse>();
+        // List<ItemResponse> itemList = new ArrayList<ItemResponse>();
 
-        //Does this work? Am getting thing from the dungeon response, do I need to find another way to get the items
+        // Does this work? Am getting thing from the dungeon response, do I need to find
+        // another way to get the items
         // itemList.addAll(getInventory(actualDungeonRes, "treasure"));
         // itemList.addAll(getInventory(actualDungeonRes, "key"));
         // itemList.addAll(getInventory(actualDungeonRes, "invisibility_potion"));
@@ -76,10 +78,9 @@ public class ItemTest {
         // itemList.add(new ItemResponse(id, "treasure"));
         // itemList.add(new ItemResponse(id, "key"));
         // itemList.add(new ItemResponse(id, "invisibility_potion"));
-        //assertEquals(itemList, actualDungeonRes.getInventory());
-        //assertEquals(itemList, actualDungeonRes.getInventory());
+        // assertEquals(itemList, actualDungeonRes.getInventory());
+        // assertEquals(itemList, actualDungeonRes.getInventory());
 
-        
     }
 
     @Test
@@ -92,7 +93,8 @@ public class ItemTest {
         EntityResponse initPlayer = getPlayer(initialResponse).get();
 
         // create the expected result
-        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(2, 1), false);
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(2, 1),
+                false);
 
         // move player downward
         DungeonResponse actualDungeonRes = dmc.tick(Direction.RIGHT);
@@ -122,7 +124,6 @@ public class ItemTest {
         List<String> buildables = new ArrayList<>();
         buildables.add("shield");
         assertListAreEqualIgnoringOrder(buildables, actualDungeonRes.getBuildables());
-
 
         actualDungeonRes = dmc.build("shield");
         ItemResponse shield = new ItemResponse("1", "shield");
@@ -140,7 +141,8 @@ public class ItemTest {
         EntityResponse initPlayer = getPlayer(initialResponse).get();
 
         // create the expected result
-        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(2, 1), false);
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(2, 1),
+                false);
 
         // move player right
         DungeonResponse actualDungeonRes = dmc.tick(Direction.RIGHT);
@@ -175,16 +177,14 @@ public class ItemTest {
         buildables.add("bow");
         assertListAreEqualIgnoringOrder(buildables, actualDungeonRes.getBuildables());
 
-
         actualDungeonRes = dmc.build("bow");
         ItemResponse bow = new ItemResponse("1", "bow");
         assertEquals(bow.getType(), actualDungeonRes.getInventory().get(0).getType());
 
-        //Check getBuildables does not return a bow as we don't have the materials
+        // Check getBuildables does not return a bow as we don't have the materials
         actualDungeonRes = dmc.getDungeonResponseModel();
         buildables.remove(0);
         assertListAreEqualIgnoringOrder(buildables, actualDungeonRes.getBuildables());
-
 
     }
 
@@ -193,10 +193,11 @@ public class ItemTest {
 
         DungeonManiaController dmc = new DungeonManiaController();
 
-        DungeonResponse initialResponse = dmc.newGame("testBuildBowShield", "c_battleTests_basicMercenaryMercenaryDies");
+        DungeonResponse initialResponse = dmc.newGame("testBuildBowShield",
+                "c_battleTests_basicMercenaryMercenaryDies");
 
         DungeonResponse move = dmc.tick(Direction.RIGHT);
-        for (int i = 0; i < 6; i++) {//move right 6 times, 0 1 2 3 4 5
+        for (int i = 0; i < 6; i++) {// move right 6 times, 0 1 2 3 4 5
             move = dmc.tick(Direction.RIGHT);
         }
 
@@ -204,7 +205,7 @@ public class ItemTest {
         buildables.add("bow");
         buildables.add("shield");
         assertListAreEqualIgnoringOrder(buildables, move.getBuildables());
-        
+
         move = dmc.build("bow");
         buildables.remove(0);
         assertListAreEqualIgnoringOrder(buildables, move.getBuildables());
@@ -221,9 +222,9 @@ public class ItemTest {
         DungeonManiaController dmc = new DungeonManiaController();
 
         DungeonResponse initialResponse = dmc.newGame("test_build_sceptre_and_armour", "c_testConfigSceptreArmour");
-        
+
         DungeonResponse move = dmc.tick(Direction.RIGHT);
-        for (int i = 0; i < 3; i++) {//move right 3 times, 0 1 2
+        for (int i = 0; i < 3; i++) {// move right 3 times, 0 1 2
             move = dmc.tick(Direction.RIGHT);
         }
 
@@ -242,9 +243,9 @@ public class ItemTest {
         DungeonManiaController dmc = new DungeonManiaController();
 
         DungeonResponse initialResponse = dmc.newGame("test_build_sceptre_and_armour", "c_testConfigSceptreArmour");
-        
+
         DungeonResponse move = dmc.tick(Direction.LEFT);
-        for (int i = 0; i < 2; i++) {//move left 2 times, 0 1 
+        for (int i = 0; i < 2; i++) {// move left 2 times, 0 1
             move = dmc.tick(Direction.LEFT);
         }
 
@@ -278,7 +279,7 @@ public class ItemTest {
 
         DungeonResponse initialResponse = dmc.newGame("test_build_sceptre_and_armour", "c_testArmourSpawnZombie");
 
-        for (int i = 0; i < 10; i++) {//tick some bit to spawn zombies
+        for (int i = 0; i < 10; i++) {// tick some bit to spawn zombies
             DungeonResponse move = dmc.tick(Direction.LEFT);
         }
 
@@ -287,10 +288,23 @@ public class ItemTest {
         });
     }
 
+    @Test
+    public void TestCannotBuildSceptre() throws IllegalArgumentException, InvalidActionException {
 
+        DungeonManiaController dmc = new DungeonManiaController();
 
+        DungeonResponse initialResponse = dmc.newGame("test_build_sceptre_and_armour", "c_testConfigSceptreArmour");
+        DungeonResponse move;
+        for (int i = 0; i < 2; i++) {// move right 2 times, 0 1
+            move = dmc.tick(Direction.RIGHT);
+            Optional<EntityResponse> player = getPlayer(move);
 
+        }
 
+        assertThrows(InvalidActionException.class, () -> {
+            dmc.build("sceptre");
+        });
+
+    }
 
 }
-

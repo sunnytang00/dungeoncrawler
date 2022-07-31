@@ -125,6 +125,11 @@ public class RewindTest {
         List<EntityResponse> older_player = getEntities(res, "older_player");
         assertEquals(new Position(1, 0), older_player.get(0).getPosition());
 
+        dmc.tick(Direction.RIGHT);
+
+        older_player = getEntities(res, "older_player");
+        assertEquals(new Position(2, 0), older_player.get(0).getPosition()); //check older_player moves to the right, following player movement
+
     }
 
     @Test
