@@ -43,7 +43,6 @@ public class MoveTowardsPlayer implements MovingStrategy {
         } else {
             while (newPos != null && !currPos.equals(newPos)) {
                 nextPos = newPos;
-                // System.out.println("nextPos" + nextPos);
                 newPos = prev.get(newPos);
             }
         }

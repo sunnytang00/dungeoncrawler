@@ -29,7 +29,7 @@ public class JSONMap {
 
         // complex goals are not handled yet
         JSONgoals = object.getJSONObject("goal-condition");
-        // JSONgoals = object.getJSONArray("goal-condition");
+        
 
         JSONArray entitiesJSON = object.getJSONArray("entities");
         for (int i = 0; i < entitiesJSON.length(); i++) {

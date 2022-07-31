@@ -20,7 +20,7 @@ public abstract class Item extends Entity {
     /**
      * Record the durability times of the sword
      */
-    private int durability;
+    private int durability = 0;
 
     public Item(String type) {
         super(type);
@@ -49,6 +49,12 @@ public abstract class Item extends Entity {
 
     public ItemResponse getItemResponse() {
         return new ItemResponse(getId(), getType());
+    }
+
+    public JSONObject weaponryUsedToJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("id", getId());
+        return obj;
     }
 
     @Override

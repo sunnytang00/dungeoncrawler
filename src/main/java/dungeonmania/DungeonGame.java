@@ -40,6 +40,10 @@ public class DungeonGame {
         return dungeonId;
     }
 
+    public void setDungeonId(String dungeonId) {
+        this.dungeonId = dungeonId;
+    }
+
     public List<Item> getInventory() {
         return inventories;
     }
@@ -50,10 +54,6 @@ public class DungeonGame {
 
     public final List<String> getBuildables() {
         return buildables;
-    }
-
-    public void setDungeonId(String dungeonId) {
-        this.dungeonId = dungeonId;
     }
 
     public void setInventories(List<Item> inventories) {
@@ -77,18 +77,19 @@ public class DungeonGame {
         return currentTick;
     }
 
+    public void setCurrentTick(int tick) {
+        this.currentTick = tick;
+    }
+
     public void incrementTick() {
         currentTick += 1;
     }
 
-    // returns which tick time travel rewinds back
+    // returns which tick time travel rewinds back 
     public int getTimeTravelTick() {
         return timeTravelTick;
     }
 
-    public int getTickHistorySize() {
-        return tickHistory.size();
-    }
     public void setTimeTravelTick(int tick) {
         timeTravelTick = tick;
     }
@@ -103,6 +104,14 @@ public class DungeonGame {
 
     public void addToTickHistory(JSONObject game) {
         tickHistory.add(game);
+    }
+
+    public int getTickHistorySize() {
+        return tickHistory.size();
+    }
+
+    public void resetTickHistory(List<JSONObject> tickHistory) {
+        this.tickHistory = tickHistory;
     }
 
     public DungeonMap getMap() {

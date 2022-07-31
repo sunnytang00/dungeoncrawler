@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.json.JSONObject;
+
 import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
@@ -68,5 +70,12 @@ public class ZombieToastSpawner extends StaticEntity {
         if (zombie != null) {
             map.addEnemyToSpawn(zombie);
         }
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = super.toJSON();
+        obj.put("interactable", getInteractable());
+        return obj;
     }
 }

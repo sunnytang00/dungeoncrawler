@@ -1,5 +1,7 @@
 package dungeonmania.entities.movingEntity.enemies;
 
+import org.json.JSONObject;
+
 import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
 import dungeonmania.entities.StaticEntities.SwampTile;
@@ -62,4 +64,12 @@ public abstract class Enemy extends MovingEntity {
         DungeonMap map = game.getMap();
         move(this, map);
     }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject obj = super.toJSON();
+        obj.put("remaining_stuck_tick", getRemainingStuckTicks());
+        return obj;
+    }
+    
 }
