@@ -17,4 +17,5 @@ public interface Goals {
     public String getGoalsAsString(DungeonMap map);
 
     public JSONObject toJSON();
+
 }

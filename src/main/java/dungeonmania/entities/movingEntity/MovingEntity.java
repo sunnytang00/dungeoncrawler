@@ -93,7 +93,6 @@ public abstract class MovingEntity extends Entity  {
         JSONObject obj = super.toJSON();
         obj.put("health", this.getHealth());
         obj.put("interactable", this.getInteractable());
-        // obj.put("remaining_stuck_tick", getRemainingStuckTick());
         return obj;
     }
 

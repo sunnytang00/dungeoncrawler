@@ -262,8 +262,12 @@ public class DungeonMap {
         return entitiesJSON;
     }
 
-    public void resetGoals(JSONObject JSONgoals, DungeonMap map) {
-        goals = JSONLoadGoals.getComposedGoals(JSONgoals, map);
+    // public void resetGoals(JSONObject JSONgoals, DungeonMap map) {
+    //     goals = JSONLoadGoals.getComposedGoals(JSONgoals, map);
+    // }
+
+    public void resetGoals(Goals goals) {
+        this.goals = goals;
     }
 
     public Goals getResetGoals() {

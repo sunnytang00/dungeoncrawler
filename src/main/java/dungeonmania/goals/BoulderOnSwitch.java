@@ -10,22 +10,25 @@ import org.json.JSONObject;
 
 public class BoulderOnSwitch extends LeafGoal {
 
-    private boolean prevIsAchieved = false;
+    // private boolean prevIsAchieved = false;
 
-    public BoulderOnSwitch(DungeonMap map) {
+    public BoulderOnSwitch(DungeonMap map, boolean prevIsAchieved) {
+        super(map, prevIsAchieved);
         map.setRemainingConditions(1);
     }
 
     @Override
     public boolean isAchieved(DungeonMap map) {
         List<Entity> switches = map.getEntitiesFromType(map.getMapEntities(), "switch");
+        for (Entity e : map.getMapEntities()) {
+        }
         if (switches.stream().allMatch(s -> ((FloorSwitch) s).isTriggered())) {
-            prevIsAchieved = true;
+            setPrevIsAchieved(true);
             map.setRemainingConditions(-1);
             return true;
         }
-        if (prevIsAchieved) { // if previously it is true but now it is false again
-            prevIsAchieved = false;
+        if (getPrevIsAchieved()) { // if previously it is true but now it is false again
+            setPrevIsAchieved(false);
             map.setRemainingConditions(1);
         }
         return false; 
@@ -41,6 +44,7 @@ public class BoulderOnSwitch extends LeafGoal {
     public JSONObject toJSON() {
         JSONObject obj = new JSONObject();
         obj.put("goal", "boulders");
+        obj.put("prev_is_achieved", getPrevIsAchieved());
         return obj;
     }
     

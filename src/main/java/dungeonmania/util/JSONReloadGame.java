@@ -13,6 +13,7 @@ import dungeonmania.entities.collectableEntities.potions.InvincibilityPotion;
 import dungeonmania.entities.collectableEntities.potions.InvisibilityPotion;
 import dungeonmania.entities.movingEntity.enemies.*;
 import dungeonmania.entities.movingEntity.player.*;
+import dungeonmania.goals.*;
 import dungeonmania.goals.Goals;
 
 import java.io.InputStream;
@@ -60,9 +61,9 @@ import org.json.JSONTokener;
  *              "x": <double>,
  *              "y": <double>,
  *              "interactable": <boolean>,
- *              "initial_x": <int>,
- *              "initial_y": <int>,
- *              "is_clockwise": <boolean>,
+ *              "initial_position_x": <int>,
+ *              "initial_potition_y": <int>,
+ *              "is_clockwise_move": <boolean>,
  *              "health": ,
  *              "remaining_stuck_tick": <int>
  *          }, {
@@ -120,7 +121,8 @@ import org.json.JSONTokener;
  *      "goal-condition": {
  *          "goal": 
  *          "subgoals": [
- *                          {"goal": },
+ *                          {"goal": 
+ *                           "prev_is_achieved": },
  *                          {"goal": }
  *                      ]
  *      }, 
@@ -185,9 +187,9 @@ public class JSONReloadGame {
     private List<Item> inventory = new ArrayList<Item>();
     private PotionQueue potions = new PotionQueue();
     private JSONObject JSONgoals;
-    private Goals goals; 
     private DungeonMap newMap;
     private DungeonGame newGame;
+    private Goals goals;
 
     public List<Entity> getMapEntities() {
         return mapEntities;
@@ -197,7 +199,7 @@ public class JSONReloadGame {
         return inventory;
     }
 
-    public JSONObject getGoals() {
+    public JSONObject getJSONGoals() {
         return JSONgoals;
     }
 
@@ -207,6 +209,10 @@ public class JSONReloadGame {
 
     public DungeonGame getReloadedGame() {
         return newGame;
+    }
+
+    public Goals getGoals() {
+        return goals;
     }
 
     public JSONReloadGame(InputStream is, String name) {
@@ -219,6 +225,15 @@ public class JSONReloadGame {
 
         newMap = new DungeonMap(mapEntities, dungeonName);
         newMap = resetGame(object, newMap);
+
+        // reset remaining goal conditions 
+        JSONgoals = object.getJSONObject("goal-condition");
+        int remaingingGoalConditions = object.getInt("remaining-goal-conditions");
+        newMap.setRemainingConditions(remaingingGoalConditions);
+        // reset goals at current tick 
+        goals = resetGoals(JSONgoals, newMap, object);
+        newMap.setJSONGoals(JSONgoals);
+        newMap.resetGoals(goals);
 
         // restore inventory 
         JSONArray inventoryJSON = object.getJSONArray("inventory");
@@ -281,8 +296,6 @@ public class JSONReloadGame {
 
     public DungeonMap resetGame(JSONObject object, DungeonMap map) {
         JSONArray entitiesJSON = object.getJSONArray("entities");
-        JSONgoals = object.getJSONObject("goal-condition");
-        int remaingingGoalConditions = object.getInt("remaining-goal-conditions");
         
         // initialise entities 
         for (int i = 0; i < entitiesJSON.length(); i++) {
@@ -291,10 +304,6 @@ public class JSONReloadGame {
             initialiseMapEntities(type, obj);
         } 
         map.setMapEntities(mapEntities);
-        // reset remaining goal conditions 
-        map.setRemainingConditions(remaingingGoalConditions);
-        // reset goals at current tick 
-        map.resetGoals(JSONgoals, map);
 
         return map;
     }
@@ -326,7 +335,9 @@ public class JSONReloadGame {
             case "boulder":
                 entity = new Boulder(type, position); break;
             case "switch":
-                entity = new FloorSwitch(type, position); break;
+                FloorSwitch floorSwitch = new FloorSwitch(type, position); 
+                floorSwitch.setTriggered(obj.getBoolean("is_triggered"));
+                entity = floorSwitch; break;
             case "door":
                 entity = new Door(type, position, obj.getInt("key")); break;
             case "door_open":
@@ -336,9 +347,15 @@ public class JSONReloadGame {
             case "zombie_toast_spawner":
                 entity = new ZombieToastSpawner(type, position, obj.getBoolean("interactable")); break;
             case "spider":
-                Spider spider = new Spider(type, position, obj.getBoolean("interactable"));
+                int initX = obj.getInt("initial_position_x");
+                int initY = obj.getInt("initial_position_y");
+                Position initPosition = new Position(initX, initY);
+                Spider spider = new Spider(type, initPosition, obj.getBoolean("interactable"));
+                boolean isClockwiseMove = obj.getBoolean("is_clockwise_move");
                 spider.setRemainingStuckTicks(obj.getInt("remaining_stuck_tick"));
                 spider.setHealth(obj.getInt("health")); 
+                spider.setPosition(position);
+                spider.setClockwiseMove(isClockwiseMove);
                 entity = spider; break;
             case "zombie_toast":
                 ZombieToast zt = new ZombieToast(type, position, obj.getBoolean("interactable")); 
@@ -353,11 +370,13 @@ public class JSONReloadGame {
                 initialiseState(obj.getString("state"), entity); break;
             case "assassin":
                 Assassin assassin = new Assassin(type, position, obj.getBoolean("interactable")); 
+                assassin.setRemainingStuckTicks(obj.getInt("remaining_stuck_tick"));
                 assassin.setHealth(obj.getInt("health"));  
                 entity = assassin;
                 initialiseState(obj.getString("state"), entity); break;
             case "hydra":
                 Hydra hydra = new Hydra(type, position, obj.getBoolean("interactable")); 
+                hydra.setRemainingStuckTicks(obj.getInt("remaining_stuck_tick"));
                 hydra.setHealth(obj.getInt("health")); 
                 entity = hydra; break;
             case "treasure":
@@ -508,5 +527,29 @@ public class JSONReloadGame {
 
     private Item getItemFromInventory(String id) {
         return inventory.stream().filter(e -> e.getId().equals(id)).findAny().orElse(null);
+    }
+
+    private Goals resetGoals(JSONObject goals, DungeonMap map, JSONObject obj) {
+        switch(goals.getString("goal")) {
+            case "AND":
+                JSONArray subgoalsAnd = goals.getJSONArray("subgoals");
+                CompositeGoal compositeAndGoal = new CompositeAnd(resetGoals(subgoalsAnd.getJSONObject(0), map, obj),
+                                                                  resetGoals(subgoalsAnd.getJSONObject(1), map, obj));
+                return compositeAndGoal;
+            case "OR":
+                JSONArray subgoalsOr = goals.getJSONArray("subgoals");
+                CompositeGoal compositeOrGoal = new CompositeOr(resetGoals(subgoalsOr.getJSONObject(0), map, obj),
+                                                                resetGoals(subgoalsOr.getJSONObject(1), map, obj));
+                return compositeOrGoal;
+            case "exit":
+                return new GetExit(map, goals.getBoolean("prev_is_achieved"));
+            case "enemies":
+                return new DestroyEnemy(map, goals.getBoolean("prev_is_achieved"));
+            case "boulders":
+                return new BoulderOnSwitch(map, goals.getBoolean("prev_is_achieved"));
+            case "treasure":
+                return new CollectTreasure(map, goals.getBoolean("prev_is_achieved"));
+        }
+        return null;
     }
 }

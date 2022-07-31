@@ -38,6 +38,7 @@ public class DungeonManiaController {
     private ArrayList<DungeonGame> gamesToPlayOut = new ArrayList<DungeonGame>();
     private boolean timeTravelled = false;
     private Goals goals;
+    // private JSONObject initialGoal;
 
     public String getSkin() {
         return "default";
@@ -78,7 +79,9 @@ public class DungeonManiaController {
         List<Entity> entities = jMap.getInitialMapEntities();
         map = new DungeonMap(entities, dungeonName);
         goals = JSONLoadGoals.getComposedGoals(jMap.getGoals(), map);
+        // initialGoal = jMap.getGoals();
         map.setJSONGoals(jMap.getGoals());
+        JSONLoadGoals.setJSONGoals(jMap.getGoals());
 
         List<EntityResponse> entityResponses = map.getEntityResponses();
         List<Item> inventoryItems = new ArrayList<Item>();
@@ -91,7 +94,6 @@ public class DungeonManiaController {
         
         gameList.add(game);
         mapList.add(map);
-
 
         return new DungeonResponse(game.getDungeonId(), dungeonName, entityResponses, inventoryResponses, battleResponses, buildableItems,
                 goals.getGoalsAsString(map));
@@ -109,7 +111,6 @@ public class DungeonManiaController {
             return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(), null,
                     battles, null, goals.getGoalsAsString(map));
         }
-
         return new DungeonResponse(game.getDungeonId(), map.getDungeonName(), map.getEntityResponses(),
                 player.getInventoryResponses(), battles, player.getBuildables(map), goals.getGoalsAsString(map));
 
@@ -338,14 +339,14 @@ public class DungeonManiaController {
         try (InputStream is = new FileInputStream("bin/" + name + ".json")) {
             reloadGame = new JSONReloadGame(is, name);
             map = new DungeonMap(reloadGame.getMapEntities(), name);
-            goals = JSONLoadGoals.getComposedGoals(reloadGame.getGoals(), map);
-            map.setJSONGoals(reloadGame.getGoals());
+            goals = reloadGame.getGoals();
+            map.resetGoals(goals);
+            map.setJSONGoals(reloadGame.getJSONGoals());
         } catch (IOException e) {
             throw new IllegalArgumentException("cannot find such file");
         }
         map = reloadGame.getReloadedMap();
         game = reloadGame.getReloadedGame();
-        goals = map.getResetGoals();
         return getDungeonResponseModel();
     }
 
@@ -373,7 +374,7 @@ public class DungeonManiaController {
             // player wins or loses
             return;
         }
-        JSONObject obj = JSONSaveGame.saveGame(map, map.getJSONGoals(), game);
+        JSONObject obj = JSONSaveGame.saveGame(map, goals, game);
         game.addToTickHistory(obj);
     }
 

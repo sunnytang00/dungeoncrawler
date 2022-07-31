@@ -7,12 +7,13 @@ import org.json.JSONObject;
 
 import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
+import dungeonmania.goals.Goals;
 
 public class JSONSaveGame {
     // save files to "./bin/saved_games/" + <fileName> + ".json" 
     // save files to "/dungeons/" + <fileName> + ".json" 
 
-    public static JSONObject saveGame(DungeonMap map, JSONObject goalsJSON, DungeonGame game) {
+    public static JSONObject saveGame(DungeonMap map, Goals goals, DungeonGame game) {
         JSONObject timeTravel = new JSONObject();
         JSONObject config = new JSONObject();
         JSONObject tick = new JSONObject();
@@ -21,6 +22,7 @@ public class JSONSaveGame {
         JSONArray potions = map.getPlayer().potionQueueToJSON();
         JSONArray battles = new JSONArray();
         JSONObject dungeonJSON = new JSONObject();
+        JSONObject goalsJSON = goals.toJSON();
 
         config.put("file_name", JSONConfig.getConfigName());
         int currTick = game.getCurrentTick();

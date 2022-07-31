@@ -7,9 +7,13 @@ import dungeonmania.util.JSONConfig;
 
 public class DestroyEnemy extends LeafGoal {
 
-    private boolean prevIsAchieved = false;
+    // private boolean prevIsAchieved = false;
 
-    public DestroyEnemy(DungeonMap map) {
+    // public DestroyEnemy(DungeonMap map) {
+    //     map.setRemainingConditions(1);
+    // }
+    public DestroyEnemy(DungeonMap map, boolean prevIsAchieved) {
+        super(map, prevIsAchieved);
         map.setRemainingConditions(1);
     }
 
@@ -19,12 +23,12 @@ public class DestroyEnemy extends LeafGoal {
         Boolean spawnerLeft = map.getMapEntities().stream().anyMatch(entity -> entity.getType().equals("zombie_toast_spawner"));
 
         if (numOfEnemies >= JSONConfig.getConfig("enemy_goal") && !spawnerLeft) {
-            prevIsAchieved = true;
+            setPrevIsAchieved(true);
             map.setRemainingConditions(-1);
             return true;
         }              
-        if (prevIsAchieved) {
-            prevIsAchieved = false;
+        if (getPrevIsAchieved()) {
+            setPrevIsAchieved(false);
             map.setRemainingConditions(1);
         }
         return false;
@@ -40,6 +44,7 @@ public class DestroyEnemy extends LeafGoal {
     public JSONObject toJSON() {
         JSONObject obj = new JSONObject();
         obj.put("goal", "enemies");
+        obj.put("prev_is_achieved", getPrevIsAchieved());
         return obj;
     }
     
