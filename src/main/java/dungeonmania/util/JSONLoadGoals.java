@@ -7,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class JSONLoadGoals {
-    private static JSONObject goalsJSON;
 
     public static Goals getComposedGoals(JSONObject goals, DungeonMap map) {
         switch(goals.getString("goal")) {
@@ -33,11 +32,4 @@ public class JSONLoadGoals {
         return null;
     }
 
-    public static JSONObject getJSONGoals() {
-        return goalsJSON;
-    }
-
-    public static void setJSONGoals(JSONObject goal) {
-        goalsJSON = goal;
-    }
 }

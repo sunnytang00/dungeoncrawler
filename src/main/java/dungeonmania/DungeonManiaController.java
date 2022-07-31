@@ -82,7 +82,7 @@ public class DungeonManiaController {
         goals = JSONLoadGoals.getComposedGoals(jMap.getGoals(), map);
         // initialGoal = jMap.getGoals();
         map.setJSONGoals(jMap.getGoals());
-        JSONLoadGoals.setJSONGoals(jMap.getGoals());
+        // JSONLoadGoals.setJSONGoals(jMap.getGoals());
 
         List<EntityResponse> entityResponses = map.getEntityResponses();
 
@@ -176,6 +176,13 @@ public class DungeonManiaController {
 
         map.setEnemiesToSpawn(new ArrayList<Entity>());
 
+        // OlderPlayer olderPlayer = (OlderPlayer) map.getEntitiesFromType(map.getMapEntities(), "older_player");
+        // if (olderPlayer != null) {
+        //     if (olderPlayer.remainingTimeTravel() == 0) {
+        //         map.removeEntityFromMap(olderPlayer);
+        //     }
+        // }
+
         saveTickToHistory();
         return getDungeonResponseModel();
     }
@@ -193,7 +200,7 @@ public class DungeonManiaController {
         Position nextPos = player.getPosition().translateBy(movementDirection);
         if (map.getEntityFromPos(nextPos).stream().anyMatch(x -> x instanceof TimeTravellingPortal)) {
             player.move(game, map, movementDirection);
-            rewind(30);
+            return rewind(30);
         }
 
         player.move(game, map, movementDirection);
@@ -216,6 +223,16 @@ public class DungeonManiaController {
         }
 
         map.setEnemiesToSpawn(new ArrayList<Entity>());
+
+        // OlderPlayer olderPlayer = null;
+        // if (map.getEntitiesFromType(map.getMapEntities(), "older_player").size() != 0) {
+        //     olderPlayer = (OlderPlayer) map.getEntitiesFromType(map.getMapEntities(), "older_player").get(0);
+        // }
+        // if (olderPlayer != null) {
+        //     if (olderPlayer.remainingTimeTravel() == 0) {
+        //         map.removeEntityFromMap(olderPlayer);
+        //     }
+        // }
 
         saveTickToHistory();
         return getDungeonResponseModel();
@@ -374,7 +391,7 @@ public class DungeonManiaController {
             return;
         }
         JSONObject obj = JSONSaveGame.saveGame(map, goals, game);
-        game.addToTickHistory(obj);
+        game.addToTickHistory(obj, map.getPlayer().getPosition());
     }
 
     /**
@@ -387,56 +404,35 @@ public class DungeonManiaController {
 
     public DungeonResponse rewind(int ticks) throws IllegalArgumentException {
         
-        Position playerPos = map.returnPlayerPosition();
+        Player currPlayer = map.getPlayer();
 
         if (ticks <= 0) {
             throw new IllegalArgumentException("The number of ticks must be > 0");
         }
 
-        if (ticks >= game.getTickHistorySize()) {
+        if (ticks > game.getTickHistorySize() && ticks != 30) {// not a time travelling portal
             throw new IllegalArgumentException("The number of ticks has not occured yet");
         }
 
-        if (ticks == 30 && game.getTickHistorySize() < 30) {
-            JSONObject rewindTick = game.getGameFromTickHistory(0);
+        JSONObject gameJSON = null;
+        int currTick = game.getCurrentTick();
+        List<Position> olderPlayerMovements = new ArrayList<Position>();
+        
+        if (ticks == 30) {
+            gameJSON = game.getGameFromTickHistory(0);
+            olderPlayerMovements = game.getPlayerMovementsStartingFrom(0);
+        } else {
+            gameJSON = game.getGameFromTickHistory(currTick - ticks);
+            olderPlayerMovements = game.getPlayerMovementsStartingFrom(currTick - ticks);
         }
-        
-        //convert rest of the game
-        //by here we should have loaded everything back to the tick, now we need the older player and a new player
-        map.changePlayerToOlder();
-        map.addEntityToMap(new Player("player", playerPos, false));
 
+        ResetGame resetGame = new ResetGame(gameJSON, map);
+        map = resetGame.reloadMap();
+        
+        map.changePlayerToOlder(olderPlayerMovements);
+        map.addEntityToMap(currPlayer);
+        
         return getDungeonResponseModel();
-        
-        // //arraylist of dungresponse should look like 0, 1, 2, 3, 4 so size = 5
-        // if (ticks <= 0) {
-        // throw new IllegalArgumentException("The number of ticks must be > 0");
-        // }
-
-        // if (ticks >= gameSize) {
-        // throw new IllegalArgumentException("The number of ticks has not occured
-        // yet");
-        // }
-
-        // for (idx = gameSize - ticks; idx < gameSize; idx++) {//Add the games that
-        // need to be played out to a new list
-        // gamesToPlayOut.add(gameList.get(idx));
-        // mapsToPlayOut.add(mapList.get(idx));
-        // }
-
-        // if (ticks == 30 && (gameList.size() < 30)) {//If we go through portal and we
-        // have been through < 30 ticks, we go back to initial state
-        // map = mapList.get(0);
-        // game = gameList.get(0);
-
-        // } else if (gameSize > ticks) {//We should be in here if there are no problems
-        // game = gameList.get((gameSize - ticks) - 1);//Set the current game and map
-        // state to the rewinded one
-        // map = mapList.get((gameSize - ticks) - 1);
-        // }
-
-        // map.addEntityToMap(new Player("player", playerPosition, false));
-        // return getDungeonResponseModel();
     }
 
     public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String configName) {
