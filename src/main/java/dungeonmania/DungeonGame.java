@@ -26,6 +26,7 @@ public class DungeonGame {
     private DungeonMap map;
     private int timeTravelTick = 0;
     private List<JSONObject> tickHistory = new ArrayList<JSONObject>();
+    private List<Position> playerMovements = new ArrayList<Position>();
 
     public DungeonGame(String goals, List<Item> inventories, List<Battle> battles, List<String> buildables,
             DungeonMap map) {
@@ -44,10 +45,25 @@ public class DungeonGame {
         this.dungeonId = dungeonId;
     }
 
+    public List<Item> getInventory() {
+        return inventories;
+    }
+
     public final List<Battle> getBattles() {
         return battles;
     }
 
+    public final List<String> getBuildables() {
+        return buildables;
+    }
+
+    public void setInventories(List<Item> inventories) {
+        this.inventories = inventories;
+    }
+
+    public void setBattles(List<Battle> battles) {
+        this.battles = battles;
+    }
 
     public void addToBattles(Battle battle) {
         battles.add(battle);
@@ -83,8 +99,21 @@ public class DungeonGame {
         return tickHistory.get(tick);
     }
 
-    public void addToTickHistory(JSONObject game) {
+    public void addToTickHistory(JSONObject game, Position playerPosition) {
         tickHistory.add(game);
+        playerMovements.add(playerPosition);
+    }
+
+    public void setPlayerMovements(List<Position> movements) {
+        this.playerMovements = movements;
+    }
+
+    public List<Position> getPlayerMovements() {
+        return playerMovements;
+    }
+
+    public List<Position> getPlayerMovementsStartingFrom(int tick) {
+        return playerMovements.subList(tick + 1, playerMovements.size());
     }
 
     public int getTickHistorySize() {

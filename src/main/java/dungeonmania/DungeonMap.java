@@ -18,6 +18,7 @@ import dungeonmania.entities.StaticEntities.logicSwitches.LogicItem;
 import dungeonmania.entities.StaticEntities.logicSwitches.Wire;
 import dungeonmania.entities.collectableEntities.Bomb;
 import dungeonmania.entities.movingEntity.enemies.*;
+import dungeonmania.entities.movingEntity.player.OlderPlayer;
 import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.goals.Goals;
 
@@ -235,11 +236,22 @@ public class DungeonMap {
         return found;    
     }
 
-    public void changePlayerToOlder() {
+    // change player to older player for time travel
+    public void changePlayerToOlder(List<Position> movements) {
+        Player player = null;
+        OlderPlayer olderPlayer = null;
         for (Entity e : mapEntities) {
             if (e instanceof Player) {
-                e.setType("older_player");
+                player = (Player) e;
+                olderPlayer = new OlderPlayer("older_player", player.getPosition(), player.getInteractable(), movements);
+                olderPlayer.setState(player.getState());
             }
+        }
+        if (player != null) {
+            mapEntities.remove(player);
+        }
+        if (olderPlayer != null) {
+            mapEntities.add(olderPlayer);
         }
     }
 

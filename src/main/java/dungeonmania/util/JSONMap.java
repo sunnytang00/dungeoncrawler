@@ -48,8 +48,6 @@ public class JSONMap {
         switch (type) {
             case "player":
                 entity = new Player(type, position, false); break;
-            case "old_player":
-                entity = new OlderPlayer(type, position, false); break;
             case "wall":
                 entity = new Wall(type, position); break;
             case "exit":
