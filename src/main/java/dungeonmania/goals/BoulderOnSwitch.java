@@ -19,7 +19,7 @@ public class BoulderOnSwitch extends LeafGoal {
     @Override
     public boolean isAchieved(DungeonMap map) {
         List<Entity> switches = map.getEntitiesFromType(map.getMapEntities(), "switch");
-        if (switches.stream().allMatch(s -> ((FloorSwitch) s).isTriggered())) {
+        if (switches.stream().allMatch(s -> ((FloorSwitch) s).isActivated())) {
             prevIsAchieved = true;
             map.setRemainingConditions(-1);
             return true;

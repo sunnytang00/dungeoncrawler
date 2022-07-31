@@ -8,7 +8,7 @@ public class PlayerDefaultState implements PlayerState {
     public void playerStateChange(Player player) {
         player.setInvisible(false);
         player.setInvincible(false); 
-        player.setNonTraversibles(Arrays.asList("wall", "door"));     
+        player.setNonTraversibles(Arrays.asList("wall", "door", "switch_door"));     
     }
 
     

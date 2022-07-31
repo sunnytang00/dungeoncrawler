@@ -1,50 +1,16 @@
 package dungeonmania.entities.StaticEntities.logicSwitches;
 
+import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.StaticEntities.FloorSwitch;
 import dungeonmania.entities.collectableEntities.Bomb;
 import dungeonmania.util.Position;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseActivateStrategy implements ActivateStrategy {
-    @Override
-    public void activate(DungeonMap map, LogicItem logicItem) {
-        if (logicItem instanceof Wire) {
-            Wire wire = (Wire)logicItem;
-            List<Position> adjacentPositions = wire.getPosition().getCardinallyAdjacentPositions();
-            if (hasActivatedEntities(map, adjacentPositions)) {
-                for (Position position : adjacentPositions) {
-                    List<Entity> entities = map.getEntityFromPos(position);
-                    for (Entity entity : entities) {
-                        if (entity instanceof Bomb) {
-                            ((Bomb)entity).setActivated(true);
-                        }
-                        if (entity instanceof LogicItem) {
-                            ((LogicItem)entity).setActivated(true);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private boolean hasActivatedEntities(DungeonMap map, List<Position> positions) {
-        if (null != positions) {
-            for (Position position : positions) {
-                List<Entity> entities = map.getEntityFromPos(position);
-                for (Entity entity : entities) {
-                    if (entity instanceof Bomb && ((Bomb)entity).isActivated()) {
-                        return true;
-                    }
-                    if (entity instanceof LogicItem && ((LogicItem)entity).isActivated()) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
 
     protected int countAdjacentActivatedEntities(DungeonMap map, LogicItem logicItem) {
         int activatedCount = 0;
@@ -53,15 +19,49 @@ public abstract class BaseActivateStrategy implements ActivateStrategy {
         for (Position position : adjacentPositions) {
             List<Entity> entities = map.getEntityFromPos(position);
             for (Entity entity : entities) {
-                if (entity instanceof Bomb && ((Bomb)entity).isActivated()) {
-                    activatedCount++;
-                }
-                if (entity instanceof LogicItem && ((LogicItem)entity).isActivated()) {
+                if ((entity instanceof Bomb && ((Bomb)entity).isActivated()) 
+                || (entity instanceof LogicItem && ((LogicItem)entity).isActivated()) 
+                || (entity instanceof FloorSwitch && ((FloorSwitch)entity).isActivated())) {
                     activatedCount++;
                 }
             }
         }
 
         return activatedCount;
+    }
+
+    protected boolean checkActivatedOnSameTick(DungeonMap map, LogicItem logicItem) {
+        boolean activateSame = false;
+        List<Integer> ticks = new ArrayList<Integer>();
+        
+        List<Position> adjacentPositions = logicItem.getPosition().getCardinallyAdjacentPositions();
+        for (Position position : adjacentPositions) {
+            List<Entity> entities = map.getEntityFromPos(position);
+            for (Entity entity : entities) {
+                if (entity instanceof Bomb && ((Bomb)entity).isActivated()) {
+                    int tick = ((LogicBomb)entity).getActivationTick();
+                    ticks.add(tick);
+                }
+                if (entity instanceof LogicItem && ((LogicItem)entity).isActivated()) {
+                    int tick = ((LogicItem)entity).getActivationTick();
+                    ticks.add(tick);
+                }
+                if (entity instanceof FloorSwitch && ((FloorSwitch)entity).isActivated()) {
+                    int tick = ((FloorSwitch)entity).getActivationTick();
+                    ticks.add(tick);
+                }
+            }
+        }
+
+        int size = ticks.size();
+        if(size < 2) { return activateSame; }
+
+        if (ticks.stream().distinct().count() == size) { 
+            activateSame = false;
+        } else {
+            activateSame = true;
+        }
+
+        return activateSame;
     }
 }
