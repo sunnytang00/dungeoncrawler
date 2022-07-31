@@ -8,14 +8,11 @@ import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Item;
 import dungeonmania.entities.StaticEntities.FloorSwitch;
+import dungeonmania.entities.StaticEntities.logicSwitches.LogicEnum;
 import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
 
-
-import org.json.JSONObject;
-
-import javax.imageio.ImageTypeSpecifier;
 
 import org.json.JSONObject;
 
@@ -28,6 +25,7 @@ public class Bomb extends Item {
         super(type, position);
         pickable = true;
     }
+
 
     public int getBombRadius() {
         return (int) JSONConfig.getConfig("bomb_radius");
@@ -48,6 +46,7 @@ public class Bomb extends Item {
     public void setPickable(boolean pickable) {
         this.pickable = pickable;
     }
+
 
     public void explode(DungeonMap map) {
         List<Entity> mapEntities = map.getMapEntities();
@@ -76,7 +75,7 @@ public class Bomb extends Item {
                 //If there is a floorswitch entity and it is triggered, explode
                 if (entity instanceof FloorSwitch) {
                     FloorSwitch floorSwitch = (FloorSwitch) entity;
-                    if (floorSwitch.isTriggered()) {
+                    if (floorSwitch.isActivated()) {
                         // remove all the entities destroyed by bomb in the range
                         // of the bomb attacking radius
                         removeEntityDestroyed(map, removable);
@@ -93,6 +92,7 @@ public class Bomb extends Item {
             map.removeEntityFromMap(entity);
         }
     }
+
 
     @Override
     public void tick(DungeonGame game) {

@@ -43,14 +43,6 @@ public class Portal extends StaticEntity {
         }
     }
 
-    public void teleport(Entity entity, Direction direction, ArrayList<Entity> entitiesList) {
-        Position newPosition = getPairPosition().translateBy(direction);
-        //Check if the portal pair exists and that the new position can be teleported to
-        if ((this.pair != null) && (Helper.CheckIfTraversable(newPosition, entitiesList) != false)) {
-            entity.setPosition(newPosition);
-        }
-    }
-
 
     public Position getPairPosition() {
         return pair.getPosition();

@@ -43,6 +43,7 @@ public class JSONMap {
     private void initialiseMapEntities(String type, JSONObject obj) {
         int x = obj.getInt("x");
         int y = obj.getInt("y");
+        
         Position position = new Position(x,y);
         Entity entity = null;
         switch (type) {
@@ -57,7 +58,11 @@ public class JSONMap {
             case "boulder":
                 entity = new Boulder(type, position); break;
             case "switch":
-                entity = new FloorSwitch(type, position); break;
+                if (obj.has("logic")) {
+                    entity = new FloorSwitch(type, position, Helper.getLogic(obj.getString("logic"))); break;
+                } else {
+                    entity = new FloorSwitch(type, position); break;
+                }
             case "door":
                 entity = new Door(type, position, obj.getInt("key")); break;
             case "portal":
@@ -89,19 +94,23 @@ public class JSONMap {
             case "arrow":
                 entity = new Arrows(type, position); break;
             case "bomb":
-                entity = new Bomb(type, position); break;
+                if (obj.has("logic")) {
+                    entity = new LogicBomb(type, position, Helper.getLogic(obj.getString("logic")));break;
+                } else {
+                    entity = new Bomb(type, position); break;
+                }
             case "sword":
                 entity = new Sword(type, position); break;
             case "swamp_tile":
                 entity = new SwampTile(type, position, obj.getInt("movement_factor")); break;
             case "time_turner":
-                // entity = new TimeTurner(type, position); break;
+                entity = new TimeTurner(type, position); break;
             case "time_travelling_portal":
                 entity = new TimeTravellingPortal(type, position); break;
             case "light_bulb_off":
                 entity = new LightBulb(type, position, Helper.getLogic(obj.getString("logic"))); break;
             case "wire":
-                entity = new Wire(type, position, Helper.getLogic(obj.getString("logic"))); break;
+                entity = new Wire(type, position, LogicEnum.OR); break;
             case "switch_door":
                 entity = new SwitchDoor(type, position, Helper.getLogic(obj.getString("logic")), obj.getInt("key")); break;
 

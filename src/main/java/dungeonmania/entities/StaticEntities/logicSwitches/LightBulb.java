@@ -1,5 +1,6 @@
 package dungeonmania.entities.StaticEntities.logicSwitches;
 
+import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.StaticEntities.Boulder;
@@ -13,20 +14,16 @@ public class LightBulb extends LogicItem {
         super(type, position, logicEnum);
     }
 
-    public void litUp(DungeonMap map) {
-        Position currentPosition = getPosition();
-        List<Position> cardinallyAdjacentPositions = currentPosition.getCardinallyAdjacentPositions();
-        if (null != cardinallyAdjacentPositions) {
-            for (Position position : cardinallyAdjacentPositions) {
-                List<Entity> entityFromPos = map.getEntityFromPos(position);
-                for (Entity entity : entityFromPos) {
-                    if (entity instanceof Boulder) {
-                        this.isActivated = true;
-                        setType("light_bulb_on");
-                        break;
-                    }
-                }
-            }
+
+    @Override
+    public void setActivated(boolean activated) {
+        this.isActivated = activated;
+        if (activated) {
+            setType("light_bulb_on");
+        } else {
+            setType("light_bulb_off");
         }
     }
+
+
 }
