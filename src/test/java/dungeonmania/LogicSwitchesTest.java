@@ -1,12 +1,14 @@
 package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -110,7 +112,41 @@ public class LogicSwitchesTest {
         
     }
 
+    @Test
+    @DisplayName("test open a switch door")
+    public void testOpenSwitchDoorKey() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_DoorsKeysTest_useKeyWalkThroughOpenDoorS", "M3_config");
 
+        // pick up key
+        res = dmc.tick(Direction.RIGHT);
+        Position pos = getEntities(res, "player").get(0).getPosition();
+        assertEquals(1, getInventory(res, "key").size());
+
+        // walk through door and check key is gone
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(0, getInventory(res, "key").size());
+        assertNotEquals(pos, getEntities(res, "player").get(0).getPosition());
+    }
+
+    @Test
+    @DisplayName("test open a switch door with sun stone")
+    public void testOpenSwitchDoorSS() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_DoorsKeysTest_useKeyWalkThroughSwitchDoor2", "M3_config");
+
+        // pick up key
+        res = dmc.tick(Direction.RIGHT);
+        Position pos = getEntities(res, "player").get(0).getPosition();
+        assertEquals(1, getInventory(res, "sun_stone").size());
+
+        // walk through door and check key is gone
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(0, getInventory(res, "sun_stone").size());
+        assertNotEquals(pos, getEntities(res, "player").get(0).getPosition());
+    }
 
 }
 
