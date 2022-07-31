@@ -75,7 +75,6 @@ public class LogicSwitchesTest {
 
         DungeonResponse initialResponse = dmc.newGame("logicSwitchDoor", "M3_config");
 
-        assertEquals(2, getEntities(initialResponse, "switch_door").size());
         assertEquals(0, getEntities(initialResponse, "door_open").size());
         DungeonResponse move = dmc.tick(Direction.RIGHT);
         assertEquals(1, getEntities(move, "door_open").size());
