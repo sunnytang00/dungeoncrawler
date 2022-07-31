@@ -1,5 +1,6 @@
 package dungeonmania.entities.StaticEntities.logicSwitches;
 
+import dungeonmania.DungeonGame;
 import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.StaticEntities.FloorSwitch;

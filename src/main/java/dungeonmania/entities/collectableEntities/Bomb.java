@@ -8,6 +8,7 @@ import dungeonmania.DungeonMap;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Item;
 import dungeonmania.entities.StaticEntities.FloorSwitch;
+import dungeonmania.entities.StaticEntities.logicSwitches.LogicEnum;
 import dungeonmania.entities.movingEntity.player.Player;
 import dungeonmania.util.JSONConfig;
 import dungeonmania.util.Position;
