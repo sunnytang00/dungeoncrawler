@@ -290,6 +290,10 @@ public class DungeonMap {
         this.goals = goals;
     }
 
+    public Goals getGoals() {
+        return goals;
+    }
+
     public final DungeonResponse getDungeonResponse() {
         Player player = getPlayer();
         return new DungeonResponse(
