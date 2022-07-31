@@ -286,10 +286,6 @@ public class DungeonMap {
     //     goals = JSONLoadGoals.getComposedGoals(JSONgoals, map);
     // }
 
-    public Goals getGoals() {
-        return goals;
-    }
-
     public void resetGoals(Goals goals) {
         this.goals = goals;
     }
@@ -333,14 +329,6 @@ public class DungeonMap {
         this.enemiesToSpawn = enemiesToSpawn;
     }
 
-    public Position returnPlayerPosition() {
-        for (Entity e : mapEntities) {
-            if (e instanceof Player && e.getType().equals("player")) {
-                return e.getPosition();
-            }
-        }
-        return null;
-    }
     
 }
 
