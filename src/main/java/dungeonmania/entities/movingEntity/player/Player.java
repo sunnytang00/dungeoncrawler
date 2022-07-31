@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -78,16 +77,13 @@ public class Player extends MovingEntity {
 
     }
 
-
     public Potion getCurrPotion() {
         return currPotion;
     }
 
-
     public void setCurrPotion(Potion currPotion) {
         this.currPotion = currPotion;
     }
-
 
     public Key getCurrKey() {
         for (Item item : inventory) {
@@ -98,7 +94,6 @@ public class Player extends MovingEntity {
         return null;
     }
 
-
     public void setCurrKey(Key currKey) {
         this.currKey = currKey;
     }
@@ -106,15 +101,14 @@ public class Player extends MovingEntity {
     public int getWealth() {
         int totalTreasure = (int) inventory.stream().filter(i -> i instanceof Treasure).count();
         int totalSunstone = (int) inventory.stream().filter(i -> i instanceof SunStone).count();
-        
+
         int totalWealth = totalTreasure + totalSunstone;
         return totalWealth;
     }
 
-    public int getSlayedEnemy(){
+    public int getSlayedEnemy() {
         return slayedEnemy;
     }
-
 
     public void setSlayedEnemy(int slayedEnemy) {
         this.slayedEnemy = slayedEnemy;
@@ -136,37 +130,31 @@ public class Player extends MovingEntity {
         this.battleQueue = battleQueue;
     }
 
-
     public PlayerState getState() {
         return state;
     }
-
 
     public void setState(PlayerState state) {
         this.state = state;
     }
 
-
     public List<Item> getInventory() {
         return inventory;
     }
 
-
     public void setInventory(List<Item> inventory) {
         this.inventory = inventory;
     }
-
 
     public List<Enemy> getBattleQueue() {
         return battleQueue;
     }
 
     public void move(DungeonGame game, DungeonMap map, Direction direction) {
-        
+
         state.move(this, direction, map);
         battle(map, game);
     }
-
 
     public boolean interactWithEntities(Entity entity, DungeonMap map) {
         boolean interfereByEntity = false;
@@ -179,11 +167,10 @@ public class Player extends MovingEntity {
         state.battle(this, map, game);
     }
 
-
     public void interactWithEnemies(Enemy enemy, DungeonMap map) {
         if (enemy.getPosition().equals(this.getPosition()) && !enemy.becomeAlly()) {
             battleQueue.add(enemy);
-            
+
         }
     }
 
@@ -191,7 +178,7 @@ public class Player extends MovingEntity {
         if (battleQueue.size() <= 0) {
             return;
         }
-        
+
         List<Battle> battles = new ArrayList<Battle>();
         double iniPlayerHealth = this.getHealth();
         Battle currBattle = null;
@@ -211,8 +198,8 @@ public class Player extends MovingEntity {
                         }
                     }
                 }
-                double deltaPlayerHealth = - enemy.getAttack()/10;
-                double deltaEnemyHealth = - getAttack()/5;
+                double deltaPlayerHealth = -enemy.getAttack() / 10;
+                double deltaEnemyHealth = -getAttack() / 5;
                 if (enemy instanceof Hydra) {
                     Hydra hydra = (Hydra) enemy;
                     deltaEnemyHealth = hydra.inBattle(deltaEnemyHealth);
@@ -222,7 +209,7 @@ public class Player extends MovingEntity {
                 }
                 double newHealth = getHealth() + deltaPlayerHealth;
                 double enemyHealth = enemy.getHealth() + deltaEnemyHealth;
-                
+
                 setHealth(newHealth);
                 enemy.setHealth(enemyHealth);
                 if (isInvincible()) {
@@ -241,9 +228,9 @@ public class Player extends MovingEntity {
                     // enemy dies
                     map.removeEntityFromMap(enemy);
                     // increment slayed enemy number
-                    setSlayedEnemy(slayedEnemy+1);
+                    setSlayedEnemy(slayedEnemy + 1);
                 }
-                
+
                 if (isInvincible()) {
                     battles.add(currBattle);
                     game.addToBattles(currBattle);
@@ -258,7 +245,7 @@ public class Player extends MovingEntity {
             }
         }
         game.addToBattles(currBattle);
-        
+
     }
 
     public List<Item> checkBattleBonuses(DungeonMap map) {
@@ -271,7 +258,7 @@ public class Player extends MovingEntity {
         double defenceBonus = 0;
         int numAlly = map.getNumOfAlly();
         List<Weapon> usableWeapon = getUsableWeapon();
-        for (Weapon weapon: usableWeapon) {
+        for (Weapon weapon : usableWeapon) {
             attackBonus += weapon.getDamageValue();
             defenceBonus += weapon.getDefence();
             weaponryUsed.add(weapon);
@@ -292,7 +279,7 @@ public class Player extends MovingEntity {
 
     public List<Weapon> getUsableWeapon() {
         List<Weapon> usableWeapon = new ArrayList<Weapon>();
-        for (Item item: inventory) {
+        for (Item item : inventory) {
             if (item instanceof Weapon) {
                 Weapon weapon = (Weapon) item;
                 if (weapon.isUsable()) {
@@ -303,16 +290,16 @@ public class Player extends MovingEntity {
         return usableWeapon;
     }
 
-
-    // may need to debug later, update potion queue etc, turn currPotion to null whenever ticks over
-    public void consumePotion(Potion item) { 
+    // may need to debug later, update potion queue etc, turn currPotion to null
+    // whenever ticks over
+    public void consumePotion(Potion item) {
         potionQueue.addPotionToQueue(item);
     }
 
     public void playerPotionQueueUpdateTick() {
-        
+
         Potion currPotion = potionQueue.updatePotionQueue();
-        if (currPotion != null) { 
+        if (currPotion != null) {
             if (currPotion instanceof InvincibilityPotion) {
                 setState(new InvincibleState());
             } else if (currPotion instanceof InvisibilityPotion) {
@@ -327,22 +314,21 @@ public class Player extends MovingEntity {
     public void addToInventory(Item item) {
         inventory.add(item);
     }
-    
+
     public void consumeInventory(String type, int amount) {
         int count = 0;
         while (count < amount) {
             Item delete = null;
             for (Item item : inventory) {
                 if (item.getType().equals(type)) {
-                    delete = item; 
+                    delete = item;
                 }
-            
+
             }
             inventory.remove(delete);
             count++;
         }
     }
-
 
     public boolean hasKey() {
         return inventory.stream().anyMatch(i -> i.getType().equals("key"));
@@ -359,7 +345,7 @@ public class Player extends MovingEntity {
     public List<String> getBuildables(DungeonMap map) {
 
         List<String> ret = new ArrayList<String>();
-        
+
         if (canBuildBow()) {
             ret.add("bow");
         }
@@ -375,16 +361,16 @@ public class Player extends MovingEntity {
         if (canBuildSceptre()) {
             ret.add("sceptre");
         }
-        
+
         return ret;
     }
 
     public boolean canBuildShield() {
-        
+
         if (!inventory.isEmpty()) {
             int woodNumber = 0;
             int treasureOrKeyNumber = 0;
-            
+
             for (Item item : inventory) {
 
                 if (item instanceof Wood) {
@@ -401,7 +387,7 @@ public class Player extends MovingEntity {
             } else {
                 return false;
             }
-                
+
         }
         return false;
     }
@@ -411,7 +397,7 @@ public class Player extends MovingEntity {
         if (!inventory.isEmpty()) {
             int woodNumber = 0;
             int arrowsNumber = 0;
-            
+
             for (Item item : inventory) {
 
                 if (item instanceof Wood) {
@@ -428,13 +414,13 @@ public class Player extends MovingEntity {
             } else {
                 return false;
             }
-                
+
         }
         return false;
     }
 
     public boolean canBuildArmour(DungeonMap map) {
-        
+
         if (map.hasZombies()) {
             return false;
         }
@@ -442,7 +428,7 @@ public class Player extends MovingEntity {
         if (!inventory.isEmpty()) {
             int sunStoneNum = 0;
             int swordNum = 0;
-            
+
             for (Item item : inventory) {
 
                 if (item instanceof SunStone) {
@@ -454,12 +440,13 @@ public class Player extends MovingEntity {
                 }
             }
 
-            if ((sunStoneNum >= 1) && (swordNum >= 1) && (map.getEntitiesFromType(map.getMapEntities(), "zombie").isEmpty())) {
+            if ((sunStoneNum >= 1) && (swordNum >= 1)
+                    && (map.getEntitiesFromType(map.getMapEntities(), "zombie").isEmpty())) {
                 return true;
             } else {
                 return false;
             }
-                
+
         }
         return false;
 
@@ -497,7 +484,7 @@ public class Player extends MovingEntity {
             } else {
                 return false;
             }
-                
+
         }
         return false;
     }
@@ -514,13 +501,13 @@ public class Player extends MovingEntity {
         }
     }
 
-
     public void interactWithMercenary(Mercenary merc, DungeonMap map) throws InvalidActionException {
-    
+
         if (!merc.isInRad(map, merc.getBribeRadius()) && !hasSceptre()) {
             throw new InvalidActionException("Bribable enemy not in radius");
         } else if (!hasEnoughToBribe(merc) && !hasSceptre()) {
-            throw new InvalidActionException("Player does not have enough treasure and does not have a sceptre to bribe/mind-control enemy");
+            throw new InvalidActionException(
+                    "Player does not have enough treasure and does not have a sceptre to bribe/mind-control enemy");
         } else {
             // assume use sceptre in priority
             if (hasSceptre()) {
@@ -533,20 +520,20 @@ public class Player extends MovingEntity {
                 consumeInventory("treasure", merc.getBribeAmount());
             }
         }
-        
+
     }
 
     @Override
     public JSONObject toJSON() {
         JSONObject obj = super.toJSON();
-        
+
         String state = getState().toString();
         state = state.replaceAll("dungeonmania.movingEntity.", "");
         state = state.substring(0, state.indexOf("@"));
 
         obj.put("state", state);
         obj.put("slayed-enemies", slayedEnemy);
-        
+
         return obj;
     }
 

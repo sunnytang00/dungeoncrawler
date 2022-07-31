@@ -14,17 +14,17 @@ public class Sceptre extends Item implements ItemBuildable {
     public Sceptre(String type) {
         super(type);
     }
-    
+
     public boolean build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException {
         // Record all the removing items
         List<Item> removingPosition = new ArrayList<>();
-    
+
         if (!inventory.isEmpty()) {
             int woodNum = 0;
             int arrowNum = 0;
             int treasureOrKeyNum = 0;
             int sunStone = 0;
-            
+
             for (Item item : inventory) {
                 if (item instanceof Wood && woodNum < 1) {
                     woodNum++;
@@ -44,8 +44,8 @@ public class Sceptre extends Item implements ItemBuildable {
                     removingPosition.add(item);
                 }
             }
-    
-            if ((sunStone == 1) && (treasureOrKeyNum == 1) && ((arrowNum == 2)||(woodNum == 1))) {
+
+            if ((sunStone == 1) && (treasureOrKeyNum == 1) && ((arrowNum == 2) || (woodNum == 1))) {
                 removingPosition.forEach(i -> inventory.remove(i));
                 player.addToInventory(new Sceptre(BUILDABLE_TYPE_SCEPTRE));
                 return true;
@@ -56,6 +56,5 @@ public class Sceptre extends Item implements ItemBuildable {
             throw new InvalidActionException("Player does not have sufficient items to build sceptre");
         }
     }
-
 
 }

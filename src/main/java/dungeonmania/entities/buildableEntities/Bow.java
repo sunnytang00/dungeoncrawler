@@ -12,7 +12,6 @@ import java.util.List;
 
 public class Bow extends Weapon implements ItemBuildable {
 
-
     public Bow(String type) {
         super(type);
         setDurability((int) JSONConfig.getConfig("bow_durability"));
@@ -29,7 +28,7 @@ public class Bow extends Weapon implements ItemBuildable {
             for (Item item : inventory) {
                 if (item instanceof Wood && woodNumber < 1) {
                     woodNumber++;
-                    removingPosition.add(item); 
+                    removingPosition.add(item);
                 }
                 if (item instanceof Arrows && arrowsNumber < 3) {
                     arrowsNumber++;
@@ -52,4 +51,3 @@ public class Bow extends Weapon implements ItemBuildable {
     }
 
 }
-
