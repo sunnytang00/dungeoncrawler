@@ -44,32 +44,13 @@ public class DungeonGame {
         this.dungeonId = dungeonId;
     }
 
-    public List<Item> getInventory() {
-        return inventories;
-    }
-
     public final List<Battle> getBattles() {
         return battles;
     }
 
-    public final List<String> getBuildables() {
-        return buildables;
-    }
-
-    public void setInventories(List<Item> inventories) {
-        this.inventories = inventories;
-    }
-
-    public void setBattles(List<Battle> battles) {
-        this.battles = battles;
-    }
 
     public void addToBattles(Battle battle) {
         battles.add(battle);
-    }
-
-    public void setBuildables(List<String> buildables) {
-        this.buildables = buildables;
     }
 
     // assuming game starts with tick 0
@@ -116,10 +97,6 @@ public class DungeonGame {
 
     public DungeonMap getMap() {
         return map;
-    }
-
-    public void setMap(DungeonMap map) {
-        this.map = map;
     }
 
     public Player getPlayer() {

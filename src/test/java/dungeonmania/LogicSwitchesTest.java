@@ -97,11 +97,18 @@ public class LogicSwitchesTest {
 
     }
 
-    // @Test
-    // @DisplayName("test a circuit with two switches one activated by another switch")
-    // public void testSwitchActivatebySwitch(){
+    @Test
+    @DisplayName("test a circuit with two switches one activated by another switch")
+    public void testSwitchActivatebySwitch(){
+        DungeonManiaController dmc = new DungeonManiaController();
+
+        DungeonResponse initialResponse = dmc.newGame("logicSwitchCOAND", "M3_config");
         
-    // }
+        assertEquals(0, getEntities(initialResponse, "light_bulb_on").size());
+        DungeonResponse move = dmc.tick(Direction.RIGHT);
+        assertEquals(1, getEntities(move, "light_bulb_on").size());
+        
+    }
 
 
 

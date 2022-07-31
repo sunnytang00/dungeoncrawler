@@ -152,10 +152,6 @@ public class DungeonMap {
         gameWin = wins;
     }
 
-    public boolean gameResult() {
-        return gameWin;
-    }
-
     public boolean checkIfEntityAdjacentIsPushable(Entity entity, Direction direction) {
 
         List<Entity> entityList = getEntityFromPos(entity.getPosition().translateBy(direction));
@@ -182,9 +178,6 @@ public class DungeonMap {
         this.goalsJSON = goalsJSON;
     }
 
-    public JSONObject getJSONGoals() {
-        return goalsJSON;
-    }
 
     public String goalString() {
         return goals.getGoalsAsString(this);
@@ -279,10 +272,6 @@ public class DungeonMap {
 
     public void resetGoals(Goals goals) {
         this.goals = goals;
-    }
-
-    public Goals getResetGoals() {
-        return goals;
     }
 
     public void addEnemyToSpawn(Enemy entity) {
