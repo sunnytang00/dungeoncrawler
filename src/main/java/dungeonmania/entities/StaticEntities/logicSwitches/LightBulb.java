@@ -1,10 +1,6 @@
 package dungeonmania.entities.StaticEntities.logicSwitches;
 
-import dungeonmania.DungeonGame;
-import dungeonmania.DungeonMap;
-import dungeonmania.entities.Entity;
-import dungeonmania.entities.StaticEntities.Boulder;
-import dungeonmania.util.Helper;
+
 import dungeonmania.util.Position;
 
 

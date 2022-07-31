@@ -12,18 +12,17 @@ import java.util.List;
 
 public class Shield extends Weapon implements ItemBuildable {
 
-
     public Shield(String type) {
         super(type);
         setDurability((int) JSONConfig.getConfig("shield_durability"));
         setDamageValue(0);
         setDefence((int) JSONConfig.getConfig("shield_defence"));
     }
-    
+
     public boolean build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException {
         // Record all the removing items
         List<Item> removingPosition = new ArrayList<>();
-    
+
         if (!inventory.isEmpty()) {
             int woodNumber = 0;
             int treasureOrKeyNumber = 0;
@@ -42,7 +41,7 @@ public class Shield extends Weapon implements ItemBuildable {
                     }
                 }
             }
-    
+
             if (2 == woodNumber && (found || 1 == treasureOrKeyNumber)) {
                 // remove all the items used to craft the buildable item
                 // if it could be crafted by the items in the inventory
@@ -58,4 +57,3 @@ public class Shield extends Weapon implements ItemBuildable {
     }
 
 }
-

@@ -26,15 +26,13 @@ public interface ItemBuildable {
      */
     String BUILDABLE_TYPE_MIDNIGHT_ARMOUR = "midnight_armour";
 
-
     /**
      * Build the complex items by the passing simple items
+     * 
      * @param inventory the items storing many items which could
      *                  be used to craft the buildable item
      * @return return a complex item if it craft successfully,
-     * otherwise null
+     *         otherwise null
      */
     boolean build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException;
 }
-
-

@@ -14,10 +14,10 @@ public class MidnightArmour extends Weapon implements ItemBuildable {
 
     public MidnightArmour(String type) {
         super(type);
-        setDamageValue((int)JSONConfig.getConfig("midnight_armour_attack"));
-        setDefence((int)JSONConfig.getConfig("midnight_armour_defence"));
+        setDamageValue((int) JSONConfig.getConfig("midnight_armour_attack"));
+        setDefence((int) JSONConfig.getConfig("midnight_armour_defence"));
     }
-    
+
     public boolean build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException {
 
         if (map.hasZombies()) {
@@ -26,11 +26,11 @@ public class MidnightArmour extends Weapon implements ItemBuildable {
 
         // Record all the removing items
         List<Item> removingPosition = new ArrayList<>();
-    
+
         if (!inventory.isEmpty()) {
             int swordNum = 0;
             int sunStone = 0;
-            
+
             for (Item item : inventory) {
                 if (item instanceof Sword && swordNum < 1) {
                     swordNum++;
@@ -42,7 +42,7 @@ public class MidnightArmour extends Weapon implements ItemBuildable {
                     removingPosition.add(item);
                 }
             }
-    
+
             if ((sunStone == 1) && (swordNum == 1)) {
                 removingPosition.forEach(i -> inventory.remove(i));
                 player.addToInventory(new MidnightArmour(BUILDABLE_TYPE_MIDNIGHT_ARMOUR));
@@ -59,6 +59,5 @@ public class MidnightArmour extends Weapon implements ItemBuildable {
     public boolean isUsable() {
         return true;
     }
-
 
 }
