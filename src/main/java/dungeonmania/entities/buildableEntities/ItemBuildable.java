@@ -34,7 +34,7 @@ public interface ItemBuildable {
      * @return return a complex item if it craft successfully,
      * otherwise null
      */
-    void build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException;
+    boolean build(List<Item> inventory, Player player, DungeonMap map) throws InvalidActionException;
 }
 
 

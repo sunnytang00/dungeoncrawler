@@ -7,6 +7,10 @@ import dungeonmania.DungeonMap;
 
 public class CompositeOr extends CompositeGoal{
     
+    public CompositeOr() {
+        super(null, null);
+    }
+    
     public CompositeOr(Goals subgoal1, Goals subgoal2) {
         super(subgoal1, subgoal2);
     }

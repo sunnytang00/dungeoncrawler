@@ -12,6 +12,7 @@ public class BoulderOnSwitch extends LeafGoal {
 
     // private boolean prevIsAchieved = false;
 
+
     public BoulderOnSwitch(DungeonMap map, boolean prevIsAchieved) {
         super(map, prevIsAchieved);
         map.setRemainingConditions(1);

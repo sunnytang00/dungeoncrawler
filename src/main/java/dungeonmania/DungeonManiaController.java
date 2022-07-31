@@ -26,6 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.json.JSONObject;
@@ -413,7 +414,24 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String configName) {
-        return null;
+        JSONConfig.setConfig(configName);
+        // get height and width for maze
+        Random random = new Random();
+        int widthMinBound = ((xStart > xEnd) ? xStart : xEnd) + 2;
+        int heightMinBound = ((yStart > yEnd) ? yStart : yEnd) + 2;
+        int width = random.nextInt(5) + widthMinBound;
+        int height = random.nextInt(5) + heightMinBound;
+
+        // create a new maze
+        DungeonBuilder dungeonBuilder = new DungeonBuilder(width, height, new Position(xStart, yStart), new Position(xEnd, yEnd));
+        JSONObject mazeJSON = dungeonBuilder.getJSONMazeInfo();
+        List<Entity> entities = EntityFactory.extractEntities(mazeJSON);
+        Goals goal = EntityFactory.extractGoal(mazeJSON);
+
+        DungeonMap map = new DungeonMap(entities, "Dungeon Builder");
+        map.resetGoals(goal);
+
+        return map.getDungeonResponse();
     }
 
 }

@@ -13,6 +13,7 @@ public class CollectTreasure extends LeafGoal {
     // public CollectTreasure(DungeonMap map) {
     //     map.setRemainingConditions(1);
     // }
+
     public CollectTreasure(DungeonMap map, boolean prevIsAchieved) {
         super(map, prevIsAchieved);
         map.setRemainingConditions(1);
