@@ -35,11 +35,6 @@ public class DungeonManiaController {
 
     private DungeonMap map;
     private DungeonGame game;
-    // private ArrayList<DungeonMap> mapList = new ArrayList<DungeonMap>();
-    // private ArrayList<DungeonGame> gameList = new ArrayList<DungeonGame>();
-    // private ArrayList<DungeonMap> mapsToPlayOut = new ArrayList<DungeonMap>();
-    // private ArrayList<DungeonGame> gamesToPlayOut = new ArrayList<DungeonGame>();
-    // private boolean timeTravelled = false;
     private Goals goals;
 
     public String getSkin() {
